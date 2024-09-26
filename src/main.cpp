@@ -1,6 +1,11 @@
 #include <iostream>
 
+#include "CPU/CPU.h"
+
 int main(int, char**)
 {
-    std::cout << "Hello, from 6502 Emulator!\n";
+    CPU cpu;
+    cpu.reset();
+
+    return 0;
 }
