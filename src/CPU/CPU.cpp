@@ -7,7 +7,7 @@ CPU::~CPU(){}
 void CPU::reset()
 {
     mRegisters.PC = 0xFFCC;
-    mRegisters.SP = 0x100;
+    mRegisters.SP = 0xFF;
     mRegisters.status.D = 0;
     mRegisters.A = 0;
     mRegisters.X = 0;
