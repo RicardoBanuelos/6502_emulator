@@ -2,5 +2,5 @@
 
 int main(int, char**)
 {
-    std::cout << "Hello, from 8086Emulator!\n";
+    std::cout << "Hello, from 6502 Emulator!\n";
 }
