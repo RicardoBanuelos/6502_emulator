@@ -2,12 +2,18 @@
 #include "Instruction/Instructions/LDA.h"
 
 CPU::CPU()
-    :   mAddressingModes(std::shared_ptr<ICPU>(this))
 {
-
 }
 
-CPU::~CPU(){}
+CPU::~CPU()
+{
+    
+}
+
+void CPU::init()
+{
+    mAddressingModes.reset(new Addressing(shared_from_this()));
+}
 
 void CPU::reset()
 {
@@ -59,11 +65,6 @@ Memory &CPU::memory()
 }
 void CPU::execute()
 {
-    LDA lda("Puto", 
-             std::shared_ptr<ICPU>(this),
-             mAddressingModes.createAddresingFunction(Immediate),
-             100
-    );
-
+    LDA  lda("hola", shared_from_this(), mAddressingModes->createAddresingFunction(AddressingMode::IndirectX), 100);
     lda.run();
 }

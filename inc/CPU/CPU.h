@@ -3,12 +3,13 @@
 #include "CPU/ICPU.h"
 #include "AddressingMode.h"
 
-class CPU : public ICPU
+class CPU : public ICPU, public std::enable_shared_from_this<CPU>
 {
 public:
     CPU();
-    virtual ~CPU();
+    ~CPU();
 
+    void init();
     void reset();
 
 private:
@@ -22,5 +23,5 @@ private:
 
     Registers mRegisters;
     Memory mMemory;
-    Addressing mAddressingModes;
+    std::unique_ptr<Addressing> mAddressingModes;
 };

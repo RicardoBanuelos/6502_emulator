@@ -4,7 +4,9 @@
 
 int main(int, char**)
 {
-    CPU cpu;
+    std::shared_ptr<CPU> cpu = std::make_shared<CPU>();
+    cpu->init();
+    
     std::cout << "Hello World!";
     return 0;
 }
