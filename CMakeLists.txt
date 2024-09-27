@@ -9,5 +9,6 @@ add_executable(
     src/CPU/Addressing.cpp
     src/Instruction/Instruction.cpp
     src/Instruction/Instructions/LDA.cpp
+    src/Instruction/Instructions/JSR.cpp
     src/Memory/Memory.cpp
 )
