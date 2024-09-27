@@ -7,7 +7,7 @@ CPU::~CPU(){}
 void CPU::reset()
 {
     mRegisters.PC = 0xFFCC;
-    mRegisters.SP = 0x100;
+    mRegisters.SP = 0xFF;
     mRegisters.status.D = 0;
     mRegisters.A = 0;
     mRegisters.X = 0;
@@ -23,6 +23,16 @@ uint8_t CPU::fetchByte()
 uint16_t CPU::fetchWord()
 {
     return 0;
+}
+
+void CPU::writeByte(uint8_t data)
+{
+    //TO DO
+}
+
+void CPU::writeWord(uint16_t data)
+{
+    //TO DO
 }
 
 void CPU::execute()
