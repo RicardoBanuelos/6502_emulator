@@ -2,7 +2,7 @@
 #include "Instruction/Instructions/LDA.h"
 
 CPU::CPU()
-    :   mAddressingModes(std::make_shared<ICPU>(this))
+    :   mAddressingModes(std::shared_ptr<ICPU>(this))
 {
 
 }
