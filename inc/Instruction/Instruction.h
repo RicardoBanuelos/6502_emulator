@@ -3,7 +3,6 @@
 #include <functional>
 #include <memory>
 #include <string>
-#include <vector>
 #include "CPU/ICPU.h"
 
 class Instruction
@@ -19,6 +18,7 @@ public:
     virtual void run() = 0;
 
 protected:
+    virtual void updateStatus() = 0;
 
     std::string mName;
     std::function<uint16_t()> mAddressingFunction;

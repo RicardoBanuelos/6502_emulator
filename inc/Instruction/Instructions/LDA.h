@@ -14,5 +14,6 @@ public:
     ~LDA();
 
     void run() override;
+    void updateStatus() override;
 private:
 };
