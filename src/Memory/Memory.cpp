@@ -12,7 +12,7 @@ void Memory::initialize()
     }
 }
 
-uint8_t Memory::readByte(uint32_t address)
+uint8_t Memory::readByte(uint32_t address) const
 {
     if(!validateAddress(address)) 
         return 0;
@@ -20,7 +20,7 @@ uint8_t Memory::readByte(uint32_t address)
     return data[address];
 }
 
-uint16_t Memory::readWord(uint32_t address)
+uint16_t Memory::readWord(uint32_t address) const
 {
     if(!validateAddress(address)) 
         return 0;
@@ -43,7 +43,7 @@ void Memory::writeWord(uint32_t address)
         return;
 }
 
-bool Memory::validateAddress(uint32_t address)
+bool Memory::validateAddress(uint32_t address) const
 {
     return address >= 0 && address < MAX_MEMORY;
 }

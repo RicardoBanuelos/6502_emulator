@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include "Registers.h"
+#include "Memory/Memory.h"
 
 class ICPU
 {
@@ -16,4 +17,5 @@ public:
     virtual void writeWord(uint16_t data) = 0;
 
     virtual const Registers &registers() = 0;
+    virtual const Memory &memory() = 0;
 };

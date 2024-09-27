@@ -5,7 +5,7 @@ include_directories(inc)
 add_executable(
     ${PROJECT_NAME} 
     src/main.cpp 
-    src/CPU/CPU.cpp,
-    src/Instruction/Instruction.cpp,
-    inc/Instruction/AddressingMode.cpp
+    src/CPU/CPU.cpp
+    src/Instruction/Instruction.cpp
+    src/Instruction/AddressingMode.cpp
 )

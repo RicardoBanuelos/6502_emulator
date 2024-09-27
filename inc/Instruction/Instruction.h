@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CPU/ICPU.h"
-#include "Instruction/AddressingMode.h"
 
 class Instruction
 {
