@@ -17,25 +17,34 @@ void CPU::reset()
 
 uint8_t CPU::fetchByte()
 {
-    return 0;
+    uint8_t byte = mMemory.readByte(mRegisters.PC);
+
+    ++mRegisters.PC;
+
+    return byte;
 }
 
 uint16_t CPU::fetchWord()
 {
-    return 0;
+    uint8_t word = mMemory.readWord(mRegisters.PC);
+
+    ++mRegisters.PC;
+    ++mRegisters.PC;
+
+    return word;
 }
 
-void CPU::writeByte(uint8_t data)
+void CPU::writeByte(uint8_t address, uint8_t byte)
 {
-    //TO DO
+    mMemory.writeByte(address, byte);
 }
 
-void CPU::writeWord(uint16_t data)
+void CPU::writeWord(uint8_t address, uint16_t word)
 {
-    //TO DO
+    mMemory.writeWord(address, word);
 }
 
 void CPU::execute()
 {
-
+    // TO DO
 }

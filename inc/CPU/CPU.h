@@ -11,9 +11,10 @@ public:
 
 private:
     Registers mRegisters;
+    Memory mMemory;
     uint8_t fetchByte();
     uint16_t fetchWord();
-    void writeByte(uint8_t data);
-    void writeWord(uint16_t data);
+    void writeByte(uint8_t address, uint8_t byte);
+    void writeWord(uint8_t address, uint16_t word);
     void execute();
 };
