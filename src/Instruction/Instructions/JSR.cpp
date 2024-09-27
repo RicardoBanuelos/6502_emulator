@@ -13,5 +13,5 @@ JSR::~JSR()
 
 void JSR::run()
 {
-    mIcpu->pushWord(mIcpu->addressing(mAddreesingMode));
+    mIcpu->pushWord(mIcpu->addressing(mAddreesingMode).address);
 }

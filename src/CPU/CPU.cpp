@@ -106,7 +106,7 @@ void CPU::execute()
     mInstructions.at(opCode)->run();
 }
 
-const uint16_t CPU::addressing(AddressingMode mode) const
+const AddressingData CPU::addressing(AddressingMode mode) const
 {
     return mAddressingModes->addressingFunction(mode)();
 }
