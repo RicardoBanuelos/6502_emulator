@@ -6,7 +6,8 @@ int main(int, char**)
 {
     std::shared_ptr<CPU> cpu = std::make_shared<CPU>();
     cpu->init();
+    cpu->reset();
+    cpu->execute();
     
-    std::cout << "Hello World!";
     return 0;
 }

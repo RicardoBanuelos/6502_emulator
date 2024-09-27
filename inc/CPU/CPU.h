@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+
 #include "CPU/ICPU.h"
 #include "AddressingMode.h"
 
@@ -11,6 +13,7 @@ public:
 
     void init();
     void reset();
+    void execute();
 
 private:
     uint8_t fetchByte() override;
@@ -19,9 +22,9 @@ private:
     void writeWord(uint8_t address, uint16_t word) override;
     Registers &registers() override;
     Memory &memory() override;
-    void execute();
 
     Registers mRegisters;
     Memory mMemory;
     std::unique_ptr<Addressing> mAddressingModes;
+    std::unordered_map<uint8_t, std::unique_ptr<Instruction>> mInstructions;
 };

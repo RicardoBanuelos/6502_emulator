@@ -13,6 +13,4 @@ LDA::~LDA()
 void LDA::run()
 {
     mIcpu->registers().A = mAddressingFunction();
-    std::cout << mIcpu->registers().A;
-    //flags
 }

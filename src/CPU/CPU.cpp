@@ -3,6 +3,7 @@
 
 CPU::CPU()
 {
+    mMemory.initialize();
 }
 
 CPU::~CPU()
@@ -55,16 +56,22 @@ void CPU::writeWord(uint8_t address, uint16_t word)
     mMemory.writeWord(address, word);
 }
 
-Registers &CPU::registers()
+Registers& CPU::registers()
 {
     return mRegisters;
 }
-Memory &CPU::memory()
+Memory& CPU::memory()
 {
     return mMemory;
 }
 void CPU::execute()
 {
-    LDA  lda("hola", shared_from_this(), mAddressingModes->createAddresingFunction(AddressingMode::IndirectX), 100);
-    lda.run();
+    uint8_t opCode = fetchByte();
+
+    if(mInstructions.count(opCode) == 0)
+    {
+        return;
+    }
+
+    mInstructions.at(opCode)->run();
 }
