@@ -14,5 +14,7 @@ add_executable(
     src/Instruction/Instructions/LDY.cpp
     src/Instruction/Instructions/LSR.cpp
     src/Instruction/Instructions/NOP.cpp
+    src/Instruction/Instructions/ORA.cpp
+    src/Instruction/Instructions/PHA.cpp
     src/Memory/Memory.cpp
 )
