@@ -2,3 +2,4 @@
 #include "Instructions/AND.h"
 #include "Instructions/ASL.h"
 #include "Instructions/BCC.h"
+#include "Instructions/BCS.h"

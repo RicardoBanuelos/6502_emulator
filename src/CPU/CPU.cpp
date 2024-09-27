@@ -2,7 +2,6 @@
 #include "Instruction/Instructions/LDA.h"
 #include "Instruction/Instructions.h"
 
-
 CPU::CPU()
 {
     mMemory.initialize();
@@ -139,4 +138,6 @@ void CPU::initInstructions()
     mInstructions[OC_ASL_ABSOLUTE_X].reset(new ASL(shared_from_this(), AddressingMode::AbsoluteOffsetX, 7));
     // BCC
     mInstructions[OC_BCC_RELATIVE].reset(new BCC(shared_from_this(), AddressingMode::Relative, 2));
+    // BCS
+    mInstructions[OC_BCS_RELATIVE].reset(new BCS(shared_from_this(), AddressingMode::Relative, 2));
 }
