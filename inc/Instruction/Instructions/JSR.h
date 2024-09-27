@@ -1,18 +1,19 @@
-#pragma once 
+#pragma once
+
 
 #include "Instruction/Instruction.h"
 
-//Load Accumulator with Memory
-class LDA : public Instruction
+class JSR : public Instruction
 {
     
 public:
-    LDA(std::shared_ptr<ICPU> icpu, 
+    JSR(std::shared_ptr<ICPU> icpu, 
         std::function<uint16_t()> addressingFunction, 
         uint8_t cycles = 0);
-
-    ~LDA();
+    ~JSR();
 
     void run() override;
 private:
+
 };
+

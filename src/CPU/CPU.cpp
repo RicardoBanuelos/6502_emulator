@@ -1,6 +1,8 @@
 #include "CPU/CPU.h"
 #include "Instruction/Instructions/LDA.h"
 
+
+
 CPU::CPU()
 {
     mMemory.initialize();
@@ -55,6 +57,33 @@ void CPU::writeByte(uint8_t address, uint8_t byte)
 void CPU::writeWord(uint8_t address, uint16_t word)
 {
     mMemory.writeWord(address, word);
+}
+
+void CPU::pushByte(uint8_t data)
+{
+    mMemory.writeByte(mStackPointerOffset + mRegisters.SP, data);
+    mRegisters.SP--;
+}
+
+uint8_t CPU::popByte()
+{
+    mRegisters.SP--;
+    return mMemory.readByte(mStackPointerOffset + mRegisters.SP);
+}
+
+void CPU::pushWord(uint16_t data)
+{
+    pushByte((data & 0xFF00) >> 8);
+    pushByte(data & 0x00FF);
+}
+
+uint16_t CPU::popWord()
+{
+    uint16_t data = 0;
+    uint8_t lo = popByte();
+    uint8_t hi = popByte();
+
+    return lo | (hi << 8 & 0xFF00);
 }
 
 Registers& CPU::registers()
