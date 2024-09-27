@@ -11,7 +11,17 @@ LDA::~LDA()
 
 void LDA::run()
 {
-    // mIcpu->registers().A = mIcpu->addressing(mAddreesingMode).data;
+    // AddressingData  addressingData = mIcpu->addressing(mAddreesingMode);
+
+    // if(mAddreesingMode == AddressingMode::Immediate)
+    // {
+    //     mIcpu->registers().A = static_cast<uint8_t>(addressingData.address);
+    // }
+    // else 
+    // {
+    //     mIcpu->registers().A = mIcpu->memory().readByte(addressingData);
+    // }
+
     // mIcpu->registers().status.setFlag(Flag::Z, mIcpu->registers().A == 0);
     // mIcpu->registers().status.setFlag(Flag::N, mIcpu->registers().A & (1 << 7));
 }
