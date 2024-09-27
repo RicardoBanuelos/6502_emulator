@@ -16,7 +16,7 @@ public:
     void reset();
     void execute();
 
-    const AddressingData addressing(AddressingMode mode) const override;
+    const uint16_t addressing(AddressingMode mode) const override;
 private:
     void initInstructions();
 
