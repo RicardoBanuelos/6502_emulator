@@ -5,6 +5,7 @@
 #include "Registers.h"
 #include "Memory/Memory.h"
 #include "AddressingMode.h"
+#include "AddressingData.h"
 
 class Addressing;
 
@@ -29,7 +30,7 @@ public:
     virtual void pushWord(uint16_t data) = 0;
     virtual uint16_t popWord() = 0;
     
-    virtual const uint16_t addressing(AddressingMode mode) const = 0;
+    virtual const AddressingData addressing(AddressingMode mode) const = 0;
     
     virtual Registers &registers() = 0;
     virtual Memory &memory() = 0;

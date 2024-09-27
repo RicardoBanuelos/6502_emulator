@@ -4,6 +4,7 @@
 #include <functional>
 #include "CPU/ICPU.h"
 #include "AddressingMode.h"
+#include "AddressingData.h"
 
 
 class Addressing
@@ -15,20 +16,20 @@ public:
 
 
 
-    const std::function<uint16_t()> &addressingFunction(AddressingMode mode);
+    const std::function<AddressingData()> &addressingFunction(AddressingMode mode);
     
 private:
-    virtual uint16_t Implied() const;
-    virtual uint16_t Immediate() const;
-    virtual uint16_t ZeroPage() const;
-    virtual uint16_t ZeroPageX() const;
-    virtual uint16_t ZeroPageY() const;
-    virtual uint16_t Relative() const;
-    virtual uint16_t Absolute() const;
-    virtual uint16_t AbsoluteOffsetX() const;
-    virtual uint16_t AbsoluteOffsetY() const;
-    virtual uint16_t Indirect() const;
-    virtual uint16_t IndirectX() const;
-    virtual uint16_t IndirectY() const;
+    virtual AddressingData Implied() const;
+    virtual AddressingData Immediate() const;
+    virtual AddressingData ZeroPage() const;
+    virtual AddressingData ZeroPageX() const;
+    virtual AddressingData ZeroPageY() const;
+    virtual AddressingData Relative() const;
+    virtual AddressingData Absolute() const;
+    virtual AddressingData AbsoluteOffsetX() const;
+    virtual AddressingData AbsoluteOffsetY() const;
+    virtual AddressingData Indirect() const;
+    virtual AddressingData IndirectX() const;
+    virtual AddressingData IndirectY() const;
     std::shared_ptr<ICPU> mIcpu;
 };
