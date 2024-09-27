@@ -20,7 +20,7 @@ public:
 
 protected:
     std::string mName;
-    AddressingMode mAddreesingMode;
+    AddressingMode mAddressingMode;
     std::shared_ptr<ICPU> mIcpu;
     uint8_t mCycles;
 };

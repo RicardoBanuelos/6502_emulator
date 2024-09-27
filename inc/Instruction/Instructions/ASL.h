@@ -4,7 +4,7 @@ class ASL : public Instruction
 {
 public:
     ASL(std::shared_ptr<ICPU> icpu, 
-        std::function<uint16_t()> addressingFunction, 
+        AddressingMode addressingMode,
         uint8_t cycles = 0);
 
     ~ASL();
