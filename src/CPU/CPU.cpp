@@ -1,5 +1,6 @@
 #include "CPU/CPU.h"
 #include "Instruction/Instructions/LDA.h"
+#include "Instruction/Instructions.h"
 
 
 CPU::CPU()
@@ -113,12 +114,12 @@ const uint16_t CPU::addressing(AddressingMode mode) const
 void CPU::initInstructions()
 {
     // ADC
-    // mInstructions[OC_ADC_IMMEDIATE] = std::make_unique<Instruction>(nullptr);
-    // mInstructions[OC_ADC_ZERO_PAGE] = std::make_unique<Instruction>(nullptr);
-    // mInstructions[OC_ADC_ZERO_PAGE_X] = std::make_unique<Instruction>(nullptr);
-    // mInstructions[OC_ADC_ABSOLUTE] = std::make_unique<Instruction>(nullptr);
-    // mInstructions[OC_ADC_ABSOLUTE_X] = std::make_unique<Instruction>(nullptr);
-    // mInstructions[OC_ADC_ABSOLUTE_Y] = std::make_unique<Instruction>(nullptr);
-    // mInstructions[OC_ADC_INDIRECT_X] = std::make_unique<Instruction>(nullptr);
-    // mInstructions[OC_ADC_INDIRECT_Y] = std::make_unique<Instruction>(nullptr);
+    mInstructions[OC_ADC_IMMEDIATE] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::Immediate, 2));;
+    mInstructions[OC_ADC_ZERO_PAGE] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::ZeroPage, 3));;
+    mInstructions[OC_ADC_ZERO_PAGE_X] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::ZeroPageX, 4));;
+    mInstructions[OC_ADC_ABSOLUTE] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::Absolute, 4));;
+    mInstructions[OC_ADC_ABSOLUTE_X] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::AbsoluteOffsetX, 4));;
+    mInstructions[OC_ADC_ABSOLUTE_Y] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::AbsoluteOffsetY, 4));;
+    mInstructions[OC_ADC_INDIRECT_X] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::IndirectX, 6));;
+    mInstructions[OC_ADC_INDIRECT_Y] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::IndirectY, 5));;
 }

@@ -11,7 +11,9 @@ AND::~AND()
 
 void AND::run()
 {
-    uint16_t fetched = mIcpu->addressing(mAddressingMode).data;
+    uint16_t address = mIcpu->addressing(mAddressingMode);
+    uint16_t fetched = mIcpu->memory().readByte(address);
+
     uint16_t result = mIcpu->registers().A & fetched;
 
     mIcpu->registers().status.Z = result & 0x00FF == 0;

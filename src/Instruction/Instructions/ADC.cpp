@@ -12,7 +12,9 @@ ADC::~ADC()
 
 void ADC::run()
 {
-    uint16_t fetched = mIcpu->addressing(mAddressingMode).data;
+    uint16_t address = mIcpu->addressing(mAddressingMode);
+    uint16_t fetched = mIcpu->memory().readByte(address);
+    
     uint16_t result = mIcpu->registers().A + fetched + mIcpu->registers().status.C;
 
     mIcpu->registers().status.C = result > 255;

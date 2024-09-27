@@ -17,7 +17,7 @@ uint16_t Addressing::Implied() const
 
 uint16_t Addressing::Immediate() const
 {
-    return mIcpu->fetchByte() & 0x00F;
+    return mIcpu->fetchByte() & 0x00FF;
 }
 
 uint16_t Addressing::ZeroPage() const
