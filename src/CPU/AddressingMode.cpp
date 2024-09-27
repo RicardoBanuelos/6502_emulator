@@ -1,4 +1,4 @@
-#include "Instruction/Addressing.h"
+#include "CPU/AddressingMode.h"
 
 
 Addressing::Addressing(std::shared_ptr<ICPU> icpu)
@@ -69,15 +69,17 @@ uint16_t Addressing::Indirect() const
 }
 uint16_t Addressing::IndirectX() const
 {
-    return Indirect() + mIcpu->registers().X;
+    uint16_t addressPointer = mIcpu->fetchWord() + mIcpu->registers().X;
+    return mIcpu->memory().readWord(addressPointer);
 }
 
 uint16_t Addressing::IndirectY() const
 {
-    return Indirect() + mIcpu->registers().Y;
+    uint16_t addressPointer = mIcpu->fetchWord() + mIcpu->registers().Y;
+    return mIcpu->memory().readWord(addressPointer);
 }
 
-std::function<uint16_t()> Addressing::createFunctionBind(AddressingMode mode)
+std::function<uint16_t()> Addressing::createAddresingFunction(AddressingMode mode)
 {
     switch (mode)
     {

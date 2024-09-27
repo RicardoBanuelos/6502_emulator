@@ -41,7 +41,7 @@ public:
     virtual uint16_t IndirectY() const;
     
 
-    std::function<uint16_t()> createFunctionBind(AddressingMode mode);
+    std::function<uint16_t()> createAddresingFunction(AddressingMode mode);
 private:
     std::shared_ptr<ICPU> mIcpu;
 };
