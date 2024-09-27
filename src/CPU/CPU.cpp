@@ -114,12 +114,29 @@ const AddressingData CPU::addressing(AddressingMode mode) const
 void CPU::initInstructions()
 {
     // ADC
-    mInstructions[OC_ADC_IMMEDIATE] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::Immediate, 2));;
-    mInstructions[OC_ADC_ZERO_PAGE] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::ZeroPage, 3));;
-    mInstructions[OC_ADC_ZERO_PAGE_X] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::ZeroPageX, 4));;
-    mInstructions[OC_ADC_ABSOLUTE] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::Absolute, 4));;
-    mInstructions[OC_ADC_ABSOLUTE_X] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::AbsoluteOffsetX, 4));;
-    mInstructions[OC_ADC_ABSOLUTE_Y] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::AbsoluteOffsetY, 4));;
-    mInstructions[OC_ADC_INDIRECT_X] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::IndirectX, 6));;
-    mInstructions[OC_ADC_INDIRECT_Y] = std::make_unique<Instruction>(new ADC(shared_from_this(), AddressingMode::IndirectY, 5));;
+    mInstructions[OC_ADC_IMMEDIATE].reset(new ADC(shared_from_this(), AddressingMode::Immediate, 2));
+    mInstructions[OC_ADC_ZERO_PAGE].reset(new ADC(shared_from_this(), AddressingMode::ZeroPage, 3));
+    mInstructions[OC_ADC_ZERO_PAGE_X].reset(new ADC(shared_from_this(), AddressingMode::ZeroPageX, 4));
+    mInstructions[OC_ADC_ABSOLUTE].reset(new ADC(shared_from_this(), AddressingMode::Absolute, 4));
+    mInstructions[OC_ADC_ABSOLUTE_X].reset(new ADC(shared_from_this(), AddressingMode::AbsoluteOffsetX, 4));
+    mInstructions[OC_ADC_ABSOLUTE_Y].reset(new ADC(shared_from_this(), AddressingMode::AbsoluteOffsetY, 4));
+    mInstructions[OC_ADC_INDIRECT_X].reset(new ADC(shared_from_this(), AddressingMode::IndirectX, 6));
+    mInstructions[OC_ADC_INDIRECT_Y].reset(new ADC(shared_from_this(), AddressingMode::IndirectY, 5));
+    // AND
+    mInstructions[OC_AND_IMMEDIATE].reset(new AND(shared_from_this(), AddressingMode::Immediate, 2));
+    mInstructions[OC_AND_ZERO_PAGE].reset(new AND(shared_from_this(), AddressingMode::ZeroPage, 3));
+    mInstructions[OC_AND_ZERO_PAGE_X].reset(new AND(shared_from_this(), AddressingMode::ZeroPageX, 4));
+    mInstructions[OC_AND_ABSOLUTE].reset(new AND(shared_from_this(), AddressingMode::Absolute, 4));
+    mInstructions[OC_AND_ABSOLUTE_X].reset(new AND(shared_from_this(), AddressingMode::AbsoluteOffsetX, 4));
+    mInstructions[OC_AND_ABSOLUTE_Y].reset(new AND(shared_from_this(), AddressingMode::AbsoluteOffsetY, 4));
+    mInstructions[OC_AND_INDIRECT_X].reset(new AND(shared_from_this(), AddressingMode::IndirectX, 6));
+    mInstructions[OC_AND_INDIRECT_Y].reset(new AND(shared_from_this(), AddressingMode::IndirectY, 5));
+    // ASL
+    mInstructions[OC_ASL_ACCUMULATOR].reset(new ASL(shared_from_this(), AddressingMode::Implied, 2));
+    mInstructions[OC_ASL_ZERO_PAGE].reset(new ASL(shared_from_this(), AddressingMode::ZeroPage, 5));
+    mInstructions[OC_ASL_ZERO_PAGE_X].reset(new ASL(shared_from_this(), AddressingMode::ZeroPageX, 6));
+    mInstructions[OC_ASL_ABSOLUTE].reset(new ASL(shared_from_this(), AddressingMode::Absolute, 6));
+    mInstructions[OC_ASL_ABSOLUTE_X].reset(new ASL(shared_from_this(), AddressingMode::AbsoluteOffsetX, 7));
+    // BCC
+    mInstructions[OC_BCC_RELATIVE].reset(new BCC(shared_from_this(), AddressingMode::Relative, 2));
 }

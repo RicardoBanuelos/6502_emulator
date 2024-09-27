@@ -1,5 +1,4 @@
 #include "Instruction/Instructions/AND.h"
-#include "AND.h"
 
 AND::AND(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("AND", icpu, addressingMode, cycles)
@@ -11,8 +10,8 @@ AND::~AND()
 
 void AND::run()
 {
-    uint16_t address = mIcpu->addressing(mAddressingMode);
-    uint16_t fetched = mIcpu->memory().readByte(address);
+    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
+    uint16_t fetched = addressingData.data;
 
     uint16_t result = mIcpu->registers().A & fetched;
 

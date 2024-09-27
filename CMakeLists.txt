@@ -8,6 +8,10 @@ add_executable(
     src/CPU/CPU.cpp
     src/CPU/Addressing.cpp
     src/Instruction/Instruction.cpp
+    src/Instruction/Instructions/ADC.cpp
+    src/Instruction/Instructions/AND.cpp
+    src/Instruction/Instructions/ASL.cpp
+    src/Instruction/Instructions/BCC.cpp
     src/Instruction/Instructions/LDA.cpp
     src/Instruction/Instructions/JSR.cpp
     src/Instruction/Instructions/LDX.cpp
