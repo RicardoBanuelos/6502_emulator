@@ -14,6 +14,7 @@ CPU::~CPU()
 void CPU::init()
 {
     mAddressingModes.reset(new Addressing(shared_from_this()));
+    initInstructions();
 }
 
 void CPU::reset()
@@ -66,7 +67,7 @@ Memory& CPU::memory()
 }
 void CPU::execute()
 {
-    uint8_t opCode = fetchByte();
+    OpCode opCode = static_cast<OpCode>(fetchByte());
 
     if(mInstructions.count(opCode) == 0)
     {
@@ -74,4 +75,18 @@ void CPU::execute()
     }
 
     mInstructions.at(opCode)->run();
+}
+
+void CPU::initInstructions()
+{
+    // ADC
+    mInstructions[OC_ADC_IMMEDIATE].reset(new LDA(shared_from_this(), (*mAddressingModes.get())[AddressingMode::AbsoluteOffsetX], 10));
+    // mInstructions[OC_ADC_IMMEDIATE] = std::make_unique<Instruction>(new LDA("", shared_from_this(), mAddressingModes->createAddresingFunction(AddressingMode::Absolute), 10));
+    // mInstructions[OC_ADC_ZERO_PAGE] = std::make_unique<Instruction>(nullptr);
+    // mInstructions[OC_ADC_ZERO_PAGE_X] = std::make_unique<Instruction>(nullptr);
+    // mInstructions[OC_ADC_ABSOLUTE] = std::make_unique<Instruction>(nullptr);
+    // mInstructions[OC_ADC_ABSOLUTE_X] = std::make_unique<Instruction>(nullptr);
+    // mInstructions[OC_ADC_ABSOLUTE_Y] = std::make_unique<Instruction>(nullptr);
+    // mInstructions[OC_ADC_INDIRECT_X] = std::make_unique<Instruction>(nullptr);
+    // mInstructions[OC_ADC_INDIRECT_Y] = std::make_unique<Instruction>(nullptr);
 }

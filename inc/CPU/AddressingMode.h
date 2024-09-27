@@ -27,6 +27,11 @@ public:
     Addressing(std::shared_ptr<ICPU> icpu);
     ~Addressing();
 
+
+
+    std::function<uint16_t()> createAddressingFunction(AddressingMode mode);
+    
+private:
     virtual uint16_t Implied() const;
     virtual uint16_t Immediate() const;
     virtual uint16_t ZeroPage() const;
@@ -39,9 +44,5 @@ public:
     virtual uint16_t Indirect() const;
     virtual uint16_t IndirectX() const;
     virtual uint16_t IndirectY() const;
-    
-
-    std::function<uint16_t()> createAddresingFunction(AddressingMode mode);
-private:
     std::shared_ptr<ICPU> mIcpu;
 };

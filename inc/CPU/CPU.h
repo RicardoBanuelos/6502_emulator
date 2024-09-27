@@ -4,6 +4,8 @@
 
 #include "CPU/ICPU.h"
 #include "AddressingMode.h"
+#include "OpCodes/OpCodes.h"
+#include "Instruction/Instruction.h"
 
 class CPU : public ICPU, public std::enable_shared_from_this<CPU>
 {
@@ -16,6 +18,8 @@ public:
     void execute();
 
 private:
+    void initInstructions();
+
     uint8_t fetchByte() override;
     uint16_t fetchWord() override;
     void writeByte(uint8_t address, uint8_t byte) override;
@@ -26,5 +30,5 @@ private:
     Registers mRegisters;
     Memory mMemory;
     std::unique_ptr<Addressing> mAddressingModes;
-    std::unordered_map<uint8_t, std::unique_ptr<Instruction>> mInstructions;
+    std::unordered_map<OpCode, std::unique_ptr<Instruction>> mInstructions;
 };

@@ -7,8 +7,7 @@ class LDA : public Instruction
 {
     
 public:
-    LDA(const std::string &name,
-        std::shared_ptr<ICPU> icpu, 
+    LDA(std::shared_ptr<ICPU> icpu, 
         std::function<uint16_t()> addressingFunction, 
         uint8_t cycles = 0);
 
