@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <functional>
 #include "CPU/ICPU.h"
 
 enum AddressingMode
@@ -13,10 +14,10 @@ enum AddressingMode
     Relative,
     Absolute,
     AbsoluteOffsetX,
-    AbsoluteYOffset,
+    AbsoluteOffsetY,
     Indirect,
     IndirectX,
-    IndiectY
+    IndirectY
 };
 
 class Addressing
@@ -26,12 +27,12 @@ public:
     Addressing(std::shared_ptr<ICPU> icpu);
     ~Addressing();
 
-    virtual uint8_t Implied() const;
-    virtual uint8_t Immediate() const;
-    virtual uint8_t ZeroPage() const;
-    virtual uint8_t ZeroPageX() const;
-    virtual uint8_t ZeroPageY() const;
-    virtual uint8_t Relative() const;
+    virtual uint16_t Implied() const;
+    virtual uint16_t Immediate() const;
+    virtual uint16_t ZeroPage() const;
+    virtual uint16_t ZeroPageX() const;
+    virtual uint16_t ZeroPageY() const;
+    virtual uint16_t Relative() const;
     virtual uint16_t Absolute() const;
     virtual uint16_t AbsoluteOffsetX() const;
     virtual uint16_t AbsoluteOffsetY() const;
@@ -40,6 +41,7 @@ public:
     virtual uint16_t IndirectY() const;
     
 
+    std::function<uint16_t()> createFunctionBind(AddressingMode mode);
 private:
     std::shared_ptr<ICPU> mIcpu;
 };

@@ -8,4 +8,5 @@ add_executable(
     src/CPU/CPU.cpp
     src/Instruction/Instruction.cpp
     src/Instruction/AddressingMode.cpp
+    src/Memory/Memory.cpp
 )

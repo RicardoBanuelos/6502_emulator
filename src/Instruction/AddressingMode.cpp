@@ -10,32 +10,32 @@ Addressing::~Addressing()
 {
 }
 
-uint8_t Addressing::Implied() const
+uint16_t Addressing::Implied() const
 {
     return 0;
 }
 
-uint8_t Addressing::Immediate() const
-{
-    return mIcpu->fetchByte();
-}
-
-uint8_t Addressing::ZeroPage() const
+uint16_t Addressing::Immediate() const
 {
     return mIcpu->fetchByte() & 0x00FF;
 }
 
-uint8_t Addressing::ZeroPageX() const
+uint16_t Addressing::ZeroPage() const
 {
-    return mIcpu->fetchByte() + mIcpu->registers().X;
+    return mIcpu->fetchByte() & 0x00FF;
 }
 
-uint8_t Addressing::ZeroPageY() const
+uint16_t Addressing::ZeroPageX() const
 {
-    return mIcpu->fetchByte() + mIcpu->registers().Y;
+    return (mIcpu->fetchByte() + mIcpu->registers().X) & 0x00FF;
 }
 
-uint8_t Addressing::Relative() const
+uint16_t Addressing::ZeroPageY() const
+{
+    return (mIcpu->fetchByte() + mIcpu->registers().Y) & 0x00FF;
+}
+
+uint16_t Addressing::Relative() const
 {
     uint8_t relativeAddress = mIcpu->fetchByte();
     if(relativeAddress & 0x80)
@@ -43,7 +43,7 @@ uint8_t Addressing::Relative() const
         relativeAddress |= 0xFF00;
     }
 
-    return relativeAddress;
+    return relativeAddress & 0x00FF;
 }
 
 uint16_t Addressing::Absolute() const
@@ -75,4 +75,24 @@ uint16_t Addressing::IndirectX() const
 uint16_t Addressing::IndirectY() const
 {
     return Indirect() + mIcpu->registers().Y;
+}
+
+std::function<uint16_t()> Addressing::createFunctionBind(AddressingMode mode)
+{
+    switch (mode)
+    {
+        case AddressingMode::Implied: return std::bind(&Addressing::Implied, this);
+        case AddressingMode::Immediate: return std::bind(&Addressing::Immediate, this);
+        case AddressingMode::ZeroPage: return std::bind(&Addressing::ZeroPage, this);
+        case AddressingMode::ZeroPageX: return std::bind(&Addressing::ZeroPageX, this);
+        case AddressingMode::ZeroPageY: return std::bind(&Addressing::ZeroPageY, this);
+        case AddressingMode::Relative: return std::bind(&Addressing::Relative, this);
+        case AddressingMode::Absolute: return std::bind(&Addressing::Absolute, this);
+        case AddressingMode::AbsoluteOffsetX: return std::bind(&Addressing::AbsoluteOffsetX, this);
+        case AddressingMode::AbsoluteOffsetY: return std::bind(&Addressing::AbsoluteOffsetY, this);
+        case AddressingMode::Indirect: return std::bind(&Addressing::Indirect, this);
+        case AddressingMode::IndirectX: return std::bind(&Addressing::IndirectX, this);
+        case AddressingMode::IndirectY: return std::bind(&Addressing::IndirectY, this);
+    }
+    return []() -> uint16_t {return 0;};
 }
