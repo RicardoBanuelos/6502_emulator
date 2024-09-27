@@ -10,5 +10,6 @@ add_executable(
     src/Instruction/Instruction.cpp
     src/Instruction/Instructions/LDA.cpp
     src/Instruction/Instructions/JSR.cpp
+    src/Instruction/Instructions/LDX.cpp
     src/Memory/Memory.cpp
 )
