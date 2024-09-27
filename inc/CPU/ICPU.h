@@ -16,6 +16,6 @@ public:
     virtual void writeByte(uint8_t data) = 0;
     virtual void writeWord(uint16_t data) = 0;
 
-    virtual const Registers &registers() = 0;
+    virtual Registers &registers() = 0;
     virtual const Memory &memory() = 0;
 };
