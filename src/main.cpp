@@ -4,6 +4,7 @@
 
 int main(int, char**)
 {
-   
+    CPU cpu;
+    std::cout << "Hello World!";
     return 0;
 }

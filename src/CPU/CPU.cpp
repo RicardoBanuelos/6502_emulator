@@ -44,6 +44,14 @@ void CPU::writeWord(uint8_t address, uint16_t word)
     mMemory.writeWord(address, word);
 }
 
+Registers &CPU::registers()
+{
+    return mRegisters;
+}
+Memory &CPU::memory()
+{
+    return mMemory;
+}
 void CPU::execute()
 {
     // TO DO
