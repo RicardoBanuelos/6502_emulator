@@ -13,4 +13,5 @@ LDA::~LDA()
 void LDA::run()
 {
     mIcpu->registers().A = mAddressingFunction();
+    
 }

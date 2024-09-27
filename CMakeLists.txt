@@ -6,7 +6,7 @@ add_executable(
     ${PROJECT_NAME} 
     src/main.cpp 
     src/CPU/CPU.cpp
-    src/CPU/AddressingMode.cpp
+    src/CPU/Addressing.cpp
     src/Instruction/Instruction.cpp
     src/Instruction/Instructions/LDA.cpp
     src/Memory/Memory.cpp

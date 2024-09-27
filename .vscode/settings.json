@@ -51,6 +51,8 @@
         "streambuf": "cpp",
         "span": "cpp",
         "charconv": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "xhash": "cpp",
+        "xstring": "cpp"
     }
 }
