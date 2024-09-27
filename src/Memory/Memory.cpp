@@ -8,7 +8,7 @@ void Memory::initialize()
 {
     for(uint32_t i = 0; i < MAX_MEMORY; ++i)
     {
-        data[i] = 0;
+        mData[i] = 0;
     }
 }
 
@@ -17,30 +17,35 @@ uint8_t Memory::readByte(uint32_t address) const
     if(!validateAddress(address)) 
         return 0;
 
-    return data[address];
+    return mData[address];
 }
 
 uint16_t Memory::readWord(uint32_t address) const
 {
-    if(!validateAddress(address)) 
+    if(!validateAddress(address + 1)) 
         return 0;
 
-    uint16_t low = data[address];
-    uint16_t high = data[address + 1] << 8;
+    uint16_t low = mData[address];
+    uint16_t high = mData[address + 1] << 8;
 
     return high | low;
 }
 
-void Memory::writeByte(uint32_t address)
+void Memory::writeByte(uint32_t address, uint8_t byte)
 {
     if(!validateAddress(address)) 
         return;
+
+    mData[address] = byte;
 }
 
-void Memory::writeWord(uint32_t address)
+void Memory::writeWord(uint32_t address, uint16_t word)
 {
-    if(!validateAddress(address)) 
+    if(!validateAddress(address + 1)) 
         return;
+
+    mData[address] = word & 0x00FF;
+    mData[address + 1] = word & 0xFF00;
 }
 
 bool Memory::validateAddress(uint32_t address) const
