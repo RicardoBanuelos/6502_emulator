@@ -1,13 +1,12 @@
 #include "../Instruction.h"
 
-class ADC : public Instruction 
-{
+class AND : public Instruction {
 public:
-    ADC(std::shared_ptr<ICPU> icpu, 
+    AND(std::shared_ptr<ICPU> icpu, 
         std::function<uint16_t()> addressingFunction, 
         uint8_t cycles = 0);
 
-    ~ADC();
+    ~AND();
 
     void run() override;
 };

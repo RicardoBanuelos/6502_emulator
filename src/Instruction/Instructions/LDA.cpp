@@ -13,8 +13,3 @@ void LDA::run()
 {
     mIcpu->registers().A = mAddressingFunction();
 }
-
-void LDA::updateStatus()
-{
-
-}
