@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include "CPU/ICPU.h"
+#include "CPU/Addressing.h"
 
 class Instruction
 {
@@ -11,7 +12,7 @@ class Instruction
 public:
     Instruction(const std::string &name,
                 std::shared_ptr<ICPU> icpu, 
-                std::function<uint16_t()> addressingFunction, 
+                AddressingMode addressingMode, 
                 uint8_t cycles = 0);
 
     virtual ~Instruction();
@@ -19,7 +20,7 @@ public:
 
 protected:
     std::string mName;
-    std::function<uint16_t()> mAddressingFunction;
+    AddressingMode mAddreesingMode;
     std::shared_ptr<ICPU> mIcpu;
     uint8_t mCycles;
 };
