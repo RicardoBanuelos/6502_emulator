@@ -10,41 +10,35 @@ Addressing::~Addressing()
 {
 }
 
-AddressingData Addressing::Implied() const
+uint16_t Addressing::Implied() const
 {
-    return AddressingData(0, mIcpu->registers().A);
+    return mIcpu->registers().A;
 }
 
-AddressingData Addressing::Immediate() const
+uint16_t Addressing::Immediate() const
 {
-    return AddressingData(0, mIcpu->fetchByte() & 0x00F);
+    return mIcpu->fetchByte() & 0x00F;
 }
 
-AddressingData Addressing::ZeroPage() const
+uint16_t Addressing::ZeroPage() const
 {
     uint16_t address = mIcpu->fetchByte() & 0x00FF;
-    uint8_t data = mIcpu->memory().readByte(address);
-
-    return AddressingData(address, data);
+    return address;
 }
 
-AddressingData Addressing::ZeroPageX() const
+uint16_t Addressing::ZeroPageX() const
 {
     uint16_t address = (mIcpu->fetchByte() + mIcpu->registers().X) & 0x00FF;
-    uint8_t data = mIcpu->memory().readByte(address);
-
-    return AddressingData(address, data);
+    return address;
 }
 
-AddressingData Addressing::ZeroPageY() const
+uint16_t Addressing::ZeroPageY() const
 {
     uint16_t address = (mIcpu->fetchByte() + mIcpu->registers().Y) & 0x00FF;
-    uint8_t data = mIcpu->memory().readByte(address);
-
-    return AddressingData(address, data);
+    return address;
 }
 
-AddressingData Addressing::Relative() const
+uint16_t Addressing::Relative() const
 {
     uint8_t relativeAddress = mIcpu->fetchByte();
     if(relativeAddress & 0x80)
@@ -52,70 +46,60 @@ AddressingData Addressing::Relative() const
         relativeAddress |= 0xFF00;
     }
 
-    return AddressingData(relativeAddress, 0);
+    return relativeAddress;
 }
 
-AddressingData Addressing::Absolute() const
+uint16_t Addressing::Absolute() const
 {
     uint16_t address = mIcpu->fetchWord();
-    uint8_t data = mIcpu->memory().readByte(address);
-
-    return AddressingData(address, data);
+    return address;
 }
 
-AddressingData Addressing::AbsoluteOffsetX() const
+uint16_t Addressing::AbsoluteOffsetX() const
 {
     uint16_t address = mIcpu->fetchWord() + mIcpu->registers().X;
-    uint8_t data = mIcpu->memory().readByte(address);
-    return AddressingData(address, data);
+    return address;
 }
 
-AddressingData Addressing::AbsoluteOffsetY() const
+uint16_t Addressing::AbsoluteOffsetY() const
 {
     uint16_t address = mIcpu->fetchWord() + mIcpu->registers().Y;
-    uint8_t data = mIcpu->memory().readByte(address);
-    return AddressingData(address, data);
+    return address;
 }
 
 
-AddressingData Addressing::Indirect() const
+uint16_t Addressing::Indirect() const
 {
     uint16_t addressPointer = mIcpu->fetchWord();
-    uint16_t data = mIcpu->memory().readWord(addressPointer);
-
-    return AddressingData(addressPointer, data);
+    return addressPointer;
 }
-AddressingData Addressing::IndirectX() const
+uint16_t Addressing::IndirectX() const
 {
     uint16_t addressPointer = mIcpu->fetchWord() + mIcpu->registers().X;
-    uint16_t data = mIcpu->memory().readWord(addressPointer);
-
-    return AddressingData(addressPointer, data);
+    return addressPointer;
 }
 
-AddressingData Addressing::IndirectY() const
+uint16_t Addressing::IndirectY() const
 {
     uint16_t addressPointer = mIcpu->fetchWord() + mIcpu->registers().Y;
-    uint16_t data = mIcpu->memory().readWord(addressPointer);
-
-    return AddressingData(addressPointer, data);
+    return addressPointer;
 }
 
-const std::function<AddressingData()> &Addressing::addressingFunction(AddressingMode mode)
+const std::function<uint16_t()> &Addressing::addressingFunction(AddressingMode mode)
 {
 
-    static std::function<AddressingData()> impledFunc = std::bind(&Addressing::Implied, this);
-    static std::function<AddressingData()> ImmediateFunc = std::bind(&Addressing::Immediate, this);
-    static std::function<AddressingData()> ZeroPageFunc = std::bind(&Addressing::ZeroPage, this);
-    static std::function<AddressingData()> ZeroPageXFunc = std::bind(&Addressing::ZeroPageX, this);
-    static std::function<AddressingData()> ZeroPageYFunc = std::bind(&Addressing::ZeroPageY, this);
-    static std::function<AddressingData()> RelativeFunc = std::bind(&Addressing::Relative, this);
-    static std::function<AddressingData()> AbsoluteFunc = std::bind(&Addressing::Absolute, this);
-    static std::function<AddressingData()> AbsoluteOffsetXFunc = std::bind(&Addressing::AbsoluteOffsetX, this);
-    static std::function<AddressingData()> AbsoluteOffsetYFunc = std::bind(&Addressing::AbsoluteOffsetY, this);
-    static std::function<AddressingData()> IndirectFunc = std::bind(&Addressing::Indirect, this);
-    static std::function<AddressingData()> IndirectXFunc = std::bind(&Addressing::IndirectX, this);
-    static std::function<AddressingData()> IndirectYFunc = std::bind(&Addressing::IndirectY, this);
+    static std::function<uint16_t()> impledFunc = std::bind(&Addressing::Implied, this);
+    static std::function<uint16_t()> ImmediateFunc = std::bind(&Addressing::Immediate, this);
+    static std::function<uint16_t()> ZeroPageFunc = std::bind(&Addressing::ZeroPage, this);
+    static std::function<uint16_t()> ZeroPageXFunc = std::bind(&Addressing::ZeroPageX, this);
+    static std::function<uint16_t()> ZeroPageYFunc = std::bind(&Addressing::ZeroPageY, this);
+    static std::function<uint16_t()> RelativeFunc = std::bind(&Addressing::Relative, this);
+    static std::function<uint16_t()> AbsoluteFunc = std::bind(&Addressing::Absolute, this);
+    static std::function<uint16_t()> AbsoluteOffsetXFunc = std::bind(&Addressing::AbsoluteOffsetX, this);
+    static std::function<uint16_t()> AbsoluteOffsetYFunc = std::bind(&Addressing::AbsoluteOffsetY, this);
+    static std::function<uint16_t()> IndirectFunc = std::bind(&Addressing::Indirect, this);
+    static std::function<uint16_t()> IndirectXFunc = std::bind(&Addressing::IndirectX, this);
+    static std::function<uint16_t()> IndirectYFunc = std::bind(&Addressing::IndirectY, this);
     
     switch (mode)
     {
