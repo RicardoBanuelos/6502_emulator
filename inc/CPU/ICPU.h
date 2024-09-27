@@ -1,8 +1,12 @@
 #pragma once 
 
 #include <stdint.h>
+#include <functional>
 #include "Registers.h"
 #include "Memory/Memory.h"
+#include "AddressingMode.h"
+
+class Addressing;
 
 class ICPU
 {
@@ -25,6 +29,7 @@ public:
     virtual void pushWord(uint16_t data) = 0;
     virtual uint16_t popWord() = 0;
     
+    virtual const uint16_t addressing(AddressingMode mode) const = 0;
     
     virtual Registers &registers() = 0;
     virtual Memory &memory() = 0;

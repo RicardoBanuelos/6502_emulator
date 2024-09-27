@@ -3,7 +3,6 @@
 #include <unordered_map>
 
 #include "CPU/ICPU.h"
-#include "Addressing.h"
 #include "OpCodes/OpCodes.h"
 #include "Instruction/Instruction.h"
 
@@ -17,6 +16,7 @@ public:
     void reset();
     void execute();
 
+    const uint16_t addressing(AddressingMode mode) const override;
 private:
     void initInstructions();
 
@@ -30,6 +30,7 @@ private:
     uint8_t popByte();
     void pushWord(uint16_t data);
     uint16_t popWord();
+
 
     Registers &registers() override;
     Memory &memory() override;

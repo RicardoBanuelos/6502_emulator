@@ -3,22 +3,8 @@
 #include <memory>
 #include <functional>
 #include "CPU/ICPU.h"
+#include "AddressingMode.h"
 
-enum AddressingMode
-{
-    Implied,
-    Immediate,
-    ZeroPage,
-    ZeroPageX,
-    ZeroPageY,
-    Relative,
-    Absolute,
-    AbsoluteOffsetX,
-    AbsoluteOffsetY,
-    Indirect,
-    IndirectX,
-    IndirectY
-};
 
 class Addressing
 {
@@ -29,7 +15,7 @@ public:
 
 
 
-    const std::function<uint16_t()> &createAddressingFunction(AddressingMode mode);
+    const std::function<uint16_t()> &addressingFunction(AddressingMode mode);
     
 private:
     virtual uint16_t Implied() const;

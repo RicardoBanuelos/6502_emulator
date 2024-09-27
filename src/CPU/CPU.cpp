@@ -2,7 +2,6 @@
 #include "Instruction/Instructions/LDA.h"
 
 
-
 CPU::CPU()
 {
     mMemory.initialize();
@@ -86,6 +85,7 @@ uint16_t CPU::popWord()
     return lo | (hi << 8 & 0xFF00);
 }
 
+
 Registers& CPU::registers()
 {
     return mRegisters;
@@ -106,6 +106,10 @@ void CPU::execute()
     mInstructions.at(opCode)->run();
 }
 
+const uint16_t CPU::addressing(AddressingMode mode) const
+{
+    return mAddressingModes->addressingFunction(mode)();
+}
 void CPU::initInstructions()
 {
     // ADC

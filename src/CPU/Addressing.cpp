@@ -79,7 +79,7 @@ uint16_t Addressing::IndirectY() const
     return mIcpu->memory().readWord(addressPointer);
 }
 
-const std::function<uint16_t()> &Addressing::createAddressingFunction(AddressingMode mode)
+const std::function<uint16_t()> &Addressing::addressingFunction(AddressingMode mode)
 {
 
     static std::function<uint16_t()> impledFunc = std::bind(&Addressing::Implied, this);
