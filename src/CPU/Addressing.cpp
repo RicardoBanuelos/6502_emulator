@@ -1,6 +1,7 @@
 #include "CPU/Addressing.h"
 
 
+
 Addressing::Addressing(std::shared_ptr<ICPU> icpu)
     :   mIcpu(icpu)
 {
@@ -15,6 +16,10 @@ uint16_t Addressing::Implied() const
     return mIcpu->registers().A;
 }
 
+uint16_t Addressing::Accumulator() const
+{
+    return 0;
+}
 uint16_t Addressing::Immediate() const
 {
     return mIcpu->fetchByte() & 0x00F;
@@ -89,6 +94,7 @@ const std::function<uint16_t()> &Addressing::addressingFunction(AddressingMode m
 {
 
     static std::function<uint16_t()> impledFunc = std::bind(&Addressing::Implied, this);
+    static std::function<uint16_t()> AccumulatorFunc = std::bind(&Addressing::Accumulator, this);
     static std::function<uint16_t()> ImmediateFunc = std::bind(&Addressing::Immediate, this);
     static std::function<uint16_t()> ZeroPageFunc = std::bind(&Addressing::ZeroPage, this);
     static std::function<uint16_t()> ZeroPageXFunc = std::bind(&Addressing::ZeroPageX, this);

@@ -19,6 +19,7 @@ public:
     
 private:
     virtual uint16_t Implied() const;
+    virtual uint16_t Accumulator() const;
     virtual uint16_t Immediate() const;
     virtual uint16_t ZeroPage() const;
     virtual uint16_t ZeroPageX() const;

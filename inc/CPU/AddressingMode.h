@@ -3,6 +3,7 @@
 enum AddressingMode
 {
     Implied,
+    Accumulator,
     Immediate,
     ZeroPage,
     ZeroPageX,
