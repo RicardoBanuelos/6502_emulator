@@ -2,12 +2,20 @@
 
 #include "Instruction/Instruction.h"
 
-class LSR
+class LSR : public Instruction
 {
     
 public:
-    LSR();
+    LSR(    std::shared_ptr<ICPU> icpu, 
+            AddressingMode addressingMode, 
+            uint8_t cycles = 0);
+
     ~LSR();
+
+    void run() override;
+
 private:
+
+
 };
 
