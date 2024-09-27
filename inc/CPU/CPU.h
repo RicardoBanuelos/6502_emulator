@@ -3,7 +3,7 @@
 #include <unordered_map>
 
 #include "CPU/ICPU.h"
-#include "AddressingMode.h"
+#include "Addressing.h"
 #include "OpCodes/OpCodes.h"
 #include "Instruction/Instruction.h"
 

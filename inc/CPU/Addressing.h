@@ -29,7 +29,7 @@ public:
 
 
 
-    std::function<uint16_t()> createAddressingFunction(AddressingMode mode);
+    const std::function<uint16_t()> &createAddressingFunction(AddressingMode mode);
     
 private:
     virtual uint16_t Implied() const;
