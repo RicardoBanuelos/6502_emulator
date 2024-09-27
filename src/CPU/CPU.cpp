@@ -59,12 +59,11 @@ Memory &CPU::memory()
 }
 void CPU::execute()
 {
-
-    std::shared_ptr<ICPU> cpu(this);
-
     LDA lda("Puto", 
-             cpu,
+             std::shared_ptr<ICPU>(this),
              mAddressingModes.createAddresingFunction(Immediate),
              100
     );
+
+    lda.run();
 }
