@@ -80,7 +80,7 @@ void CPU::execute()
 void CPU::initInstructions()
 {
     // ADC
-    mInstructions[OC_ADC_IMMEDIATE].reset(new LDA(shared_from_this(), (*mAddressingModes.get())[AddressingMode::AbsoluteOffsetX], 10));
+    mInstructions[OC_ADC_IMMEDIATE].reset(new LDA(shared_from_this(), mAddressingModes->createAddressingFunction(AddressingMode::Absolute), 10));
     // mInstructions[OC_ADC_IMMEDIATE] = std::make_unique<Instruction>(new LDA("", shared_from_this(), mAddressingModes->createAddresingFunction(AddressingMode::Absolute), 10));
     // mInstructions[OC_ADC_ZERO_PAGE] = std::make_unique<Instruction>(nullptr);
     // mInstructions[OC_ADC_ZERO_PAGE_X] = std::make_unique<Instruction>(nullptr);
