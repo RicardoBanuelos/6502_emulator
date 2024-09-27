@@ -6,10 +6,13 @@
 
 class ICPU
 {
+
+public:
+    virtual ~ICPU(){};
+
     
 protected:
     ICPU(){};
-    virtual ~ICPU(){};
 public:
     virtual uint8_t fetchByte() = 0;
     virtual uint16_t fetchWord() = 0;
@@ -17,5 +20,5 @@ public:
     virtual void writeWord(uint8_t address, uint16_t word) = 0;
 
     virtual Registers &registers() = 0;
-    virtual const Memory &memory() = 0;
+    virtual Memory &memory() = 0;
 };

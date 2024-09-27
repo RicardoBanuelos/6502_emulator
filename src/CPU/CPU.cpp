@@ -1,6 +1,11 @@
 #include "CPU/CPU.h"
+#include "Instruction/Instructions/LDA.h"
 
-CPU::CPU(){}
+CPU::CPU()
+    :   mAddressingModes(std::make_shared<ICPU>(this))
+{
+
+}
 
 CPU::~CPU(){}
 
@@ -54,5 +59,12 @@ Memory &CPU::memory()
 }
 void CPU::execute()
 {
-    // TO DO
+
+    std::shared_ptr<ICPU> cpu(this);
+
+    LDA lda("Puto", 
+             cpu,
+             mAddressingModes.createAddresingFunction(Immediate),
+             100
+    );
 }

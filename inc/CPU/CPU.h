@@ -1,25 +1,26 @@
 #pragma once
 
-#include "Registers.h"
 #include "CPU/ICPU.h"
+#include "AddressingMode.h"
 
 class CPU : public ICPU
 {
 public:
     CPU();
-    ~CPU();
+    virtual ~CPU();
 
     void reset();
 
 private:
-    uint8_t fetchByte();
-    uint16_t fetchWord();
-    void writeByte(uint8_t address, uint8_t byte);
-    void writeWord(uint8_t address, uint16_t word);
-    Registers &registers();
-    Memory &memory();
+    uint8_t fetchByte() override;
+    uint16_t fetchWord() override;
+    void writeByte(uint8_t address, uint8_t byte) override;
+    void writeWord(uint8_t address, uint16_t word) override;
+    Registers &registers() override;
+    Memory &memory() override;
     void execute();
 
     Registers mRegisters;
     Memory mMemory;
+    Addressing mAddressingModes;
 };
