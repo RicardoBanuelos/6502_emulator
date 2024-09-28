@@ -14,6 +14,7 @@ add_executable(
     src/Instruction/Instructions/BCC.cpp
     src/Instruction/Instructions/BCS.cpp
     src/Instruction/Instructions/BEQ.cpp
+    src/Instruction/Instructions/BIT.cpp
     src/Instruction/Instructions/LDA.cpp
     src/Instruction/Instructions/JSR.cpp
     src/Instruction/Instructions/LDX.cpp
