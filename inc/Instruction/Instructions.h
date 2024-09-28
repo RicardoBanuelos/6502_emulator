@@ -3,3 +3,5 @@
 #include "Instructions/ASL.h"
 #include "Instructions/BCC.h"
 #include "Instructions/BCS.h"
+#include "Instructions/BIT.h"
+#include "Instructions/BMI.h"

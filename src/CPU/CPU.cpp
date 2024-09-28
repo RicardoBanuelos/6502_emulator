@@ -140,4 +140,9 @@ void CPU::initInstructions()
     mInstructions[OC_BCC_RELATIVE].reset(new BCC(shared_from_this(), AddressingMode::Relative, 2));
     // BCS
     mInstructions[OC_BCS_RELATIVE].reset(new BCS(shared_from_this(), AddressingMode::Relative, 2));
+    // BIT
+    mInstructions[OC_BIT_ZERO_PAGE].reset(new BIT(shared_from_this(), AddressingMode::ZeroPage, 3));
+    mInstructions[OC_BIT_ABSOLUTE].reset(new BIT(shared_from_this(), AddressingMode::Absolute, 4));
+    // BMI
+    mInstructions[OC_BMI_RELATIVE].reset(new BMI(shared_from_this(), AddressingMode::Relative, 2));
 }
