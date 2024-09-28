@@ -10,11 +10,10 @@ BCC::~BCC()
 }
 
 void BCC::run()
-{
-    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
-
+{   
     if(mIcpu->registers().status.C)
         return;
 
+    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
     mIcpu->registers().PC += addressingData.address;
 }

@@ -5,3 +5,4 @@
 #include "Instructions/BCS.h"
 #include "Instructions/BIT.h"
 #include "Instructions/BMI.h"
+#include "Instructions/BNE.h"

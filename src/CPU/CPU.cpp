@@ -145,4 +145,6 @@ void CPU::initInstructions()
     mInstructions[OC_BIT_ABSOLUTE].reset(new BIT(shared_from_this(), AddressingMode::Absolute, 4));
     // BMI
     mInstructions[OC_BMI_RELATIVE].reset(new BMI(shared_from_this(), AddressingMode::Relative, 2));
+    // BNE
+    mInstructions[OC_BNE_RELATIVE].reset(new BNE(shared_from_this(), AddressingMode::Relative, 2));
 }

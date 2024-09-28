@@ -11,10 +11,9 @@ BMI::~BMI()
 
 void BMI::run()
 {
-    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
-
     if(mIcpu->registers().status.N == 0)
         return;
 
+    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
     mIcpu->registers().PC += addressingData.address;
 }
