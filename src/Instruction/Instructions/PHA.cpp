@@ -1,8 +1,8 @@
 #include "Instruction/Instructions/PHA.h"
 
 
-PHA::PHA(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
-    :   Instruction("PHA", icpu, addressingMode, cycles)
+PHA::PHA(std::shared_ptr<ICPU> icpu, uint8_t cycles)
+    :   Instruction("PHA", icpu, AddressingMode::NA, cycles)
 {
 }
 
