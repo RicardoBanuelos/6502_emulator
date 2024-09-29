@@ -53,6 +53,7 @@
         "charconv": "cpp",
         "list": "cpp",
         "xhash": "cpp",
-        "xstring": "cpp"
+        "xstring": "cpp",
+        "bitset": "cpp"
     }
 }

@@ -16,5 +16,10 @@ add_executable(
     src/Instruction/Instructions/NOP.cpp
     src/Instruction/Instructions/ORA.cpp
     src/Instruction/Instructions/PHA.cpp
+    src/Instruction/Instructions/PHP.cpp
+    src/Instruction/Instructions/PLA.cpp
+    src/Instruction/Instructions/PLP.cpp
+    src/Instruction/Instructions/ROL.cpp
+    src/Instruction/Instructions/ROR.cpp
     src/Memory/Memory.cpp
 )

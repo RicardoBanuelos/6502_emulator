@@ -1,6 +1,6 @@
 #pragma once 
 
-#include "Instruction.h"
+#include "Instruction/Instruction.h"
 
 class PHP : public Instruction
 {

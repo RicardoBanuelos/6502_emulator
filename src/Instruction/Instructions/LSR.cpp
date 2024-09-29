@@ -21,7 +21,8 @@ void LSR::run()
     {
         carry = mIcpu->registers().A & 0x01;
         result = mIcpu->registers().A >> 1;
-        result = mIcpu->registers().A;
+        
+        mIcpu->registers().A = result;
     }
     else 
     {
