@@ -21,5 +21,7 @@ add_executable(
     src/Instruction/Instructions/PLP.cpp
     src/Instruction/Instructions/ROL.cpp
     src/Instruction/Instructions/ROR.cpp
+    src/Instruction/Instructions/RTI.cpp
+    src/Instruction/Instructions/RTS.cpp
     src/Memory/Memory.cpp
 )
