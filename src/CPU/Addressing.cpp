@@ -108,19 +108,19 @@ AddressingData Addressing::IndirectY() const
 const std::function<AddressingData()> &Addressing::addressingFunction(AddressingMode mode)
 {
 
-    static std::function<AddressingData()> impledFunc = std::bind(&Addressing::Implied, this);
-    static std::function<AddressingData()> ImmediateFunc = std::bind(&Addressing::Immediate, this);
-    static std::function<AddressingData()> ZeroPageFunc = std::bind(&Addressing::ZeroPage, this);
-    static std::function<AddressingData()> ZeroPageXFunc = std::bind(&Addressing::ZeroPageX, this);
-    static std::function<AddressingData()> ZeroPageYFunc = std::bind(&Addressing::ZeroPageY, this);
-    static std::function<AddressingData()> RelativeFunc = std::bind(&Addressing::Relative, this);
-    static std::function<AddressingData()> AbsoluteFunc = std::bind(&Addressing::Absolute, this);
-    static std::function<AddressingData()> AbsoluteOffsetXFunc = std::bind(&Addressing::AbsoluteOffsetX, this);
-    static std::function<AddressingData()> AbsoluteOffsetYFunc = std::bind(&Addressing::AbsoluteOffsetY, this);
-    static std::function<AddressingData()> IndirectFunc = std::bind(&Addressing::Indirect, this);
-    static std::function<AddressingData()> IndirectXFunc = std::bind(&Addressing::IndirectX, this);
-    static std::function<AddressingData()> IndirectYFunc = std::bind(&Addressing::IndirectY, this);
-    static std::function<AddressingData()> AccumulatorFunc = std::bind(&Addressing::Accumulator, this);
+    static const std::function<AddressingData()> impledFunc = std::bind(&Addressing::Implied, this);
+    static const std::function<AddressingData()> ImmediateFunc = std::bind(&Addressing::Immediate, this);
+    static const std::function<AddressingData()> ZeroPageFunc = std::bind(&Addressing::ZeroPage, this);
+    static const std::function<AddressingData()> ZeroPageXFunc = std::bind(&Addressing::ZeroPageX, this);
+    static const std::function<AddressingData()> ZeroPageYFunc = std::bind(&Addressing::ZeroPageY, this);
+    static const std::function<AddressingData()> RelativeFunc = std::bind(&Addressing::Relative, this);
+    static const std::function<AddressingData()> AbsoluteFunc = std::bind(&Addressing::Absolute, this);
+    static const std::function<AddressingData()> AbsoluteOffsetXFunc = std::bind(&Addressing::AbsoluteOffsetX, this);
+    static const std::function<AddressingData()> AbsoluteOffsetYFunc = std::bind(&Addressing::AbsoluteOffsetY, this);
+    static const std::function<AddressingData()> IndirectFunc = std::bind(&Addressing::Indirect, this);
+    static const std::function<AddressingData()> IndirectXFunc = std::bind(&Addressing::IndirectX, this);
+    static const std::function<AddressingData()> IndirectYFunc = std::bind(&Addressing::IndirectY, this);
+    static const std::function<AddressingData()> AccumulatorFunc = std::bind(&Addressing::Accumulator, this);
     
     switch (mode)
     {

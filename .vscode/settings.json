@@ -54,6 +54,12 @@
         "list": "cpp",
         "xhash": "cpp",
         "xstring": "cpp",
-        "bitset": "cpp"
+        "bitset": "cpp",
+        "any": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "iomanip": "cpp",
+        "sstream": "cpp",
+        "variant": "cpp"
     }
 }

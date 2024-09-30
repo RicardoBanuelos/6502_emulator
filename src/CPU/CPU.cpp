@@ -48,12 +48,12 @@ uint16_t CPU::fetchWord()
     return word;
 }
 
-void CPU::writeByte(uint8_t address, uint8_t byte)
+void CPU::writeByte(uint16_t address, uint8_t byte)
 {
     mMemory.writeByte(address, byte);
 }
 
-void CPU::writeWord(uint8_t address, uint16_t word)
+void CPU::writeWord(uint16_t address, uint16_t word)
 {
     mMemory.writeWord(address, word);
 }

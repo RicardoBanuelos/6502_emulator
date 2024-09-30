@@ -23,8 +23,8 @@ private:
     uint8_t fetchByte() override;
     uint16_t fetchWord() override;
     
-    void writeByte(uint8_t address, uint8_t byte) override;
-    void writeWord(uint8_t address, uint16_t word) override;
+    void writeByte(uint16_t address, uint8_t byte) override;
+    void writeWord(uint16_t address, uint16_t word) override;
 
     void pushByte(uint8_t data);
     uint8_t popByte();
