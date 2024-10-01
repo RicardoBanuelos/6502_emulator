@@ -7,3 +7,4 @@
 #include "Instructions/BMI.h"
 #include "Instructions/BNE.h"
 #include "Instructions/BPL.h"
+#include "Instructions/BRK.h"
