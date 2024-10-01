@@ -11,10 +11,11 @@ BCC::~BCC()
 
 void BCC::run()
 {   
+    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
+    
     if(mIcpu->getFlag(Flag::C))
         return;
 
-    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
     uint16_t result = mIcpu->getRegister(Register::PC) + addressingData.address;
     mIcpu->setRegister(Register::PC, result);
 }
