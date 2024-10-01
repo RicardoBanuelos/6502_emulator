@@ -3,6 +3,7 @@
 
 enum Register {
     PC,
+    PS,
     SP,
     A,
     X,

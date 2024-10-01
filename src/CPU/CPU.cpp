@@ -112,6 +112,10 @@ void CPU::setRegister(Register reg, uint16_t value)
             mRegisters.PC = value;
             break;
 
+        case PS:
+            mRegisters.statusRegister.byte = value;
+            break;
+
         case SP:
             mRegisters.SP = value;
             break;
@@ -139,6 +143,9 @@ uint16_t CPU::getRegister(Register reg)
     {
         case PC:
             return mRegisters.PC;
+
+        case PS:
+            return mRegisters.statusRegister.byte;
 
         case SP:
             return mRegisters.SP;
