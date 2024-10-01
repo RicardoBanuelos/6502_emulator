@@ -38,8 +38,8 @@ private:
 
     void setFlag(Flag flag, bool value) override;
     bool getFlag(Flag flag) override;
-    void setRegister(Register register, uint16_t value) override;
-    uint16_t getRegister(Register register) override;
+    void setRegister(Register reg, uint16_t value) override;
+    uint16_t getRegister(Register reg) override;
 
     Registers mRegisters;
     std::unique_ptr<Addressing> mAddressingModes;

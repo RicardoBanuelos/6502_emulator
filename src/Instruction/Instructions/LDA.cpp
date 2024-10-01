@@ -11,8 +11,9 @@ LDA::~LDA()
 
 void LDA::run()
 {
-    // AddressingData addressingData = mIcpu->addressing(mAddressingMode);
-    // mIcpu->registers().A = addressingData.data;
-    // mIcpu->registers().statusRegister.setFlag(Flag::Z, mIcpu->registers().A == 0);
-    // mIcpu->registers().statusRegister.setFlag(Flag::N, mIcpu->registers().A & (1 << 7));
+    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
+    mIcpu->setRegister(Register::A, addressingData.data);
+    mIcpu->setFlag(Flag::Z, mIcpu->getRegister(Register::A) == 0);
+    mIcpu->setFlag(Flag::N, mIcpu->getRegister(Register::A) & 0x80);
+
 }
