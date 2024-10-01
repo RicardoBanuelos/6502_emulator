@@ -6,3 +6,4 @@
 #include "Instructions/BIT.h"
 #include "Instructions/BMI.h"
 #include "Instructions/BNE.h"
+#include "Instructions/BPL.h"

@@ -147,4 +147,6 @@ void CPU::initInstructions()
     mInstructions[OC_BMI_RELATIVE].reset(new BMI(shared_from_this(), AddressingMode::Relative, 2));
     // BNE
     mInstructions[OC_BNE_RELATIVE].reset(new BNE(shared_from_this(), AddressingMode::Relative, 2));
+    // BPL
+    mInstructions[OC_BPL_RELATIVE].reset(new BPL(shared_from_this(), AddressingMode::Relative, 2));
 }

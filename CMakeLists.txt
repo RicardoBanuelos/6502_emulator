@@ -17,6 +17,7 @@ add_executable(
     src/Instruction/Instructions/BIT.cpp
     src/Instruction/Instructions/BMI.cpp
     src/Instruction/Instructions/BNE.cpp
+    src/Instruction/Instructions/BPL.cpp
     src/Instruction/Instructions/LDA.cpp
     src/Instruction/Instructions/JSR.cpp
     src/Instruction/Instructions/LDX.cpp
