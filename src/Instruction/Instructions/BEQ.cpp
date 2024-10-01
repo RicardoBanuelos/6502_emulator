@@ -11,9 +11,10 @@ BEQ::~BEQ()
 
 void BEQ::run()
 {
-    if(mIcpu->registers().status.Z == 0)
+    if(!mIcpu->getFlag(Flag::Z))
         return;
         
     AddressingData addressingData = mIcpu->addressing(mAddressingMode);
-    mIcpu->registers().PC += addressingData.address;
+    uint16_t result = mIcpu->getRegister(Register::PC) + addressingData.address;
+    mIcpu->setRegister(Register::PC, result);
 }

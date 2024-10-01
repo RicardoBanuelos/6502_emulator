@@ -13,9 +13,9 @@ BIT::~BIT()
 void BIT::run()
 {
     AddressingData addressingData = mIcpu->addressing(mAddressingMode);
-    uint16_t result = mIcpu->registers().A & addressingData.data;
+    uint16_t result = mIcpu->getRegister(Register::A) & addressingData.data;
 
-    mIcpu->registers().status.Z = result & 0x00FF == 0;
-    mIcpu->registers().status.N = result & (1 << 7);
-    mIcpu->registers().status.Z = result & (1 << 6);
+    mIcpu->setFlag(Flag::Z, result & 0x00FF == 0);
+    mIcpu->setFlag(Flag::V, result & (1 << 6));
+    mIcpu->setFlag(Flag::N, result & (1 << 7));
 }

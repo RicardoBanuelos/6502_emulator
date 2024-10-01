@@ -35,7 +35,7 @@ public:
     
     virtual void setFlag(Flag flag, bool value);
     virtual bool getFlag(Flag);
-    virtual void setRegister(Register register, uint16_t value);
-    virtual uint16_t getRegister(Register register);
+    virtual void setRegister(Register reg, uint16_t value);
+    virtual uint16_t getRegister(Register reg);
 
 };

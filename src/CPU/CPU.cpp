@@ -104,9 +104,9 @@ bool CPU::getFlag(Flag flag)
     return mRegisters.statusRegister.getFlag(flag);
 }
 
-void CPU::setRegister(Register register, uint16_t value)
+void CPU::setRegister(Register reg, uint16_t value)
 {
-    switch (register)
+    switch (reg)
     {
         case PC:
             mRegisters.PC = value;
@@ -133,9 +133,9 @@ void CPU::setRegister(Register register, uint16_t value)
     }
 }
 
-uint16_t CPU::getRegister(Register register)
+uint16_t CPU::getRegister(Register reg)
 {
-    switch (register)
+    switch (reg)
     {
         case PC:
             return mRegisters.PC;

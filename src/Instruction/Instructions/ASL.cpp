@@ -15,13 +15,13 @@ void ASL::run()
     uint16_t fetched = addressingData.data;
     uint16_t result = fetched << 1; 
 
-    mIcpu->registers().status.C = result & 0xFF00 > 0;
-    mIcpu->registers().status.Z = result & 0x00FF == 0;
-    mIcpu->registers().status.N = result & 0x80 == 0;
+    mIcpu->setFlag(Flag::C, result & 0xFF00 > 0);
+    mIcpu->setFlag(Flag::Z, result & 0x00FF == 0);
+    mIcpu->setFlag(Flag::N, result & 0x80 == 0);
 
     if(mAddressingMode == AddressingMode::Implied)
     {
-        mIcpu->registers().A = result & 0x00FF;
+        mIcpu->setRegister(Register::A, result & 0x00FF);
     }
     else
     {
