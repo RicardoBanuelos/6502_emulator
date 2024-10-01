@@ -12,17 +12,17 @@ LDX::~LDX()
 
 void LDX::run()
 {
-    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
+    // AddressingData addressingData = mIcpu->addressing(mAddressingMode);
 
-    if(mAddressingMode == AddressingMode::Immediate)
-    {
-        mIcpu->registers().X = static_cast<uint8_t>(addressingData.address);
-    }
-    else 
-    {
-        mIcpu->registers().X = addressingData.data;
-    }
+    // if(mAddressingMode == AddressingMode::Immediate)
+    // {
+    //     mIcpu->registers().X = static_cast<uint8_t>(addressingData.address);
+    // }
+    // else 
+    // {
+    //     mIcpu->registers().X = addressingData.data;
+    // }
 
-    mIcpu->registers().statusRegister.setFlag(Flag::Z, mIcpu->registers().X == 0);
-    mIcpu->registers().statusRegister.setFlag(Flag::N, mIcpu->registers().X & (1 << 7));
+    // mIcpu->registers().statusRegister.setFlag(Flag::Z, mIcpu->registers().X == 0);
+    // mIcpu->registers().statusRegister.setFlag(Flag::N, mIcpu->registers().X & (1 << 7));
 }

@@ -12,5 +12,5 @@ PHA::~PHA()
 
 void PHA::run()
 {
-    mIcpu->pushByte(mIcpu->registers().A);
+    //mIcpu->pushByte(mIcpu->registers().A);
 }

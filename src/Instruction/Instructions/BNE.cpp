@@ -11,9 +11,10 @@ BNE::~BNE()
 
 void BNE::run()
 {
-    if(mIcpu->registers().status.Z)
+    if(!mIcpu->getFlag(Flag::Z))
         return;
         
     AddressingData addressingData = mIcpu->addressing(mAddressingMode);
-    mIcpu->registers().PC + addressingData.address;
+    uint16_t pc = mIcpu->getRegister(Register::PC);
+    mIcpu->setRegister(Register::PC, pc + addressingData.address);
 }
