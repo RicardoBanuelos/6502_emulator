@@ -2,6 +2,18 @@ set(INTRUCTIONS_LIBRARY libInstructions CACHE INTERNAL "")
 
 add_library(${INTRUCTIONS_LIBRARY} 
     Instruction.cpp
+    Instructions/ADC.cpp
+    Instructions/AND.cpp
+    Instructions/ASL.cpp
+    Instructions/BCC.cpp
+    Instructions/BCS.cpp
+    Instructions/BEQ.cpp
+    Instructions/BIT.cpp
+    Instructions/BMI.cpp
+    Instructions/BNE.cpp
+    Instructions/BPL.cpp
+    Instructions/BRK.cpp
+    Instructions/JSR.cpp
     Instructions/LDA.cpp
     Instructions/JSR.cpp
     Instructions/LDX.cpp
@@ -19,3 +31,5 @@ add_library(${INTRUCTIONS_LIBRARY}
     Instructions/RTS.cpp
     Instructions/SBC.cpp
 )
+
+

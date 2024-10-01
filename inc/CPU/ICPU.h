@@ -12,11 +12,11 @@ class ICPU
 {
 
 public:
-    virtual ~ICPU(){};
+    virtual ~ICPU();
 
     
 protected:
-    ICPU(){};
+    ICPU();
 public:
     virtual uint8_t fetchByte() = 0;
     virtual uint16_t fetchWord() = 0;
@@ -33,9 +33,9 @@ public:
     
     virtual AddressingData addressing(AddressingMode mode) const = 0;
     
-    virtual void setFlag(Flag flag, bool value);
-    virtual bool getFlag(Flag);
-    virtual void setRegister(Register reg, uint16_t value);
-    virtual uint16_t getRegister(Register reg);
+    virtual void setFlag(Flag flag, bool value) = 0;
+    virtual bool getFlag(Flag) = 0;
+    virtual void setRegister(Register reg, uint16_t value) = 0;
+    virtual uint16_t getRegister(Register reg) = 0;
 
 };

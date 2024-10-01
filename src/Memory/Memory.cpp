@@ -25,10 +25,15 @@ uint16_t Memory::readWord(uint32_t address) const
     if(!validateAddress(address + 1)) 
         return 0;
 
-    uint16_t low = mData[address];
-    uint16_t high = mData[address + 1] << 8;
+    uint16_t tmp;
+    uint8_t low = mData[address];
+    uint8_t high = mData[address + 1];
 
-    return high | low;
+    tmp = high;
+    tmp <<= 8;
+    tmp |= low;
+
+    return tmp;
 }
 
 void Memory::writeByte(uint32_t address, uint8_t byte)
@@ -45,7 +50,7 @@ void Memory::writeWord(uint32_t address, uint16_t word)
         return;
 
     mData[address] = word & 0x00FF;
-    mData[address + 1] = word & 0xFF00;
+    mData[address + 1] = (word >> 8);
 }
 
 bool Memory::validateAddress(uint32_t address) const

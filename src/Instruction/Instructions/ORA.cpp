@@ -13,17 +13,17 @@ ORA::~ORA()
 
 void ORA::run()
 {
-    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
+    // AddressingData addressingData = mIcpu->addressing(mAddressingMode);
 
-    if(AddressingMode::Immediate == mAddressingMode)
-    {
-        mIcpu->registers().A |= addressingData.address;
-    }
-    else 
-    {
-        mIcpu->registers().A |= addressingData.data;
-    }
+    // if(AddressingMode::Immediate == mAddressingMode)
+    // {
+    //     mIcpu->registers().A |= addressingData.address;
+    // }
+    // else 
+    // {
+    //     mIcpu->registers().A |= addressingData.data;
+    // }
 
-    mIcpu->registers().statusRegister.setFlag(Flag::Z, mIcpu->registers().A == 0);
-    mIcpu->registers().statusRegister.setFlag(Flag::N, mIcpu->registers().A & (1 << 7));
+    // mIcpu->registers().statusRegister.setFlag(Flag::Z, mIcpu->registers().A == 0);
+    // mIcpu->registers().statusRegister.setFlag(Flag::N, mIcpu->registers().A & (1 << 7));
 }

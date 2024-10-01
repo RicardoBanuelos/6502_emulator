@@ -13,12 +13,12 @@ Addressing::~Addressing()
 
 AddressingData Addressing::Implied() const
 {
-    return AddressingData(0, mIcpu->registers().A);
+    return AddressingData(0, mIcpu->getRegister(Register::A));
 }
 
 AddressingData Addressing::Accumulator() const
 {
-    return AddressingData(0, mIcpu->registers().A);
+    return AddressingData(0, mIcpu->getRegister(Register::A));
 }
 
 AddressingData Addressing::Immediate() const
@@ -36,7 +36,7 @@ AddressingData Addressing::ZeroPage() const
 
 AddressingData Addressing::ZeroPageX() const
 {
-    uint16_t address = (mIcpu->fetchByte() + mIcpu->registers().X) & 0x00FF;
+    uint16_t address = (mIcpu->fetchByte() + mIcpu->getRegister(Register::X)) & 0x00FF;
     uint8_t data = mIcpu->readByte(address);
 
     return AddressingData(address, data);
@@ -44,7 +44,7 @@ AddressingData Addressing::ZeroPageX() const
 
 AddressingData Addressing::ZeroPageY() const
 {
-    uint16_t address = (mIcpu->fetchByte() + mIcpu->registers().Y) & 0x00FF;
+    uint16_t address = (mIcpu->fetchByte() + mIcpu->getRegister(Register::Y)) & 0x00FF;
     uint8_t data = mIcpu->readByte(address);
 
     return AddressingData(address, data);
@@ -71,14 +71,14 @@ AddressingData Addressing::Absolute() const
 
 AddressingData Addressing::AbsoluteOffsetX() const
 {
-    uint16_t address = mIcpu->fetchWord() + mIcpu->registers().X;
+    uint16_t address = mIcpu->fetchWord() + mIcpu->getRegister(Register::X);
     uint8_t data = mIcpu->readByte(address);
     return AddressingData(address, data);
 }
 
 AddressingData Addressing::AbsoluteOffsetY() const
 {
-    uint16_t address = mIcpu->fetchWord() + mIcpu->registers().Y;
+    uint16_t address = mIcpu->fetchWord() + mIcpu->getRegister(Register::Y);
     uint8_t data = mIcpu->readByte(address);
     return AddressingData(address, data);
 }
@@ -93,7 +93,7 @@ AddressingData Addressing::Indirect() const
 }
 AddressingData Addressing::IndirectX() const
 {
-    uint16_t addressPointer = mIcpu->fetchWord() + mIcpu->registers().X;
+    uint16_t addressPointer = mIcpu->fetchWord() + mIcpu->getRegister(Register::X);
     uint16_t data = mIcpu->readWord(addressPointer);
 
     return AddressingData(addressPointer, data);
@@ -101,7 +101,7 @@ AddressingData Addressing::IndirectX() const
 
 AddressingData Addressing::IndirectY() const
 {
-    uint16_t addressPointer = mIcpu->fetchWord() + mIcpu->registers().Y;
+    uint16_t addressPointer = mIcpu->fetchWord() + mIcpu->getRegister(Register::Y);
     uint16_t data = mIcpu->readWord(addressPointer);
 
     return AddressingData(addressPointer, data);
