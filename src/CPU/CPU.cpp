@@ -1,10 +1,9 @@
-#include "CPU/CPU.h"
+#include "CPU.h"
 #include "Instruction/Instructions/LDA.h"
 
 
 CPU::CPU()
 {
-    mMemory.initialize();
 }
 
 CPU::~CPU()
@@ -22,16 +21,16 @@ void CPU::reset()
 {
     mRegisters.PC = 0xFFCC;
     mRegisters.SP = 0xFF;
-    mRegisters.status.D = 0;
+    mRegisters.statusRegister.statusFlags.D = 0;
     mRegisters.A = 0;
     mRegisters.X = 0;
     mRegisters.Y = 0;
-    mRegisters.status.byte = 0;
+    mRegisters.statusRegister.byte = 0;
 }
 
 uint8_t CPU::fetchByte()
 {
-    uint8_t byte = mMemory.readByte(mRegisters.PC);
+    uint8_t byte = mBus->readByte(mRegisters.PC);
 
     ++mRegisters.PC;
 
@@ -40,7 +39,7 @@ uint8_t CPU::fetchByte()
 
 uint16_t CPU::fetchWord()
 {
-    uint8_t word = mMemory.readWord(mRegisters.PC);
+    uint16_t word = mBus->readWord(mRegisters.PC);
 
     ++mRegisters.PC;
     ++mRegisters.PC;
@@ -50,24 +49,24 @@ uint16_t CPU::fetchWord()
 
 void CPU::writeByte(uint16_t address, uint8_t byte)
 {
-    mMemory.writeByte(address, byte);
+    mBus->writeByte(address, byte);
 }
 
 void CPU::writeWord(uint16_t address, uint16_t word)
 {
-    mMemory.writeWord(address, word);
+    mBus->writeWord(address, word);
 }
 
 void CPU::pushByte(uint8_t data)
 {
-    mMemory.writeByte(mStackPointerOffset + mRegisters.SP, data);
+    mBus->writeByte(mStackPointerOffset + mRegisters.SP, data);
     mRegisters.SP--;
 }
 
 uint8_t CPU::popByte()
 {
     mRegisters.SP--;
-    return mMemory.readByte(mStackPointerOffset + mRegisters.SP);
+    return mBus->readByte(mStackPointerOffset + mRegisters.SP);
 }
 
 void CPU::pushWord(uint16_t data)
@@ -85,15 +84,21 @@ uint16_t CPU::popWord()
     return lo | (hi << 8 & 0xFF00);
 }
 
+uint8_t CPU::readByte(uint16_t address)
+{
+    return mBus->readByte(address);
+}
+
+uint16_t CPU::readWord(uint16_t address)
+{
+    return mBus->readWord(address);
+}
 
 Registers& CPU::registers()
 {
     return mRegisters;
 }
-Memory& CPU::memory()
-{
-    return mMemory;
-}
+
 void CPU::execute()
 {
     OpCode opCode = static_cast<OpCode>(fetchByte());
@@ -106,9 +111,12 @@ void CPU::execute()
     mInstructions.at(opCode)->run();
 }
 
-const AddressingData CPU::addressing(AddressingMode mode) const
+void CPU::connectBus(std::shared_ptr<IBus> bus)
 {
-    return mAddressingModes->addressingFunction(mode)();
+}
+AddressingData CPU::addressing(AddressingMode mode) const
+{
+    return mAddressingModes->addressing(mode);
 }
 void CPU::initInstructions()
 {

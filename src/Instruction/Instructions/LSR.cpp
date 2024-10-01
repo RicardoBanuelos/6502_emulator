@@ -32,8 +32,8 @@ void LSR::run()
         mIcpu->writeByte(addressingData.address, result);
     }
 
-    mIcpu->registers().status.setFlag(Flag::C, carry);
-    mIcpu->registers().status.setFlag(Flag::Z, result == 0);
-    mIcpu->registers().status.setFlag(Flag::N, result & (1 << 7));
+    mIcpu->registers().statusRegister.setFlag(Flag::C, carry);
+    mIcpu->registers().statusRegister.setFlag(Flag::Z, result == 0);
+    mIcpu->registers().statusRegister.setFlag(Flag::N, result & (1 << 7));
 
 }

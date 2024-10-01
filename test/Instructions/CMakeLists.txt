@@ -10,4 +10,4 @@ target_link_libraries(${LDA_TEST_EXECUTABLE}
   ${INTRUCTIONS_LIBRARY} 
   ${MEMORY_LIBRARY})
 
-add_test(ldaTest ${LDA_TEST_EXECUTABLE})
+gtest_discover_tests(${LDA_TEST_EXECUTABLE})

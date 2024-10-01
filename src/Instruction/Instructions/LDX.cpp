@@ -23,6 +23,6 @@ void LDX::run()
         mIcpu->registers().X = addressingData.data;
     }
 
-    mIcpu->registers().status.setFlag(Flag::Z, mIcpu->registers().X == 0);
-    mIcpu->registers().status.setFlag(Flag::N, mIcpu->registers().X & (1 << 7));
+    mIcpu->registers().statusRegister.setFlag(Flag::Z, mIcpu->registers().X == 0);
+    mIcpu->registers().statusRegister.setFlag(Flag::N, mIcpu->registers().X & (1 << 7));
 }

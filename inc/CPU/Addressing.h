@@ -15,7 +15,7 @@ public:
 
 
 
-    const std::function<AddressingData()> &addressingFunction(AddressingMode mode);
+    AddressingData addressing(AddressingMode mode);
     
 private:
     virtual AddressingData Implied() const;

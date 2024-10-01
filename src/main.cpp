@@ -2,6 +2,9 @@
 
 #include "CPU/CPU.h"
 #include "Instruction/Instructions/LDA.h"
+#include "Memory/Memory.h"
+
+
 int main(int, char**)
 {
     std::shared_ptr<CPU> cpu = std::make_shared<CPU>();

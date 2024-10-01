@@ -14,7 +14,7 @@ void PLA::run()
 {
     mIcpu->registers().A = mIcpu->popByte();
 
-    mIcpu->registers().status.setFlag(Flag::Z, mIcpu->registers().A == 0);
-    mIcpu->registers().status.setFlag(Flag::N, mIcpu->registers().A & (1 << 7));
+    mIcpu->registers().statusRegister.setFlag(Flag::Z, mIcpu->registers().A == 0);
+    mIcpu->registers().statusRegister.setFlag(Flag::N, mIcpu->registers().A & (1 << 7));
     
 }
