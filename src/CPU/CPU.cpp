@@ -1,4 +1,4 @@
-#include "CPU.h"
+#include "CPU/CPU.h"
 #include "Instruction/Instructions/LDA.h"
 #include "Instruction/Instructions.h"
 
@@ -94,9 +94,67 @@ uint16_t CPU::readWord(uint16_t address)
     return mBus->readWord(address);
 }
 
-Registers& CPU::registers()
+void CPU::setFlag(Flag flag, bool value)
 {
-    return mRegisters;
+    mRegisters.statusRegister.setFlag(flag, value);
+}
+
+bool CPU::getFlag(Flag flag)
+{
+    return mRegisters.statusRegister.getFlag(flag);
+}
+
+void CPU::setRegister(Register register, uint16_t value)
+{
+    switch (register)
+    {
+        case PC:
+            mRegisters.PC = value;
+            break;
+
+        case SP:
+            mRegisters.SP = value;
+            break;
+
+        case A:
+            mRegisters.A = value;
+            break;
+
+        case X:
+            mRegisters.X = value;
+            break;
+
+        case Y:
+            mRegisters.Y = value;
+            break;
+        
+        default:
+            break;
+    }
+}
+
+uint16_t CPU::getRegister(Register register)
+{
+    switch (register)
+    {
+        case PC:
+            return mRegisters.PC;
+
+        case SP:
+            return mRegisters.SP;
+
+        case A:
+            return mRegisters.A;
+
+        case X:
+            return mRegisters.X;
+
+        case Y:
+            return mRegisters.Y;
+        
+        default:
+            return -1;
+    }
 }
 
 void CPU::execute()
