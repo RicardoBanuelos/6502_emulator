@@ -1,4 +1,3 @@
 set(CPU_LIBRARY cpulib CACHE INTERNAL "")
- 
-
-add_library(${CPU_LIBRARY} Addressing.cpp CPU.cpp)
+include_directories(${PROJECT_SOURCE_DIR}/inc/CPU)
+add_library(${CPU_LIBRARY} CPU.cpp Addressing.cpp)

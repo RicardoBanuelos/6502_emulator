@@ -16,5 +16,5 @@ SEC::~SEC()
 
 void SEC::run()
 {
-    mIcpu->registers().status.setFlag(Flag::C, true);
+    mIcpu->registers().statusRegister.setFlag(Flag::C, true);
 }

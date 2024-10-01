@@ -1,8 +1,8 @@
 #pragma once
 
-enum AddressingMode
+enum AddressingMode : int
 {
-    Implied,
+    Implied = 0,
     Accumulator,
     Immediate,
     ZeroPage,

@@ -31,13 +31,13 @@ void ROR::run()
         carry = data & (1 << 7);
 
         data = (data >> 1) | (data << 7);
-        mIcpu->memory().writeByte(addressingData.address, data);
+        mIcpu->writeByte(addressingData.address, data);
 
         result = data;
     }
 
-    mIcpu->registers().status.setFlag(Flag::C, carry);
-    mIcpu->registers().status.setFlag(Flag::Z, result == 0);
-    mIcpu->registers().status.setFlag(Flag::N, result & (1 << 7));
+    mIcpu->registers().statusRegister.setFlag(Flag::C, carry);
+    mIcpu->registers().statusRegister.setFlag(Flag::Z, result == 0);
+    mIcpu->registers().statusRegister.setFlag(Flag::N, result & (1 << 7));
 
 }

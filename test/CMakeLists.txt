@@ -1,4 +1,5 @@
 include(FetchContent)
+enable_testing()
 
 FetchContent_Declare(
   googletest
@@ -8,12 +9,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 add_library(GTest::GTest INTERFACE IMPORTED)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
+include(GoogleTest)
 
-add_executable(multiply_test multiply_test.cpp)
 
-target_link_libraries(multiply_test
- PRIVATE
-  GTest::GTest
-  multiply)
+add_subdirectory(Instructions)
 
-add_test(multiply_gtests multiply_test)

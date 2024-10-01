@@ -13,7 +13,7 @@ public:
     Addressing(std::shared_ptr<ICPU> icpu);
     ~Addressing();
 
-    const std::function<AddressingData()> &addressingFunction(AddressingMode mode);
+    AddressingData addressing(AddressingMode mode);
     
 private:
     virtual AddressingData Implied() const;

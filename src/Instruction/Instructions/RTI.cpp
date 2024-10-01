@@ -12,6 +12,6 @@ RTI::~RTI()
 
 void RTI::run()
 {
-    mIcpu->registers().status.byte = mIcpu->popByte();
+    mIcpu->registers().statusRegister.byte = mIcpu->popByte();
     mIcpu->registers().PC = mIcpu->popWord();
 }

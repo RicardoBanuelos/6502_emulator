@@ -11,5 +11,5 @@ PHP::~PHP()
 
 void PHP::run()
 {
-    mIcpu->pushByte(mIcpu->registers().status.byte);
+    mIcpu->pushByte(mIcpu->registers().statusRegister.byte);
 }
