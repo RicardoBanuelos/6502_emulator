@@ -13,8 +13,6 @@ public:
     Addressing(std::shared_ptr<ICPU> icpu);
     ~Addressing();
 
-
-
     AddressingData addressing(AddressingMode mode);
     
 private:

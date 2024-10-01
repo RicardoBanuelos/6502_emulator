@@ -36,8 +36,11 @@ private:
     uint8_t readByte(uint16_t address) override;
     uint16_t readWord(uint16_t address) override;
 
+    void setFlag(Flag flag, bool value) override;
+    bool getFlag(Flag flag) override;
+    void setRegister(Register register, uint16_t value) override;
+    uint16_t getRegister(Register register) override;
 
-    Registers &registers() override;
     Registers mRegisters;
     std::unique_ptr<Addressing> mAddressingModes;
     std::unordered_map<OpCode, std::unique_ptr<Instruction>> mInstructions;

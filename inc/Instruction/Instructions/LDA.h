@@ -14,5 +14,4 @@ public:
     ~LDA();
 
     void run() override;
-private:
 };

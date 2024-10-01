@@ -11,12 +11,12 @@ ROL::~ROL()
 
 void ROL::run()
 {
-    AddressingData addressingData = mIcpu->addressing(mAddreesingMode);
+    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
     uint8_t carry;
     uint8_t result;
 
 
-    if(AddressingMode::Accumulator == mAddreesingMode)
+    if(AddressingMode::Accumulator == mAddressingMode)
     {
         uint8_t &A = mIcpu->registers().A;
         carry = A & (1 << 7);

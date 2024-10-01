@@ -25,7 +25,6 @@ public:
     virtual void writeWord(uint16_t address, uint16_t word) = 0;
     virtual uint8_t readByte(uint16_t address) = 0;
     virtual uint16_t readWord(uint16_t address) = 0;
-
     
     virtual void pushByte(uint8_t data) = 0;
     virtual uint8_t popByte() = 0;
@@ -33,5 +32,10 @@ public:
     virtual uint16_t popWord() = 0;
     
     virtual AddressingData addressing(AddressingMode mode) const = 0;
-    virtual Registers &registers() = 0;
+    
+    virtual void setFlag(Flag flag, bool value);
+    virtual bool getFlag(Flag);
+    virtual void setRegister(Register reg, uint16_t value);
+    virtual uint16_t getRegister(Register reg);
+
 };

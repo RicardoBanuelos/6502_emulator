@@ -11,7 +11,7 @@ SBC::~SBC()
 
 void SBC::run()
 {
-    uint16_t value = mIcpu->addressing(mAddreesingMode).data ^ 0x00FF;
+    uint16_t value = mIcpu->addressing(mAddressingMode).data ^ 0x00FF;
 
     uint16_t tmp = static_cast<uint16_t>(mIcpu->registers().A) + value + static_cast<uint16_t>(mIcpu->registers().statusRegister.statusFlags.C);
     

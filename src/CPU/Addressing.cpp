@@ -17,8 +17,9 @@ AddressingData Addressing::Implied() const
 
 AddressingData Addressing::Accumulator() const
 {
-    return AddressingData(0, 0);
+    return AddressingData(0, mIcpu->registers().A);
 }
+
 AddressingData Addressing::Immediate() const
 {
     return AddressingData(0, mIcpu->fetchByte() & 0x00FF);

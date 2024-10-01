@@ -13,9 +13,9 @@ ORA::~ORA()
 
 void ORA::run()
 {
-    AddressingData addressingData = mIcpu->addressing(mAddreesingMode);
+    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
 
-    if(AddressingMode::Immediate == mAddreesingMode)
+    if(AddressingMode::Immediate == mAddressingMode)
     {
         mIcpu->registers().A |= addressingData.address;
     }
