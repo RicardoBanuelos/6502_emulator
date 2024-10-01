@@ -13,11 +13,11 @@ LSR::~LSR()
 
 void LSR::run()
 {
-    const AddressingData addressingData = mIcpu->addressing(mAddreesingMode);
+    const AddressingData addressingData = mIcpu->addressing(mAddressingMode);
     uint8_t carry = 0;
     uint8_t result;
 
-    if(mAddreesingMode == AddressingMode::Accumulator)
+    if(mAddressingMode == AddressingMode::Accumulator)
     {
         carry = mIcpu->registers().A & 0x01;
         result = mIcpu->registers().A >> 1;

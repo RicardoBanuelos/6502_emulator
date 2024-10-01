@@ -11,9 +11,9 @@ LDA::~LDA()
 
 void LDA::run()
 {
-    AddressingData addressingData = mIcpu->addressing(mAddreesingMode);
+    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
 
-    if(mAddreesingMode == AddressingMode::Immediate)
+    if(mAddressingMode == AddressingMode::Immediate)
     {
         mIcpu->registers().A = static_cast<uint8_t>(addressingData.address);
     }
