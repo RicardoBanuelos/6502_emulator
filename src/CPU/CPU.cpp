@@ -178,6 +178,7 @@ void CPU::execute()
 
 void CPU::connectBus(std::shared_ptr<IBus> bus)
 {
+    mBus = bus;
 }
 AddressingData CPU::addressing(AddressingMode mode) const
 {
