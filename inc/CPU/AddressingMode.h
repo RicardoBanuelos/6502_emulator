@@ -14,5 +14,6 @@ enum AddressingMode
     AbsoluteOffsetY,
     Indirect,
     IndirectX,
-    IndirectY
+    IndirectY,
+    NA
 };
