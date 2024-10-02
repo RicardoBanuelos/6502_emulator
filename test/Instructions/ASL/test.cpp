@@ -8,6 +8,13 @@ static std::shared_ptr<ICPU> cpu(new CPU());
 static std::shared_ptr<Memory> mem(new Memory());
 static std::shared_ptr<Bus> bus(new Bus());
 
+void ASSERT_ALL(uint16_t expected)
+{
+    ASSERT_EQ(cpu->getFlag(Flag::C), expected & 0xFF00 > 0);
+    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
+    ASSERT_EQ(cpu->getFlag(Flag::N), expected & 0x80 > 0);
+}
+
 TEST(instructions, asl_accumulator)
 {
     cpu->reset();
@@ -16,6 +23,7 @@ TEST(instructions, asl_accumulator)
     std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::Implied, 2));
     instruction->run();
 
+    ASSERT_ALL(expected);
     ASSERT_EQ(expected, cpu->getRegister(Register::A));
 }
 
@@ -30,6 +38,7 @@ TEST(instructions, asl_zero_page)
     std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::ZeroPage, 5));
     instruction->run();
 
+    ASSERT_ALL(expected);
     ASSERT_EQ(expected, cpu->readByte(zeroPageAddress));
 }
 
@@ -45,6 +54,7 @@ TEST(instructions, asl_zero_page_x)
     std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::ZeroPageX, 6));
     instruction->run();
 
+    ASSERT_ALL(expected);
     ASSERT_EQ(expected, cpu->readByte(zeroPageAddress));
 }
 
@@ -59,6 +69,7 @@ TEST(instructions, asl_absolute)
     std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::Absolute, 6));
     instruction->run();
 
+    ASSERT_ALL(expected);
     ASSERT_EQ(expected, cpu->readByte(absoluteAddress));
 }
 
@@ -74,6 +85,7 @@ TEST(instructions, asl_absolute_x)
     std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::AbsoluteOffsetX, 7));
     instruction->run();
 
+    ASSERT_ALL(expected);
     ASSERT_EQ(expected, cpu->readByte(absoluteAddress));
 }
 
@@ -89,7 +101,6 @@ int main(int argc, char** argv)
 
     cppu->connectBus(bus);
     bus->connectMemory(mem);
-    
    
     return RUN_ALL_TESTS();
 }

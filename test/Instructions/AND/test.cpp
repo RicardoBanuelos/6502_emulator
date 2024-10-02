@@ -8,6 +8,13 @@ static std::shared_ptr<ICPU> cpu(new CPU());
 static std::shared_ptr<Memory> mem(new Memory());
 static std::shared_ptr<Bus> bus(new Bus());
 
+void ASSERT_ALL(uint16_t expected)
+{
+    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
+    ASSERT_EQ(cpu->getFlag(Flag::N), (expected & 0x80 ) > 0);
+    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+}
+
 TEST(instructions, and_immediate)
 {
     cpu->reset();
@@ -19,10 +26,7 @@ TEST(instructions, and_immediate)
     std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::Immediate, 2));
     instruction->run();
 
-
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), (expected & 0x80 ) > 0);
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(expected);
 }
 
 TEST(instructions, and_zero_page)
@@ -37,9 +41,7 @@ TEST(instructions, and_zero_page)
     std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::ZeroPage, 3));
     instruction->run();
 
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), (expected & 0x80 ) > 0);
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(expected);
 }
 
 TEST(instructions, and_zero_page_x)
@@ -55,9 +57,7 @@ TEST(instructions, and_zero_page_x)
     std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::ZeroPageX, 4));
     instruction->run();
 
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), (expected & 0x80 ) > 0);
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(expected);
 }
 
 TEST(instructions, and_absolute)
@@ -72,9 +72,7 @@ TEST(instructions, and_absolute)
     std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::Absolute, 4));
     instruction->run();
 
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), (expected & 0x80 ) > 0);
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(expected);
 }
 
 TEST(instructions, and_absolute_x)
@@ -90,9 +88,7 @@ TEST(instructions, and_absolute_x)
     std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::AbsoluteOffsetX, 4));
     instruction->run();
 
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), (expected & 0x80 ) > 0);
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(expected);
 }
 
 TEST(instructions, and_absolute_y)
@@ -108,16 +104,14 @@ TEST(instructions, and_absolute_y)
     std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::AbsoluteOffsetY, 4));
     instruction->run();
 
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), (expected & 0x80 ) > 0);
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(expected);
 }
 
 TEST(instructions, and_indirect_x)
 {
     cpu->reset();
     uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t indirectAddress = cpu->readWord(address)
+    uint16_t indirectAddress = cpu->readByte(address)
                              + cpu->getRegister(Register::X);;
 
     uint16_t expected = cpu->readByte(indirectAddress) & 0x00FF 
@@ -126,16 +120,14 @@ TEST(instructions, and_indirect_x)
     std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::IndirectX, 6));
     instruction->run();
 
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), (expected & 0x80 ) > 0);
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(expected);
 }
 
 TEST(instructions, and_indirect_y)
 {
     cpu->reset();
     uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t indirectAddress = cpu->readWord(address)
+    uint16_t indirectAddress = cpu->readByte(address)
                              + cpu->getRegister(Register::Y);;
 
     uint16_t expected = cpu->readByte(indirectAddress) & 0x00FF 
@@ -144,9 +136,7 @@ TEST(instructions, and_indirect_y)
     std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::IndirectY, 5));
     instruction->run();
 
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), (expected & 0x80 ) > 0);
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(expected);
 }
 
 int main(int argc, char** argv)

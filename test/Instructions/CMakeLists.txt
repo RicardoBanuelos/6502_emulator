@@ -1,4 +1,5 @@
 add_subdirectory(ADC)
 add_subdirectory(AND)
 add_subdirectory(ASL)
+add_subdirectory(BCC)
 add_subdirectory(LDA)

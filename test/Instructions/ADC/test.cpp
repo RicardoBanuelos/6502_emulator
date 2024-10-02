@@ -10,6 +10,18 @@ static std::shared_ptr<ICPU> cpu(new CPU());
 static std::shared_ptr<Memory> mem(new Memory());
 static std::shared_ptr<Bus> bus(new Bus());
 
+void ASSERT_ALL(uint16_t a, uint16_t fetched, uint16_t expected)
+{
+    // Overflow formula based on javidx9
+    // Explanation here: https://github.com/OneLoneCoder/olcNES/blob/master/Part%232%20-%20CPU/olc6502.cpp
+    bool overflow = (~(a ^ fetched) & (a ^ expected)) & 0x0080;
+    ASSERT_EQ(cpu->getFlag(Flag::V), overflow);
+    ASSERT_EQ(cpu->getFlag(Flag::C), expected > 255);
+    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
+    ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(expected & 0x80));
+    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+}
+
 TEST(instructions, adc_immediate)
 {
     cpu->reset();
@@ -24,14 +36,7 @@ TEST(instructions, adc_immediate)
     std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::Immediate, 2));
     adc->run();
 
-    // Overflow formula based on javidx9
-    // Explanation here: https://github.com/OneLoneCoder/olcNES/blob/master/Part%232%20-%20CPU/olc6502.cpp
-    bool overflow = (~(a ^ fetched) & (a ^ expected)) & 0x0080;
-    ASSERT_EQ(cpu->getFlag(Flag::V), overflow);
-    ASSERT_EQ(cpu->getFlag(Flag::C), expected > 255);
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(expected & 0x80));
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(a, fetched, expected);
 }
 
 TEST(instructions, adc_zero_page)
@@ -49,12 +54,7 @@ TEST(instructions, adc_zero_page)
     std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::ZeroPage, 3));
     adc->run();
 
-    bool overflow = (~(a ^ fetched) & (a ^ expected)) & 0x0080;
-    ASSERT_EQ(cpu->getFlag(Flag::V), overflow);
-    ASSERT_EQ(cpu->getFlag(Flag::C), expected > 255);
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(expected & 0x80));
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(a, fetched, expected);
 }
 
 TEST(instructions, adc_zero_page_x)
@@ -73,12 +73,7 @@ TEST(instructions, adc_zero_page_x)
     std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::ZeroPage, 4));
     adc->run();
 
-    bool overflow = (~(a ^ fetched) & (a ^ expected)) & 0x0080;
-    ASSERT_EQ(cpu->getFlag(Flag::V), overflow);
-    ASSERT_EQ(cpu->getFlag(Flag::C), expected > 255);
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(expected & 0x80));
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(a, fetched, expected);
 }
 
 TEST(instructions, adc_absolute)
@@ -96,12 +91,7 @@ TEST(instructions, adc_absolute)
     std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::Absolute, 4));
     adc->run();
 
-    bool overflow = (~(a ^ fetched) & (a ^ expected)) & 0x0080;
-    ASSERT_EQ(cpu->getFlag(Flag::V), overflow);
-    ASSERT_EQ(cpu->getFlag(Flag::C), expected > 255);
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(expected & 0x80));
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(a, fetched, expected);
 }
 
 TEST(instructions, adc_absolute_x)
@@ -120,12 +110,7 @@ TEST(instructions, adc_absolute_x)
     std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::AbsoluteOffsetX, 4));
     adc->run();
 
-    bool overflow = (~(a ^ fetched) & (a ^ expected)) & 0x0080;
-    ASSERT_EQ(cpu->getFlag(Flag::V), overflow);
-    ASSERT_EQ(cpu->getFlag(Flag::C), expected > 255);
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(expected & 0x80));
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(a, fetched, expected);
 }
 
 TEST(instructions, adc_absolute_y)
@@ -144,19 +129,14 @@ TEST(instructions, adc_absolute_y)
     std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::AbsoluteOffsetY, 4));
     adc->run();
 
-    bool overflow = (~(a ^ fetched) & (a ^ expected)) & 0x0080;
-    ASSERT_EQ(cpu->getFlag(Flag::V), overflow);
-    ASSERT_EQ(cpu->getFlag(Flag::C), expected > 255);
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(expected & 0x80));
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(a, fetched, expected);
 }
 
 TEST(instructions, adc_indirect_x)
 {
     cpu->reset();
     uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t indirectAddress = cpu->readWord(address)
+    uint16_t indirectAddress = cpu->readByte(address)
                              + cpu->getRegister(Register::X);;
 
     uint16_t a = cpu->getRegister(Register::A);
@@ -168,19 +148,14 @@ TEST(instructions, adc_indirect_x)
     std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::IndirectX, 6));
     adc->run();
 
-    bool overflow = (~(a ^ fetched) & (a ^ expected)) & 0x0080;
-    ASSERT_EQ(cpu->getFlag(Flag::V), overflow);
-    ASSERT_EQ(cpu->getFlag(Flag::C), expected > 255);
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(expected & 0x80));
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(a, fetched, expected);
 }
 
 TEST(instructions, adc_indirect_y)
 {
     cpu->reset();
     uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t indirectAddress = cpu->readWord(address)
+    uint16_t indirectAddress = cpu->readByte(address)
                              + cpu->getRegister(Register::Y);;
 
     uint16_t a = cpu->getRegister(Register::A);
@@ -192,12 +167,7 @@ TEST(instructions, adc_indirect_y)
     std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::IndirectY, 5));
     adc->run();
 
-    bool overflow = (~(a ^ fetched) & (a ^ expected)) & 0x0080;
-    ASSERT_EQ(cpu->getFlag(Flag::V), overflow);
-    ASSERT_EQ(cpu->getFlag(Flag::C), expected > 255);
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(expected & 0x80));
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_ALL(a, fetched, expected);
 }
 
 int main(int argc, char** argv)
