@@ -7,139 +7,201 @@
 static std::shared_ptr<ICPU> cpu(new CPU());
 static std::shared_ptr<Memory> mem(new Memory());
 static std::shared_ptr<Bus> bus(new Bus());
-
+static const int MAX_ITERATIONS = 10000;
 
 
 TEST(instructions, lda_test_immediate)
 {
-    uint16_t baseAddr = 1250;
-    uint8_t expected = 89;
-    cpu->setRegister(Register::PC, baseAddr);
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        cpu->setRegister(Register::PC, currentAddr);
 
-    mem->writeByte(baseAddr, expected);
-    std::unique_ptr<LDA> lda(new LDA(cpu, AddressingMode::Immediate, 2));
-    lda->run();
+        uint8_t expected = cpu->readByte(currentAddr);
 
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+        LDA lda(cpu, AddressingMode::Immediate, 2);
+        lda.run();
+
+        ASSERT_EQ(cpu->getRegister(Register::A), expected);
+
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+        
+    }
 }
 
 TEST(instructions, lda_test_zeroPage)
 {
-    uint16_t baseAddr = 1250;
-    uint8_t addrToRead = 89;
-    uint8_t expected = 120;
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        cpu->setRegister(Register::PC, currentAddr);
 
-    cpu->setRegister(Register::PC, baseAddr);
+        uint8_t lookUpAddr = cpu->readByte(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr);
 
-    mem->writeByte(baseAddr, addrToRead);
-    mem->writeByte(addrToRead, expected);
-    
+        LDA lda(cpu, AddressingMode::ZeroPage, 2);
+        lda.run();
 
-    std::unique_ptr<LDA> lda(new LDA(cpu, AddressingMode::ZeroPage, 2));
-    lda->run();
+        ASSERT_EQ(cpu->getRegister(Register::A), expected);
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+    }
 
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
 }
 
 TEST(instructions, lda_test_zeroPageX)
 {
-    uint16_t baseAddr = 1250;
-    uint8_t addrToRead = 81;
-    uint8_t xOffset = 9;
-    
-    uint8_t expected = 120;
-    
-    cpu->setRegister(Register::PC, baseAddr);
-    cpu->setRegister(Register::X, xOffset);
-    
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        uint8_t currentXvalue = rand() % UINT8_MAX;
 
-    mem->writeByte(baseAddr, addrToRead);
-    mem->writeByte(addrToRead + xOffset, expected);
+        cpu->setRegister(Register::PC, currentAddr);
+        cpu->setRegister(Register::X, currentXvalue);
+        
+        uint8_t lookUpAddr = cpu->readByte(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr + currentXvalue);
 
+        LDA lda(cpu, AddressingMode::ZeroPageX, 2);
+        lda.run();
 
-    std::unique_ptr<LDA> lda(new LDA(cpu, AddressingMode::ZeroPageX, 2));
-    lda->run();
-
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+        ASSERT_EQ(cpu->getRegister(Register::A), expected);
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+    }
 }
 
 
 
 TEST(instructions, lda_test_zeroPageY)
 {
-    uint16_t baseAddr = 1250;
-    uint8_t addrToRead = 81;
-    uint8_t xOffset = 9;
-    
-    uint8_t expected = 120;
-    
-    cpu->setRegister(Register::PC, baseAddr);
-    cpu->setRegister(Register::Y, xOffset);
-    
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        uint8_t currentYvalue = rand() % UINT8_MAX;
 
-    mem->writeByte(baseAddr, addrToRead);
-    mem->writeByte(addrToRead + xOffset, expected);
+        cpu->setRegister(Register::PC, currentAddr);
+        cpu->setRegister(Register::Y, currentYvalue);
+        
+        uint8_t lookUpAddr = cpu->readByte(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr + currentYvalue);
 
+        LDA lda(cpu, AddressingMode::ZeroPageY, 2);
+        lda.run();
 
-    std::unique_ptr<LDA> lda(new LDA(cpu, AddressingMode::ZeroPageY, 2));
-    lda->run();
-
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+        ASSERT_EQ(cpu->getRegister(Register::A), expected);
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+    }
 }
 
 TEST(instructions, lda_test_absolute)
 {
-    uint16_t baseAddr = 1250;
-    uint16_t addrToLook = 3254;
-    uint8_t expected = 125;
-    
-    cpu->setRegister(Register::PC, baseAddr);
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        uint16_t currentAddr = rand() % UINT16_MAX;
 
-    cpu->writeWord(baseAddr, addrToLook);
-    cpu->writeByte(addrToLook, expected);
+        cpu->setRegister(Register::PC, currentAddr);
+        
+        uint16_t lookUpAddr = cpu->readWord(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr);
 
-     std::unique_ptr<LDA> lda(new LDA(cpu, AddressingMode::Absolute, 2));
-    lda->run();
+        LDA lda(cpu, AddressingMode::Absolute, 2);
+        lda.run();
 
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+        ASSERT_EQ(cpu->getRegister(Register::A), expected);
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+    }
 }
 
 TEST(instructions, lda_test_absoluteX)
 {
-    uint16_t baseAddr = 1250;
-    uint8_t addrOffset = 12;
-    uint16_t addrToLook = 3254;
-    uint8_t expected = 125;
-    
-    cpu->setRegister(Register::PC, baseAddr);
-    cpu->setRegister(Register::X, addrOffset);
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        uint8_t currentXvalue = rand() % UINT8_MAX;
 
-    cpu->writeWord(baseAddr, addrToLook);
-    cpu->writeByte(addrToLook + addrOffset, expected);
+        cpu->setRegister(Register::PC, currentAddr);
+        cpu->setRegister(Register::X, currentXvalue);
+        
+        uint16_t lookUpAddr = cpu->readWord(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr + currentXvalue);
 
-    std::unique_ptr<LDA> lda(new LDA(cpu, AddressingMode::AbsoluteOffsetX, 2));
-    lda->run();
+        LDA lda(cpu, AddressingMode::AbsoluteOffsetX, 2);
+        lda.run();
 
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+        ASSERT_EQ(cpu->getRegister(Register::A), expected);
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+    }
 }
 
 TEST(instructions, lda_test_absoluteY)
 {
-    uint16_t baseAddr = 3321;
-    uint8_t addrOffset = 45;
-    uint16_t addrToLook = 3333;
-    uint8_t expected = 111;
-    
-    cpu->setRegister(Register::PC, baseAddr);
-    cpu->setRegister(Register::Y, addrOffset);
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        uint8_t currentYvalue = rand() % UINT8_MAX;
 
-    cpu->writeWord(baseAddr, addrToLook);
-    cpu->writeByte(addrToLook + addrOffset, expected);
+        cpu->setRegister(Register::PC, currentAddr);
+        cpu->setRegister(Register::Y, currentYvalue);
+        
+        uint16_t lookUpAddr = cpu->readWord(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr + currentYvalue);
 
-    std::unique_ptr<LDA> lda(new LDA(cpu, AddressingMode::AbsoluteOffsetY, 2));
-    lda->run();
+        LDA lda(cpu, AddressingMode::AbsoluteOffsetY, 2);
+        lda.run();
 
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+        ASSERT_EQ(cpu->getRegister(Register::A), expected);
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+    }
+}
+
+TEST(instructions, lda_test_indirect_x)
+{
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        uint8_t currentXvalue = rand() % UINT8_MAX;
+
+        cpu->setRegister(Register::PC, currentAddr);
+        cpu->setRegister(Register::X, currentXvalue);
+        
+        uint8_t lookUpAddr = cpu->readByte(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr + currentXvalue);
+
+        LDA lda(cpu, AddressingMode::IndirectX, 2);
+        lda.run();
+
+        ASSERT_EQ(cpu->getRegister(Register::A), expected);
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+    }
+}
+
+TEST(instructions, lda_test_indirect_Y)
+{
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        uint8_t currentXvalue = rand() % UINT8_MAX;
+
+        cpu->setRegister(Register::PC, currentAddr);
+        cpu->setRegister(Register::X, currentXvalue);
+        
+        uint8_t lookUpAddr = cpu->readByte(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr + currentXvalue);
+
+        LDA lda(cpu, AddressingMode::IndirectX, 2);
+        lda.run();
+
+        ASSERT_EQ(cpu->getRegister(Register::A), expected);
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+    }
 }
 
 
@@ -147,10 +209,15 @@ int main(int argc, char** argv)
 {
 
     ::testing::InitGoogleTest(&argc, argv);
-    mem->initialize();
+    srand(time(nullptr));
 
+    mem->initialize();
+    mem->randomize();
+    
     CPU *cppu = static_cast<CPU*>(cpu.get());
     cppu->init();
+    cppu->reset();
+    
 
     cppu->connectBus(bus);
     bus->connectMemory(mem);
