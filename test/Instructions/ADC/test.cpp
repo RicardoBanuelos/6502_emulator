@@ -56,6 +56,90 @@ TEST(instructions, adc_zero_page_x)
     ASSERT_EQ(expected, cpu->getRegister(Register::A));
 }
 
+TEST(instructions, adc_absolute)
+{
+    cpu->reset();
+    uint16_t address = cpu->getRegister(Register::PC);
+    uint16_t absoluteAddress = cpu->readWord(address);
+
+    uint8_t expected = cpu->readByte(absoluteAddress) 
+                     + cpu->getRegister(Register::A) 
+                     + cpu->getFlag(Flag::C);
+
+    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::Absolute, 4));
+    adc->run();
+
+    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+}
+
+TEST(instructions, adc_absolute_x)
+{
+    cpu->reset();
+    uint16_t address = cpu->getRegister(Register::PC);
+    uint16_t absoluteAddress = cpu->readWord(address)
+                             + cpu->getRegister(Register::X);;
+
+    uint8_t expected = cpu->readByte(absoluteAddress) 
+                     + cpu->getRegister(Register::A) 
+                     + cpu->getFlag(Flag::C);
+
+    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::AbsoluteOffsetX, 4));
+    adc->run();
+
+    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+}
+
+TEST(instructions, adc_absolute_y)
+{
+    cpu->reset();
+    uint16_t address = cpu->getRegister(Register::PC);
+    uint16_t absoluteAddress = cpu->readWord(address)
+                             + cpu->getRegister(Register::Y);;
+
+    uint8_t expected = cpu->readByte(absoluteAddress) 
+                     + cpu->getRegister(Register::A) 
+                     + cpu->getFlag(Flag::C);
+
+    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::AbsoluteOffsetY, 4));
+    adc->run();
+
+    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+}
+
+TEST(instructions, adc_indirect_x)
+{
+    cpu->reset();
+    uint16_t address = cpu->getRegister(Register::PC);
+    uint16_t indirectAddress = cpu->readWord(address)
+                             + cpu->getRegister(Register::X);;
+
+    uint8_t expected = cpu->readByte(indirectAddress) & 0x00FF 
+                     + cpu->getRegister(Register::A) 
+                     + cpu->getFlag(Flag::C);
+
+    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::IndirectX, 6));
+    adc->run();
+
+    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+}
+
+TEST(instructions, adc_indirect_y)
+{
+    cpu->reset();
+    uint16_t address = cpu->getRegister(Register::PC);
+    uint16_t indirectAddress = cpu->readWord(address)
+                             + cpu->getRegister(Register::Y);;
+
+    uint8_t expected = cpu->readByte(indirectAddress) & 0x00FF 
+                     + cpu->getRegister(Register::A) 
+                     + cpu->getFlag(Flag::C);
+
+    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::IndirectY, 5));
+    adc->run();
+
+    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+}
+
 int main(int argc, char** argv)
 {
 
