@@ -8,6 +8,7 @@ public:
     ~Memory();
 
     void initialize();
+    void randomize();
     uint8_t readByte(uint32_t address) const;
     uint16_t readWord(uint32_t address) const;
     void writeByte(uint32_t address, uint8_t byte);

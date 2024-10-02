@@ -14,7 +14,7 @@ public:
     ~CPU();
 
     void init();
-    void reset();
+    void reset() override;
     void execute();
     void connectBus(std::shared_ptr<IBus> bus);
 

@@ -1,6 +1,8 @@
 #include "Memory/Memory.h"
 #include "Memory.h"
 
+#include <random>
+
 Memory::Memory(){}
 Memory::~Memory(){}
 
@@ -9,6 +11,17 @@ void Memory::initialize()
     for(uint32_t i = 0; i < MAX_MEMORY; ++i)
     {
         mData[i] = 0;
+    }
+}
+
+void Memory::randomize()
+{
+    std::mt19937 gen(std::random_device{}());
+    std::uniform_int_distribution<> dis(0, UINT8_MAX);
+
+    for(int i = 0; i < MAX_MEMORY; ++i)
+    {
+        mData[i] = dis(gen);
     }
 }
 
