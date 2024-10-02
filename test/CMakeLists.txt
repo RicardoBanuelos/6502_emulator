@@ -1,5 +1,4 @@
 include(FetchContent)
-enable_testing()
 
 FetchContent_Declare(
   googletest
@@ -13,5 +12,6 @@ include(GoogleTest)
 
 add_subdirectory(Memory)
 add_subdirectory(CPU)
+add_subdirectory(Instructions)
 
 
