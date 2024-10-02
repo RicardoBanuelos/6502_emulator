@@ -47,7 +47,7 @@ TEST(instructions, and_zero_page_x)
     uint8_t expected = cpu->readByte(zeroPageAddress) 
                      & cpu->getRegister(Register::A);
 
-    std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::ZeroPage, 4));
+    std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::ZeroPageX, 4));
     instruction->run();
 
     ASSERT_EQ(expected, cpu->getRegister(Register::A));
