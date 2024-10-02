@@ -65,7 +65,7 @@ void CPU::pushByte(uint8_t data)
 
 uint8_t CPU::popByte()
 {
-    mRegisters.SP--;
+    mRegisters.SP++;
     return mBus->readByte(mStackPointerOffset + mRegisters.SP);
 }
 
