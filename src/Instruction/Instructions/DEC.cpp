@@ -14,9 +14,7 @@ void DEC::run()
     AddressingData addressingData = mIcpu->addressing(mAddressingMode);
     uint8_t fetched = addressingData.data;
 
-    --fetched;
-
-    mIcpu->writeByte(addressingData.address, fetched);
+    mIcpu->writeByte(addressingData.address, --fetched);
 
     mIcpu->setFlag(Flag::Z, fetched == 0);
     mIcpu->setFlag(Flag::N, fetched & 0x80);
