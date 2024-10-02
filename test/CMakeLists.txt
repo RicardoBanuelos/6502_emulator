@@ -13,5 +13,6 @@ include(GoogleTest)
 
 add_subdirectory(Memory)
 add_subdirectory(CPU)
+add_subdirectory(Instructions)
 
 

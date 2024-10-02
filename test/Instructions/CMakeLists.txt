@@ -8,6 +8,7 @@ target_link_libraries(${LDA_TEST_EXECUTABLE}
   GTest::GTest
   ${CPU_LIBRARY}
   ${INTRUCTIONS_LIBRARY} 
-  ${MEMORY_LIBRARY})
+  ${MEMORY_LIBRARY}
+  ${BUS_LIBRARY})
 
 gtest_discover_tests(${LDA_TEST_EXECUTABLE})
