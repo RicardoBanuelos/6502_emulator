@@ -109,6 +109,44 @@ TEST(stack_test, stackTest0)
     ASSERT_EQ(expected, cpu->popByte());
 }
 
+TEST(stack_test, stackTest1)
+{
+    cpu->pushByte(10);
+    cpu->pushByte(20);
+    cpu->pushByte(30);
+    cpu->pushByte(40);
+    
+
+    ASSERT_EQ(40, cpu->popByte());
+    ASSERT_EQ(30, cpu->popByte());
+    ASSERT_EQ(20, cpu->popByte());
+    ASSERT_EQ(10, cpu->popByte());
+}
+
+
+TEST(stack_test, stackTest2)
+{
+    uint16_t expected = 4587;
+    cpu->pushWord(expected);
+
+    ASSERT_EQ(expected, cpu->popWord());
+}
+
+
+TEST(stack_test, stackTest3)
+{
+    cpu->pushWord(1);
+    cpu->pushWord(1000);
+    cpu->pushWord(200);
+    cpu->pushWord(3000);
+    
+
+    ASSERT_EQ(3000, cpu->popWord());
+    ASSERT_EQ(200, cpu->popWord());
+    ASSERT_EQ(1000, cpu->popWord());
+    ASSERT_EQ(1, cpu->popWord());
+}
+
 
 
 int main(int argc, char** argv)
