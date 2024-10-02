@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IBus.h"
+#include "CPU/CPU.h"
 #include "Memory/Memory.h"
 #include <memory>
 
@@ -19,6 +20,7 @@ public:
     void connectMemory(std::shared_ptr<Memory> memory);
 
 private:
+    std::shared_ptr<CPU> mCPU;
     std::shared_ptr<Memory> mMemory;
     
 };
