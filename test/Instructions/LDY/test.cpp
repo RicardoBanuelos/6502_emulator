@@ -26,7 +26,6 @@ TEST(instructions, ldy_test_immediate)
 
         ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
         ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
-        
     }
 }
 
