@@ -51,7 +51,14 @@ add_library(${INTRUCTIONS_LIBRARY}
     Instructions/SED.cpp
     Instructions/SEI.cpp
     Instructions/STA.cpp
-    
+    Instructions/STX.cpp
+    Instructions/STY.cpp
+    Instructions/TAX.cpp
+    Instructions/TAY.cpp
+    Instructions/TSX.cpp
+    Instructions/TXA.cpp
+    Instructions/TXS.cpp
+    Instructions/TYA.cpp
 )
 
 
