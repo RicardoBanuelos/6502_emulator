@@ -144,6 +144,85 @@ TEST(instructions, sbc_test_absoluteX)
     }
 }
 
+TEST(instructions, sbc_test_indirectX)
+{
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        cpu->randomizeRegisters();
+        cpu->randomizeFlags();
+
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        cpu->setRegister(Register::PC, currentAddr);
+
+        uint8_t lookUpAddr = cpu->readByte(currentAddr);
+
+        uint16_t a = cpu->getRegister(Register::A);
+        uint16_t indirect = cpu->readWord(lookUpAddr + cpu->getRegister(Register::X));
+        uint16_t fetched = cpu->readByte(indirect);
+        uint16_t carry = cpu->getFlag(Flag::C);
+
+        uint16_t expected = a - fetched - carry;
+
+        SBC ins(cpu, AddressingMode::IndirectX, 2);
+        ins.run();
+
+        ASSERT_ALL(a, fetched, expected);
+    }
+}
+
+TEST(instructions, sbc_test_indirectY)
+{
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        cpu->randomizeRegisters();
+        cpu->randomizeFlags();
+
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        cpu->setRegister(Register::PC, currentAddr);
+
+        uint8_t lookUpAddr = cpu->readByte(currentAddr);
+
+        uint16_t a = cpu->getRegister(Register::A);
+        uint16_t indirect = cpu->readWord(lookUpAddr + cpu->getRegister(Register::Y));
+        uint16_t fetched = cpu->readByte(indirect);
+        uint16_t carry = cpu->getFlag(Flag::C);
+
+        uint16_t expected = a - fetched - carry;
+
+        SBC ins(cpu, AddressingMode::IndirectY, 2);
+        ins.run();
+
+        ASSERT_ALL(a, fetched, expected);
+    }
+}
+
+
+
+TEST(instructions, sbc_test_absoluteY)
+{
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        cpu->randomizeRegisters();
+        cpu->randomizeFlags();
+
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        cpu->setRegister(Register::PC, currentAddr);
+
+        uint16_t lookUpAddr = cpu->readWord(currentAddr);
+
+        uint16_t a = cpu->getRegister(Register::A);
+        uint16_t fetched = cpu->readByte(lookUpAddr + cpu->getRegister(Register::Y));
+        uint16_t carry = cpu->getFlag(Flag::C);
+
+        uint16_t expected = a - fetched - carry;
+
+        SBC ins(cpu, AddressingMode::AbsoluteOffsetY, 2);
+        ins.run();
+
+        ASSERT_ALL(a, fetched, expected);
+    }
+}
+
 int main(int argc, char** argv)
 {
 
