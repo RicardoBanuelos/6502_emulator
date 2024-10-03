@@ -24,39 +24,45 @@ void ASSERT_ALL(uint16_t a, uint16_t fetched, uint16_t expected)
 
 TEST(instructions, adc_immediate)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
-    uint16_t address = cpu->getRegister(Register::PC);
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
+        uint16_t address = cpu->getRegister(Register::PC);
 
-    uint16_t a = cpu->getRegister(Register::A);
-    uint16_t fetched =  cpu->readByte(address);
-    uint16_t expected = fetched
-                      + a 
-                      + cpu->getFlag(Flag::C);
+        uint16_t a = cpu->getRegister(Register::A);
+        uint16_t fetched =  cpu->readByte(address);
+        uint16_t expected = fetched
+                        + a 
+                        + cpu->getFlag(Flag::C);
 
-    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::Immediate, 2));
-    adc->run();
+        std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::Immediate, 2));
+        adc->run();
 
-    ASSERT_ALL(a, fetched, expected);
+        ASSERT_ALL(a, fetched, expected);
+    }
 }
 
 TEST(instructions, adc_zero_page)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t zeroPageAddress = cpu->readByte(address);
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t zeroPageAddress = cpu->readByte(address);
 
-    uint16_t a = cpu->getRegister(Register::A);
-    uint16_t fetched =  cpu->readByte(zeroPageAddress);
-    uint16_t expected = fetched 
-                     + a
-                     + cpu->getFlag(Flag::C);
+        uint16_t a = cpu->getRegister(Register::A);
+        uint16_t fetched =  cpu->readByte(zeroPageAddress);
+        uint16_t expected = fetched 
+                        + a
+                        + cpu->getFlag(Flag::C);
 
-    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::ZeroPage, 3));
-    adc->run();
+        std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::ZeroPage, 3));
+        adc->run();
 
-    ASSERT_ALL(a, fetched, expected);
+        ASSERT_ALL(a, fetched, expected);
+    }
 }
 
 TEST(instructions, adc_zero_page_x)
@@ -70,7 +76,7 @@ TEST(instructions, adc_zero_page_x)
                                 + cpu->getRegister(Register::X);
 
         uint16_t a = cpu->getRegister(Register::A);
-        uint16_t fetched =  cpu->readWord(zeroPageAddress);
+        uint16_t fetched =  cpu->readByte(zeroPageAddress);
         uint16_t expected = fetched
                         + a
                         + cpu->getFlag(Flag::C);
@@ -84,102 +90,116 @@ TEST(instructions, adc_zero_page_x)
 
 TEST(instructions, adc_absolute)
 {
-    
-    cpu->reset();
-    cpu->randomizeRegisters();
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t absoluteAddress = cpu->readWord(address);
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t absoluteAddress = cpu->readWord(address);
 
-    uint16_t a = cpu->getRegister(Register::A);
-    uint16_t fetched =  cpu->readWord(absoluteAddress);
-    uint16_t expected = fetched
-                     + a
-                     + cpu->getFlag(Flag::C);
+        uint16_t a = cpu->getRegister(Register::A);
+        uint16_t fetched =  cpu->readByte(absoluteAddress);
+        uint16_t expected = fetched
+                        + a
+                        + cpu->getFlag(Flag::C);
 
-    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::Absolute, 4));
-    adc->run();
+        std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::Absolute, 4));
+        adc->run();
 
-    ASSERT_ALL(a, fetched, expected);
+        ASSERT_ALL(a, fetched, expected);   
+    }
 }
 
 TEST(instructions, adc_absolute_x)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t absoluteAddress = cpu->readWord(address)
-                             + cpu->getRegister(Register::X);;
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t absoluteAddress = cpu->readWord(address)
+                                + cpu->getRegister(Register::X);;
 
-    uint16_t a = cpu->getRegister(Register::A);
-    uint16_t fetched =  cpu->readByte(absoluteAddress);
-    uint16_t expected = fetched
-                     + a
-                     + cpu->getFlag(Flag::C);
+        uint16_t a = cpu->getRegister(Register::A);
+        uint16_t fetched =  cpu->readByte(absoluteAddress);
+        uint16_t expected = fetched
+                        + a
+                        + cpu->getFlag(Flag::C);
 
-    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::AbsoluteOffsetX, 4));
-    adc->run();
+        std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::AbsoluteOffsetX, 4));
+        adc->run();
 
-    ASSERT_ALL(a, fetched, expected);
+        ASSERT_ALL(a, fetched, expected);   
+    }
 }
 
 TEST(instructions, adc_absolute_y)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t absoluteAddress = cpu->readWord(address)
-                             + cpu->getRegister(Register::Y);;
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t absoluteAddress = cpu->readWord(address)
+                                + cpu->getRegister(Register::Y);;
 
-    uint16_t a = cpu->getRegister(Register::A);
-    uint16_t fetched =  cpu->readByte(absoluteAddress);
-    uint16_t expected = fetched
-                     + a
-                     + cpu->getFlag(Flag::C);
+        uint16_t a = cpu->getRegister(Register::A);
+        uint16_t fetched =  cpu->readByte(absoluteAddress);
+        uint16_t expected = fetched
+                        + a
+                        + cpu->getFlag(Flag::C);
 
-    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::AbsoluteOffsetY, 4));
-    adc->run();
+        std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::AbsoluteOffsetY, 4));
+        adc->run();
 
-    ASSERT_ALL(a, fetched, expected);
+        ASSERT_ALL(a, fetched, expected);   
+    }
 }
 
 TEST(instructions, adc_indirect_x)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t indirectAddress = cpu->readByte(address)
-                             + cpu->getRegister(Register::X);
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t indirectAddress = cpu->readByte(address)
+                                + cpu->getRegister(Register::X);
 
-    uint16_t a = cpu->getRegister(Register::A);
-    uint16_t fetched =  cpu->readByte(indirectAddress);
-    uint16_t expected = fetched
-                     + a
-                     + cpu->getFlag(Flag::C);
+        uint16_t a = cpu->getRegister(Register::A);
+        uint16_t fetched =  cpu->readWord(indirectAddress);
+        uint16_t expected = fetched
+                        + a
+                        + cpu->getFlag(Flag::C);
 
-    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::IndirectX, 6));
-    adc->run();
+        std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::IndirectX, 6));
+        adc->run();
 
-    ASSERT_ALL(a, fetched, expected);
+        ASSERT_ALL(a, fetched, expected);   
+    }
 }
 
 TEST(instructions, adc_indirect_y)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t indirectAddress = cpu->readByte(address)
-                             + cpu->getRegister(Register::Y);
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t indirectAddress = cpu->readByte(address)
+                                + cpu->getRegister(Register::Y);
 
-    uint16_t a = cpu->getRegister(Register::A);
-    uint16_t fetched =  cpu->readByte(indirectAddress);
-    uint16_t expected = fetched
-                     + a
-                     + cpu->getFlag(Flag::C);
+        uint16_t a = cpu->getRegister(Register::A);
+        uint16_t fetched =  cpu->readWord(indirectAddress);
+        uint16_t expected = fetched
+                        + a
+                        + cpu->getFlag(Flag::C);
 
-    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::IndirectY, 5));
-    adc->run();
+        std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::IndirectY, 5));
+        adc->run();
 
-    ASSERT_ALL(a, fetched, expected);
+        ASSERT_ALL(a, fetched, expected);   
+    }
 }
 
 int main(int argc, char** argv)
