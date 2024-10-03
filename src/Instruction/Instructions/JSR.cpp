@@ -2,8 +2,8 @@
 
 
 
-JSR::JSR(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
-    :   Instruction("JSR", icpu, addressingMode, cycles)
+JSR::JSR(std::shared_ptr<ICPU> icpu)
+    :   Instruction("JSR", icpu, AddressingMode::Absolute, 6)
 {
 }
 JSR::~JSR()
@@ -13,5 +13,8 @@ JSR::~JSR()
 
 void JSR::run()
 {
-    //mIcpu->pushWord(mIcpu->addressing(mAddressingMode).address);
+    AddressingData addessingata = mIcpu->addressing(mAddressingMode);
+    mIcpu->pushWord(mIcpu->getRegister(Register::PC));
+
+    mIcpu->setRegister(Register::PC, addessingata.address);
 }
