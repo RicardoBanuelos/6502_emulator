@@ -118,13 +118,8 @@ TEST(instructions, lsr_test_absoluteX)
     }
 }
 
-
-
-
-
 int main(int argc, char** argv)
 {
-
     ::testing::InitGoogleTest(&argc, argv);
     srand(time(nullptr));
 
@@ -135,10 +130,8 @@ int main(int argc, char** argv)
     cppu->init();
     cppu->reset();
     
-
     cppu->connectBus(bus);
     bus->connectMemory(mem);
     
-   
     return RUN_ALL_TESTS();
 }

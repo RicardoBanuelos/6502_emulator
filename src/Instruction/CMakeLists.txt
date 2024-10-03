@@ -13,6 +13,7 @@ add_library(${INTRUCTIONS_LIBRARY}
     Instructions/BNE.cpp
     Instructions/BPL.cpp
     Instructions/BRK.cpp
+    Instructions/BVC.cpp
     Instructions/JSR.cpp
     Instructions/LDA.cpp
     Instructions/JSR.cpp
