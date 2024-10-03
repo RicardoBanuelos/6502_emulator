@@ -83,7 +83,6 @@ AddressingData Addressing::AbsoluteOffsetY() const
     return AddressingData(address, data);
 }
 
-
 AddressingData Addressing::Indirect() const
 {
     uint16_t addressPointer = mIcpu->fetchWord();
@@ -91,10 +90,11 @@ AddressingData Addressing::Indirect() const
 
     return AddressingData(addressPointer, data);
 }
+
 AddressingData Addressing::IndirectX() const
 {
     uint16_t addressPointer = mIcpu->fetchByte() + mIcpu->getRegister(Register::X);
-    uint16_t data = mIcpu->readByte(addressPointer);
+    uint16_t data = mIcpu->readWord(addressPointer);
 
     return AddressingData(addressPointer, data);
 }

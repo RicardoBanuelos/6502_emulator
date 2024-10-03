@@ -7,7 +7,7 @@ struct AddressingData
     uint16_t data;
 
 
-    AddressingData(uint16_t address, uint8_t data) 
+    AddressingData(uint16_t address, uint16_t data) 
         :   address(address),
             data(data)
     {

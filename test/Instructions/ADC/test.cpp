@@ -61,33 +61,37 @@ TEST(instructions, adc_zero_page)
 
 TEST(instructions, adc_zero_page_x)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t zeroPageAddress = cpu->readByte(address) 
-                             + cpu->getRegister(Register::X);
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t zeroPageAddress = cpu->readByte(address) 
+                                + cpu->getRegister(Register::X);
 
-    uint16_t a = cpu->getRegister(Register::A);
-    uint16_t fetched =  cpu->readByte(zeroPageAddress);
-    uint16_t expected = fetched
-                     + a
-                     + cpu->getFlag(Flag::C);
+        uint16_t a = cpu->getRegister(Register::A);
+        uint16_t fetched =  cpu->readWord(zeroPageAddress);
+        uint16_t expected = fetched
+                        + a
+                        + cpu->getFlag(Flag::C);
 
-    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::ZeroPageX, 4));
-    adc->run();
+        std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::ZeroPageX, 4));
+        adc->run();
 
-    ASSERT_ALL(a, fetched, expected);
+        ASSERT_ALL(a, fetched, expected);
+    }
 }
 
 TEST(instructions, adc_absolute)
 {
+    
     cpu->reset();
     cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t absoluteAddress = cpu->readWord(address);
 
     uint16_t a = cpu->getRegister(Register::A);
-    uint16_t fetched =  cpu->readByte(absoluteAddress);
+    uint16_t fetched =  cpu->readWord(absoluteAddress);
     uint16_t expected = fetched
                      + a
                      + cpu->getFlag(Flag::C);
@@ -144,7 +148,7 @@ TEST(instructions, adc_indirect_x)
     cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t indirectAddress = cpu->readByte(address)
-                             + cpu->getRegister(Register::X);;
+                             + cpu->getRegister(Register::X);
 
     uint16_t a = cpu->getRegister(Register::A);
     uint16_t fetched =  cpu->readByte(indirectAddress);
@@ -164,7 +168,7 @@ TEST(instructions, adc_indirect_y)
     cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t indirectAddress = cpu->readByte(address)
-                             + cpu->getRegister(Register::Y);;
+                             + cpu->getRegister(Register::Y);
 
     uint16_t a = cpu->getRegister(Register::A);
     uint16_t fetched =  cpu->readByte(indirectAddress);
