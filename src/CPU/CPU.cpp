@@ -2,6 +2,8 @@
 #include "Instruction/Instructions/LDA.h"
 #include "Instruction/Instructions.h"
 
+#include <random>
+
 CPU::CPU()
 {
 }
@@ -26,6 +28,16 @@ void CPU::reset()
     mRegisters.X = 0;
     mRegisters.Y = 0;
     mRegisters.statusRegister.byte = 0;
+}
+
+void CPU::randomizeRegisters()
+{
+    std::mt19937 gen(std::random_device{}());
+    std::uniform_int_distribution<> dis(0, UINT8_MAX);
+
+    setRegister(Register::A, dis(gen));
+    setRegister(Register::X, dis(gen));
+    setRegister(Register::Y, dis(gen));
 }
 
 uint8_t CPU::fetchByte()

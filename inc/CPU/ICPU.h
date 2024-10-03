@@ -19,6 +19,7 @@ protected:
     ICPU();
 public:
     virtual void reset() = 0;
+    virtual void randomizeRegisters() = 0;
     virtual uint8_t fetchByte() = 0;
     virtual uint16_t fetchWord() = 0;
     

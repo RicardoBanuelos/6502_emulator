@@ -11,9 +11,10 @@ AND::~AND()
 void AND::run()
 {
     AddressingData addressingData = mIcpu->addressing(mAddressingMode);
-    uint16_t fetched = addressingData.data;
+    uint16_t M = addressingData.data;
+    uint16_t A = mIcpu->getRegister(Register::A);
 
-    uint16_t result = mIcpu->getRegister(Register::A) && fetched;
+    uint16_t result = A & M;
 
     mIcpu->setFlag(Flag::Z, result & 0x00FF == 0);
     mIcpu->setFlag(Flag::N, result & 0x80);

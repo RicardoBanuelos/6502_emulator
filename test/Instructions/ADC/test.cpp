@@ -19,12 +19,13 @@ void ASSERT_ALL(uint16_t a, uint16_t fetched, uint16_t expected)
     ASSERT_EQ(cpu->getFlag(Flag::C), expected > 255);
     ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
     ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(expected & 0x80));
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    ASSERT_EQ(expected & 0x00FF, cpu->getRegister(Register::A));
 }
 
 TEST(instructions, adc_immediate)
 {
     cpu->reset();
+    cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
 
     uint16_t a = cpu->getRegister(Register::A);
@@ -42,6 +43,7 @@ TEST(instructions, adc_immediate)
 TEST(instructions, adc_zero_page)
 {
     cpu->reset();
+    cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t zeroPageAddress = cpu->readByte(address);
 
@@ -60,6 +62,7 @@ TEST(instructions, adc_zero_page)
 TEST(instructions, adc_zero_page_x)
 {
     cpu->reset();
+    cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t zeroPageAddress = cpu->readByte(address) 
                              + cpu->getRegister(Register::X);
@@ -70,7 +73,7 @@ TEST(instructions, adc_zero_page_x)
                      + a
                      + cpu->getFlag(Flag::C);
 
-    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::ZeroPage, 4));
+    std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::ZeroPageX, 4));
     adc->run();
 
     ASSERT_ALL(a, fetched, expected);
@@ -79,6 +82,7 @@ TEST(instructions, adc_zero_page_x)
 TEST(instructions, adc_absolute)
 {
     cpu->reset();
+    cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t absoluteAddress = cpu->readWord(address);
 
@@ -97,6 +101,7 @@ TEST(instructions, adc_absolute)
 TEST(instructions, adc_absolute_x)
 {
     cpu->reset();
+    cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t absoluteAddress = cpu->readWord(address)
                              + cpu->getRegister(Register::X);;
@@ -116,6 +121,7 @@ TEST(instructions, adc_absolute_x)
 TEST(instructions, adc_absolute_y)
 {
     cpu->reset();
+    cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t absoluteAddress = cpu->readWord(address)
                              + cpu->getRegister(Register::Y);;
@@ -135,6 +141,7 @@ TEST(instructions, adc_absolute_y)
 TEST(instructions, adc_indirect_x)
 {
     cpu->reset();
+    cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t indirectAddress = cpu->readByte(address)
                              + cpu->getRegister(Register::X);;
@@ -154,6 +161,7 @@ TEST(instructions, adc_indirect_x)
 TEST(instructions, adc_indirect_y)
 {
     cpu->reset();
+    cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t indirectAddress = cpu->readByte(address)
                              + cpu->getRegister(Register::Y);;

@@ -18,6 +18,7 @@ void ASSERT_ALL(uint16_t expected)
 TEST(instructions, asl_accumulator)
 {
     cpu->reset();
+    cpu->randomizeRegisters();
     uint8_t expected = cpu->getRegister(Register::A) << 1;    
 
     std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::Implied, 2));
@@ -30,6 +31,7 @@ TEST(instructions, asl_accumulator)
 TEST(instructions, asl_zero_page)
 {
     cpu->reset();
+    cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t zeroPageAddress = cpu->readByte(address);
 
@@ -45,6 +47,7 @@ TEST(instructions, asl_zero_page)
 TEST(instructions, asl_zero_page_x)
 {
     cpu->reset();
+    cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t zeroPageAddress = cpu->readByte(address) 
                              + cpu->getRegister(Register::X);
@@ -61,6 +64,7 @@ TEST(instructions, asl_zero_page_x)
 TEST(instructions, asl_absolute)
 {
     cpu->reset();
+    cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t absoluteAddress = cpu->readWord(address);
 
@@ -76,6 +80,7 @@ TEST(instructions, asl_absolute)
 TEST(instructions, asl_absolute_x)
 {
     cpu->reset();
+    cpu->randomizeRegisters();
     uint16_t address = cpu->getRegister(Register::PC);
     uint16_t absoluteAddress = cpu->readWord(address)
                              + cpu->getRegister(Register::X);;
