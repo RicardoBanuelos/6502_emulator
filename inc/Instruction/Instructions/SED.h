@@ -9,6 +9,5 @@ public:
     SED(std::shared_ptr<ICPU> icpu);
     ~SED();
 
-
     void run() override;
 };

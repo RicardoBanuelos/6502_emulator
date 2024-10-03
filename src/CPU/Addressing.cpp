@@ -97,7 +97,7 @@ AddressingData Addressing::IndirectX() const
     uint16_t indirect = mIcpu->readWord(addressPointer);
     uint8_t data = mIcpu->readByte(indirect);
 
-    return AddressingData(addressPointer, data);
+    return AddressingData(indirect, data);
 }
 
 AddressingData Addressing::IndirectY() const
@@ -106,7 +106,7 @@ AddressingData Addressing::IndirectY() const
     uint16_t indirect = mIcpu->readWord(addressPointer);
     uint8_t data = mIcpu->readByte(indirect);
 
-    return AddressingData(addressPointer, data);
+    return AddressingData(indirect, data);
 }
 
 AddressingData Addressing::addressing(AddressingMode mode)
