@@ -16,6 +16,7 @@ public:
     void init();
     void reset() override;
     void randomizeRegisters() override;
+    void randomizeFlags() override;
     void execute();
     void connectBus(std::shared_ptr<IBus> bus);
 
