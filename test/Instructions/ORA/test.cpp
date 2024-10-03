@@ -160,8 +160,9 @@ TEST(instructions, ora_test_indirect_X)
         uint16_t currentAddr = rand() % UINT16_MAX;
         cpu->setRegister(Register::PC, currentAddr);
 
-        uint8_t lookUpAddr = cpu->readWord(currentAddr);
-        uint8_t expected = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) | cpu->getRegister(Register::A);
+        uint8_t lookUpAddr = cpu->readByte(currentAddr);
+        uint16_t indirect = cpu->readWord(lookUpAddr + cpu->getRegister(Register::X));
+        uint8_t expected = cpu->readByte(indirect) | cpu->getRegister(Register::A);
 
         ORA lda(cpu, AddressingMode::IndirectX, 2);
         lda.run();
@@ -180,8 +181,10 @@ TEST(instructions, ora_test_indirect_Y)
         uint16_t currentAddr = rand() % UINT16_MAX;
         cpu->setRegister(Register::PC, currentAddr);
 
-        uint8_t lookUpAddr = cpu->readWord(currentAddr);
-        uint8_t expected = cpu->readByte(lookUpAddr + cpu->getRegister(Register::Y)) | cpu->getRegister(Register::A);
+
+        uint8_t lookUpAddr = cpu->readByte(currentAddr);
+        uint16_t indirect = cpu->readWord(lookUpAddr + cpu->getRegister(Register::Y));
+        uint8_t expected = cpu->readByte(indirect) | cpu->getRegister(Register::A);
 
         ORA lda(cpu, AddressingMode::IndirectY, 2);
         lda.run();

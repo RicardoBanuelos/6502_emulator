@@ -129,7 +129,7 @@ TEST(instructions, sbc_test_absoluteX)
         uint16_t currentAddr = rand() % UINT16_MAX;
         cpu->setRegister(Register::PC, currentAddr);
 
-        uint8_t lookUpAddr = cpu->readByte(currentAddr);
+        uint16_t lookUpAddr = cpu->readWord(currentAddr);
 
         uint16_t a = cpu->getRegister(Register::A);
         uint16_t fetched = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X));
@@ -137,7 +137,7 @@ TEST(instructions, sbc_test_absoluteX)
 
         uint16_t expected = a - fetched - carry;
 
-        SBC ins(cpu, AddressingMode::Absolute, 2);
+        SBC ins(cpu, AddressingMode::AbsoluteOffsetX, 2);
         ins.run();
 
         ASSERT_ALL(a, fetched, expected);

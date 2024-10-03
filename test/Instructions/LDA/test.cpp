@@ -188,15 +188,16 @@ TEST(instructions, lda_test_indirect_Y)
     for(int i = 0; i < MAX_ITERATIONS; ++i)
     {
         uint16_t currentAddr = rand() % UINT16_MAX;
-        uint8_t currentXvalue = rand() % UINT8_MAX;
+        uint8_t currentYvalue = rand() % UINT8_MAX;
 
         cpu->setRegister(Register::PC, currentAddr);
-        cpu->setRegister(Register::X, currentXvalue);
+        cpu->setRegister(Register::Y, currentYvalue);
         
         uint8_t lookUpAddr = cpu->readByte(currentAddr);
-        uint8_t expected = cpu->readByte(lookUpAddr + currentXvalue);
+        uint16_t indirect = cpu->readWord(lookUpAddr + currentYvalue);
+        uint8_t expected = cpu->readByte(indirect);
 
-        LDA lda(cpu, AddressingMode::IndirectX, 2);
+        LDA lda(cpu, AddressingMode::IndirectY, 2);
         lda.run();
 
         ASSERT_EQ(cpu->getRegister(Register::A), expected);
