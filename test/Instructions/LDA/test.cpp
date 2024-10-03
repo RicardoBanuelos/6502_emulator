@@ -171,7 +171,8 @@ TEST(instructions, lda_test_indirect_x)
         cpu->setRegister(Register::X, currentXvalue);
         
         uint8_t lookUpAddr = cpu->readByte(currentAddr);
-        uint8_t expected = cpu->readByte(lookUpAddr + currentXvalue);
+        uint16_t indirect = cpu->readWord(lookUpAddr + currentXvalue);
+        uint8_t expected = cpu->readByte(indirect);
 
         LDA lda(cpu, AddressingMode::IndirectX, 2);
         lda.run();

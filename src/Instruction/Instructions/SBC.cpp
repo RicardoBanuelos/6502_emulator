@@ -11,14 +11,16 @@ SBC::~SBC()
 
 void SBC::run()
 {
-    // uint16_t value = mIcpu->addressing(mAddressingMode).data ^ 0x00FF;
-
-    // uint16_t tmp = static_cast<uint16_t>(mIcpu->registers().A) + value + static_cast<uint16_t>(mIcpu->registers().statusRegister.statusFlags.C);
+    uint16_t value = mIcpu->addressing(mAddressingMode).data;
+    uint16_t accumulator = mIcpu->getRegister(Register::A); 
+    uint16_t carry = mIcpu->getFlag(Flag::C); 
     
-    // mIcpu->registers().statusRegister.setFlag(Flag::C, tmp & 0xFF00);
-    // mIcpu->registers().statusRegister.setFlag(Flag::Z, (tmp & 0x00FF) == 0);
-    // mIcpu->registers().statusRegister.setFlag(Flag::V, (tmp ^ static_cast<uint16_t>(mIcpu->registers().A) & (tmp ^ value) & 0x0080));
-    // mIcpu->registers().statusRegister.setFlag(Flag::N, (tmp & 0x0080));
+    uint16_t tmp = accumulator - value - carry;
 
-    // mIcpu->registers().A = tmp & 0x00FF;
+    mIcpu->setFlag(Flag::C, tmp & 0xFF00);
+    mIcpu->setFlag(Flag::Z, tmp == 0);
+    mIcpu->setFlag(Flag::V, ((tmp ^ accumulator) & (tmp ^ value) & 0x0080));
+    mIcpu->setFlag(Flag::N, tmp & Flag::N);
+    
+    mIcpu->setRegister(Register::A, tmp & 0x00FF);
 }
