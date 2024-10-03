@@ -13,7 +13,9 @@ ORA::~ORA()
 
 void ORA::run()
 {
-    auto [data, address] = mIcpu->addressing(mAddressingMode);
+    auto addressingData = mIcpu->addressing(mAddressingMode);
+
+    uint8_t data = addressingData.data;
     uint8_t accumulator = mIcpu->getRegister(Register::A);
 
     accumulator |= data;

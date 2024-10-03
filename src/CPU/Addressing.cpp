@@ -23,7 +23,7 @@ AddressingData Addressing::Accumulator() const
 
 AddressingData Addressing::Immediate() const
 {
-    return AddressingData(0, mIcpu->fetchByte() & 0x00FF);
+    return AddressingData(0, mIcpu->fetchByte());
 }
 
 AddressingData Addressing::ZeroPage() const

@@ -14,13 +14,13 @@ TEST(instructions, ora_test_immediate)
 {
     for(int i = 0; i < MAX_ITERATIONS; ++i)
     {
+        cpu->randomizeRegisters();
         uint16_t currentAddr = rand() % UINT16_MAX;
-        uint8_t accumulator = rand() % UINT8_MAX;
 
-        cpu->setRegister(Register::A, accumulator);
         cpu->setRegister(Register::PC, currentAddr);
 
-        uint8_t expected = cpu->readByte(currentAddr);
+        uint8_t registerA = cpu->getRegister(Register::A);
+        uint8_t expected = cpu->readByte(currentAddr) | cpu->getRegister(Register::A);
 
         ORA ins(cpu, AddressingMode::Immediate, 2);
         ins.run();
@@ -33,70 +33,161 @@ TEST(instructions, ora_test_immediate)
     }
 }
 
-TEST(instructions, lda_test_zeroPage)
+TEST(instructions, ora_test_zeroPage)
 {
     for(int i = 0; i < MAX_ITERATIONS; ++i)
     {
+        cpu->randomizeRegisters();
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        cpu->setRegister(Register::PC, currentAddr);
 
-    }
+        uint8_t lookUpAddr = cpu->readByte(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr) | cpu->getRegister(Register::A);
 
-}
+        ORA lda(cpu, AddressingMode::ZeroPage, 2);
+        lda.run();
 
-TEST(instructions, lda_test_zeroPageX)
-{
-    for(int i = 0; i < MAX_ITERATIONS; ++i)
-    {
-
-    }
-}
-
-
-
-TEST(instructions, lda_test_zeroPageY)
-{
-    for(int i = 0; i < MAX_ITERATIONS; ++i)
-    {
-
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
     }
 }
 
-TEST(instructions, lda_test_absolute)
+
+TEST(instructions, ora_test_zeroPageX)
 {
     for(int i = 0; i < MAX_ITERATIONS; ++i)
     {
+        cpu->randomizeRegisters();
+        uint16_t currentAddr = rand() % UINT16_MAX;
 
+        cpu->setRegister(Register::PC, currentAddr);
+
+        uint8_t lookUpAddr = cpu->readByte(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) | cpu->getRegister(Register::A);
+
+        ORA lda(cpu, AddressingMode::ZeroPageX, 2);
+        lda.run();
+
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
     }
 }
 
-TEST(instructions, lda_test_absoluteX)
+
+
+TEST(instructions, ora_test_zeroPageY)
 {
     for(int i = 0; i < MAX_ITERATIONS; ++i)
     {
+        cpu->randomizeRegisters();
+        uint16_t currentAddr = rand() % UINT16_MAX;
 
+        cpu->setRegister(Register::PC, currentAddr);
+
+        uint8_t lookUpAddr = cpu->readByte(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr + cpu->getRegister(Register::Y)) | cpu->getRegister(Register::A);
+
+        ORA lda(cpu, AddressingMode::ZeroPageY, 2);
+        lda.run();
+
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
     }
 }
 
-TEST(instructions, lda_test_absoluteY)
+TEST(instructions, ora_test_absolute)
 {
     for(int i = 0; i < MAX_ITERATIONS; ++i)
     {
+        cpu->randomizeRegisters();
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        cpu->setRegister(Register::PC, currentAddr);
 
+        uint16_t lookUpAddr = cpu->readWord(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr) | cpu->getRegister(Register::A);
+
+        ORA lda(cpu, AddressingMode::Absolute, 2);
+        lda.run();
+
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
     }
 }
 
-TEST(instructions, lda_test_indirect_x)
+TEST(instructions, ora_test_absoluteX)
 {
     for(int i = 0; i < MAX_ITERATIONS; ++i)
     {
+        cpu->randomizeRegisters();
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        cpu->setRegister(Register::PC, currentAddr);
 
+        uint16_t lookUpAddr = cpu->readWord(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) | cpu->getRegister(Register::A);
+
+        ORA lda(cpu, AddressingMode::AbsoluteOffsetX, 2);
+        lda.run();
+
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
     }
 }
 
-TEST(instructions, lda_test_indirect_Y)
+TEST(instructions, ora_test_absoluteY)
 {
     for(int i = 0; i < MAX_ITERATIONS; ++i)
     {
+        cpu->randomizeRegisters();
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        cpu->setRegister(Register::PC, currentAddr);
 
+        uint16_t lookUpAddr = cpu->readWord(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr + cpu->getRegister(Register::Y)) | cpu->getRegister(Register::A);
+
+        ORA lda(cpu, AddressingMode::AbsoluteOffsetY, 2);
+        lda.run();
+
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+    }
+}
+
+TEST(instructions, ora_test_indirect_X)
+{
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        cpu->randomizeRegisters();
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        cpu->setRegister(Register::PC, currentAddr);
+
+        uint8_t lookUpAddr = cpu->readWord(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) | cpu->getRegister(Register::A);
+
+        ORA lda(cpu, AddressingMode::IndirectX, 2);
+        lda.run();
+
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+    }
+}
+
+
+TEST(instructions, ora_test_indirect_Y)
+{
+    for(int i = 0; i < MAX_ITERATIONS; ++i)
+    {
+        cpu->randomizeRegisters();
+        uint16_t currentAddr = rand() % UINT16_MAX;
+        cpu->setRegister(Register::PC, currentAddr);
+
+        uint8_t lookUpAddr = cpu->readWord(currentAddr);
+        uint8_t expected = cpu->readByte(lookUpAddr + cpu->getRegister(Register::Y)) | cpu->getRegister(Register::A);
+
+        ORA lda(cpu, AddressingMode::IndirectY, 2);
+        lda.run();
+
+        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
     }
 }
 
@@ -117,7 +208,6 @@ int main(int argc, char** argv)
 
     cppu->connectBus(bus);
     bus->connectMemory(mem);
-    
-   
+
     return RUN_ALL_TESTS();
 }
