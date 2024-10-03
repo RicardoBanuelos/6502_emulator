@@ -1,5 +1,5 @@
 set(INTRUCTIONS_LIBRARY libInstructions CACHE INTERNAL "")
-
+include_directories(${PROJECT_SOURCE_DIR}/inc/Instruction/Instructions)
 add_library(${INTRUCTIONS_LIBRARY} 
     Instruction.cpp
     Instructions/ADC.cpp
@@ -47,6 +47,11 @@ add_library(${INTRUCTIONS_LIBRARY}
     Instructions/RTI.cpp
     Instructions/RTS.cpp
     Instructions/SBC.cpp
+    Instructions/SEC.cpp
+    Instructions/SED.cpp
+    Instructions/SEI.cpp
+    Instructions/STA.cpp
+    
 )
 
 
