@@ -11,9 +11,11 @@ DEX::~DEX()
 
 void DEX::run()
 {
-    uint8_t X = mIcpu->getRegister(Register::X);
-    mIcpu->setRegister(Register::X, --X);
+    uint8_t X = mIcpu->getRegister(Register::X) - 1;
+    mIcpu->setRegister(Register::X, X);
+
+    X = mIcpu->getRegister(Register::X);
 
     mIcpu->setFlag(Flag::Z, X == 0);
-    mIcpu->setFlag(Flag::N, X & 0x80);
+    mIcpu->setFlag(Flag::N, X & (1 << 7));
 }

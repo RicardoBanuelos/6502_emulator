@@ -1,5 +1,4 @@
 #include "Instruction/Instructions/JMP.h"
-#include "JMP.h"
 
 JMP::JMP(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("JMP", icpu, addressingMode, cycles)
