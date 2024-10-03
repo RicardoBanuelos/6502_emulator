@@ -8,45 +8,51 @@ static std::shared_ptr<ICPU> cpu(new CPU());
 static std::shared_ptr<Memory> mem(new Memory());
 static std::shared_ptr<Bus> bus(new Bus());
 
-void ASSERT_ALL(uint16_t result)
+void ASSERT_ALL(uint8_t result)
 {
-    ASSERT_EQ(cpu->getFlag(Flag::Z), result & 0x00FF == 0);
+    ASSERT_EQ(cpu->getFlag(Flag::Z), result == 0);
     ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(result & (1 << 7)));
     ASSERT_EQ(cpu->getRegister(Register::A), result);
 }
 
 TEST(instructions, eor_immediate)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t A = cpu->getRegister(Register::A);
-    uint16_t M = cpu->readByte(address);
-    uint8_t result = A ^ M;
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint8_t A = cpu->getRegister(Register::A);
+        uint8_t M = cpu->readByte(address);
+        uint8_t result = A ^ M;
 
-    std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::Immediate, 2));
-    instruction->run();
+        std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::Immediate, 2));
+        instruction->run();
 
-    ASSERT_ALL(result);
+        ASSERT_ALL(result);
+    }
 }
 
 TEST(instructions, eor_zero_page)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t zeroPageAddress = cpu->readByte(address);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t zeroPageAddress = cpu->readByte(address);
 
-    uint16_t A = cpu->getRegister(Register::A);
-    uint16_t M = cpu->readByte(zeroPageAddress);
-    uint8_t result = A ^ M;
+        uint8_t A = cpu->getRegister(Register::A);
+        uint8_t M = cpu->readByte(zeroPageAddress);
+        uint8_t result = A ^ M;
 
-    std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::ZeroPage, 3));
-    instruction->run();
+        std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::ZeroPage, 3));
+        instruction->run();
 
-    ASSERT_ALL(result);
+        ASSERT_ALL(result);
+    }
 }
 
 TEST(instructions, eor_zero_page_x)
@@ -59,8 +65,8 @@ TEST(instructions, eor_zero_page_x)
         uint16_t address = cpu->getRegister(Register::PC);
         uint16_t zeroPageAddress = cpu->readByte(address) + cpu->getRegister(Register::X);
 
-        uint16_t A = cpu->getRegister(Register::A);
-        uint16_t M = cpu->readByte(zeroPageAddress);
+        uint8_t A = cpu->getRegister(Register::A);
+        uint8_t M = cpu->readByte(zeroPageAddress);
         uint8_t result = A ^ M;
 
         std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::ZeroPageX, 4));
@@ -80,8 +86,8 @@ TEST(instructions, eor_absolute)
         uint16_t address = cpu->getRegister(Register::PC);
         uint16_t absoluteAddress = cpu->readWord(address);
 
-        uint16_t A = cpu->getRegister(Register::A);
-        uint16_t M = cpu->readByte(absoluteAddress);
+        uint8_t A = cpu->getRegister(Register::A);
+        uint8_t M = cpu->readByte(absoluteAddress);
         uint8_t result = A ^ M;
 
         std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::Absolute, 4));
@@ -101,8 +107,8 @@ TEST(instructions, eor_absolute_x)
         uint16_t address = cpu->getRegister(Register::PC);
         uint16_t absoluteAddress = cpu->readWord(address) + cpu->getRegister(Register::X);
 
-        uint16_t A = cpu->getRegister(Register::A);
-        uint16_t M = cpu->readByte(absoluteAddress);
+        uint8_t A = cpu->getRegister(Register::A);
+        uint8_t M = cpu->readByte(absoluteAddress);
         uint8_t result = A ^ M;
 
         std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::AbsoluteOffsetX, 4));
@@ -122,8 +128,8 @@ TEST(instructions, eor_absolute_y)
         uint16_t address = cpu->getRegister(Register::PC);
         uint16_t absoluteAddress = cpu->readWord(address) + cpu->getRegister(Register::Y);
 
-        uint16_t A = cpu->getRegister(Register::A);
-        uint16_t M = cpu->readByte(absoluteAddress);
+        uint8_t A = cpu->getRegister(Register::A);
+        uint8_t M = cpu->readByte(absoluteAddress);
         uint8_t result = A ^ M;
 
         std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::AbsoluteOffsetY, 4));
@@ -140,11 +146,12 @@ TEST(instructions, eor_indirect_x)
         cpu->reset();
         cpu->randomizeRegisters();
 
-        uint16_t address = cpu->getRegister(Register::PC);
-        uint16_t indirectAddress = cpu->readByte(address) + cpu->getRegister(Register::X);
+        uint16_t PC = cpu->getRegister(Register::PC);
+        uint16_t baseAddress = cpu->readByte(PC) + cpu->getRegister(Register::X);
+        uint16_t indirectAddress = cpu->readWord(baseAddress);
 
-        uint16_t A = cpu->getRegister(Register::A);
-        uint16_t M = cpu->readByte(indirectAddress);
+        uint8_t A = cpu->getRegister(Register::A);
+        uint8_t M = cpu->readByte(indirectAddress);
         uint8_t result = A ^ M;
 
         std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::IndirectX, 6));
@@ -161,11 +168,12 @@ TEST(instructions, eor_indirect_y)
         cpu->reset();
         cpu->randomizeRegisters();
 
-        uint16_t address = cpu->getRegister(Register::PC);
-        uint16_t indirectAddress = cpu->readByte(address) + cpu->getRegister(Register::Y);
+        uint16_t PC = cpu->getRegister(Register::PC);
+        uint16_t baseAddress = cpu->readByte(PC) + cpu->getRegister(Register::Y);
+        uint16_t indirectAddress = cpu->readWord(baseAddress);
 
-        uint16_t A = cpu->getRegister(Register::A);
-        uint16_t M = cpu->readByte(indirectAddress);
+        uint8_t A = cpu->getRegister(Register::A);
+        uint8_t M = cpu->readByte(indirectAddress);
         uint8_t result = A ^ M;
 
         std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::IndirectY, 5));

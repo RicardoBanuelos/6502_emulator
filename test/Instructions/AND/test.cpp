@@ -139,12 +139,11 @@ TEST(instructions, and_indirect_x)
     {
         cpu->reset();
         cpu->randomizeRegisters();
-        uint16_t address = cpu->getRegister(Register::PC);
-        uint16_t indirectAddress = cpu->readByte(address)
-                                + cpu->getRegister(Register::X);;
+        uint16_t PC = cpu->getRegister(Register::PC);
+        uint16_t baseAddress = cpu->readByte(PC) + cpu->getRegister(Register::X);
+        uint16_t indirectAddress = cpu->readWord(baseAddress);
 
-        uint16_t expected = cpu->readWord(indirectAddress) & 0x00FF 
-                        & cpu->getRegister(Register::A);
+        uint16_t expected = cpu->readByte(indirectAddress) & cpu->getRegister(Register::A);
 
         std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::IndirectX, 6));
         instruction->run();
@@ -159,12 +158,11 @@ TEST(instructions, and_indirect_y)
     {
         cpu->reset();
         cpu->randomizeRegisters();
-        uint16_t address = cpu->getRegister(Register::PC);
-        uint16_t indirectAddress = cpu->readByte(address)
-                                + cpu->getRegister(Register::Y);;
+        uint16_t PC = cpu->getRegister(Register::PC);
+        uint16_t baseAddress = cpu->readByte(PC) + cpu->getRegister(Register::Y);
+        uint16_t indirectAddress = cpu->readWord(baseAddress);
 
-        uint16_t expected = cpu->readWord(indirectAddress) & 0x00FF 
-                        & cpu->getRegister(Register::A);
+        uint16_t expected = cpu->readByte(indirectAddress) & cpu->getRegister(Register::A);
 
         std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::IndirectY, 5));
         instruction->run();

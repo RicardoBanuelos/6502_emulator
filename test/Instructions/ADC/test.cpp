@@ -162,12 +162,12 @@ TEST(instructions, adc_indirect_x)
     {
         cpu->reset();
         cpu->randomizeRegisters();
-        uint16_t address = cpu->getRegister(Register::PC);
-        uint16_t indirectAddress = cpu->readByte(address)
-                                + cpu->getRegister(Register::X);
+        uint16_t PC = cpu->getRegister(Register::PC);
+        uint16_t baseAddress = cpu->readByte(PC) + cpu->getRegister(Register::X);
+        uint16_t indirectAddress = cpu->readWord(baseAddress);
 
         uint16_t a = cpu->getRegister(Register::A);
-        uint16_t fetched =  cpu->readWord(indirectAddress);
+        uint16_t fetched =  cpu->readByte(indirectAddress);
         uint16_t expected = fetched
                         + a
                         + cpu->getFlag(Flag::C);
@@ -185,12 +185,12 @@ TEST(instructions, adc_indirect_y)
     {
         cpu->reset();
         cpu->randomizeRegisters();
-        uint16_t address = cpu->getRegister(Register::PC);
-        uint16_t indirectAddress = cpu->readByte(address)
-                                + cpu->getRegister(Register::Y);
+        uint16_t PC = cpu->getRegister(Register::PC);
+        uint16_t baseAddress = cpu->readByte(PC) + cpu->getRegister(Register::Y);
+        uint16_t indirectAddress = cpu->readWord(baseAddress);
 
         uint16_t a = cpu->getRegister(Register::A);
-        uint16_t fetched =  cpu->readWord(indirectAddress);
+        uint16_t fetched =  cpu->readByte(indirectAddress);
         uint16_t expected = fetched
                         + a
                         + cpu->getFlag(Flag::C);

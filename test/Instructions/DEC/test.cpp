@@ -30,7 +30,7 @@ TEST(instructions, dec_zero_page)
         instruction->run();
 
         ASSERT_ALL(M);
-        ASSERT_EQ(cpu->readByte(zeroPageAddress), M);
+        ASSERT_EQ(cpu->readByte(zeroPageAddress), M & 0x00FF);
     }
 }
 
@@ -50,7 +50,7 @@ TEST(instructions, dec_zero_page_x)
         instruction->run();
 
         ASSERT_ALL(M);
-        ASSERT_EQ(cpu->readByte(zeroPageAddress), M);
+        ASSERT_EQ(cpu->readByte(zeroPageAddress), M & 0x00FF);
     }
 }
 
@@ -70,7 +70,7 @@ TEST(instructions, dec_absolute)
         instruction->run();
 
         ASSERT_ALL(M);
-        ASSERT_EQ(cpu->readByte(absoluteAddress), M);
+        ASSERT_EQ(cpu->readByte(absoluteAddress), M & 0x00FF);
     }
 }
 
@@ -90,7 +90,7 @@ TEST(instructions, dec_absolute_x)
         instruction->run();
 
         ASSERT_ALL(M);
-        ASSERT_EQ(cpu->readByte(absoluteAddress), M);
+        ASSERT_EQ(cpu->readByte(absoluteAddress), M & 0x00FF);
     }
 }
 

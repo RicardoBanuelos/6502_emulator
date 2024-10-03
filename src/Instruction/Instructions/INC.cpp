@@ -16,5 +16,5 @@ void INC::run()
 
     mIcpu->writeByte(addressingData.address, result);
     mIcpu->setFlag(Flag::Z, result == 0);
-    mIcpu->setFlag(Flag::N, result & 0x80);
+    mIcpu->setFlag(Flag::N, result & (1 << 7));
 }

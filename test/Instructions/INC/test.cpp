@@ -8,9 +8,9 @@ static std::shared_ptr<ICPU> cpu(new CPU());
 static std::shared_ptr<Memory> mem(new Memory());
 static std::shared_ptr<Bus> bus(new Bus());
 
-void ASSERT_ALL(uint16_t M)
+void ASSERT_ALL(uint8_t M)
 {
-    ASSERT_EQ(cpu->getFlag(Flag::C), M & 0x00FF == 0);
+    ASSERT_EQ(cpu->getFlag(Flag::Z), M == 0);
     ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(M & (1 << 7)));
 }
 
@@ -24,7 +24,7 @@ TEST(instructions, inc_zero_page)
         uint16_t address = cpu->getRegister(Register::PC);
         uint16_t zeroPageAddress = cpu->readByte(address);
 
-        uint16_t M = cpu->readByte(zeroPageAddress) + 1;
+        uint8_t M = cpu->readByte(zeroPageAddress) + 1;
 
         std::unique_ptr<INC> instruction(new INC(cpu, AddressingMode::ZeroPage, 3));
         instruction->run();
@@ -44,7 +44,7 @@ TEST(instructions, inc_zero_page_x)
         uint16_t address = cpu->getRegister(Register::PC);
         uint16_t zeroPageAddress = cpu->readByte(address) + cpu->getRegister(Register::X);
 
-        uint16_t M = cpu->readByte(zeroPageAddress) + 1;
+        uint8_t M = cpu->readByte(zeroPageAddress) + 1;
 
         std::unique_ptr<INC> instruction(new INC(cpu, AddressingMode::ZeroPageX, 3));
         instruction->run();
@@ -64,7 +64,7 @@ TEST(instructions, inc_absolute)
         uint16_t address = cpu->getRegister(Register::PC);
         uint16_t absoluteAddress = cpu->readWord(address);
 
-        uint16_t M = cpu->readByte(absoluteAddress) + 1;
+        uint8_t M = cpu->readByte(absoluteAddress) + 1;
 
         std::unique_ptr<INC> instruction(new INC(cpu, AddressingMode::Absolute, 4));
         instruction->run();
@@ -84,7 +84,7 @@ TEST(instructions, inc_absolute_x)
         uint16_t address = cpu->getRegister(Register::PC);
         uint16_t absoluteAddress = cpu->readWord(address) + cpu->getRegister(Register::X);
 
-        uint16_t M = cpu->readByte(absoluteAddress) + 1;
+        uint8_t M = cpu->readByte(absoluteAddress) + 1;
 
         std::unique_ptr<INC> instruction(new INC(cpu, AddressingMode::AbsoluteOffsetX, 4));
         instruction->run();
