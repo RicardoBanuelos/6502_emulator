@@ -3,6 +3,7 @@
 #include "Instruction/Instructions.h"
 
 #include <random>
+#include "CPU.h"
 
 CPU::CPU()
 {
@@ -186,6 +187,14 @@ void CPU::execute()
     }
 
     mInstructions.at(opCode)->run();
+}
+
+void CPU::randomizeFlags()
+{
+    std::mt19937 gen(std::random_device{}());
+    std::uniform_int_distribution<> dis(0, UINT8_MAX);
+
+    mRegisters.statusRegister.byte = dis(gen);
 }
 
 void CPU::connectBus(std::shared_ptr<IBus> bus)

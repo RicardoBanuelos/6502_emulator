@@ -12,5 +12,5 @@ PLP::~PLP()
 
 void PLP::run()
 {
-    //mIcpu->registers().statusRegister.byte = mIcpu->popByte();
+    mIcpu->setRegister(Register::PS, mIcpu->popByte());
 }

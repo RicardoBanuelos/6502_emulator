@@ -12,5 +12,5 @@ RTS::~RTS()
 
 void RTS::run()
 {
-    // mIcpu->registers().PC = mIcpu->popWord();
+    mIcpu->setRegister(Register::PC, mIcpu->popWord());
 }

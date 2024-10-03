@@ -1,12 +1,12 @@
-set(CPY_TEST_EXECUTABLE cmx_test CACHE INTERNAL "")
+set(CPY_TEST_EXECUTABLE cpy_test CACHE INTERNAL "")
 
-add_executable(${CMX_TEST_EXECUTABLE} test.cpp)
+add_executable(${CPY_TEST_EXECUTABLE} test.cpp)
 
-target_link_libraries(${CMX_TEST_EXECUTABLE}
+target_link_libraries(${CPY_TEST_EXECUTABLE}
   GTest::GTest
   ${CPU_LIBRARY}
   ${INTRUCTIONS_LIBRARY} 
   ${MEMORY_LIBRARY}
   ${BUS_LIBRARY})
 
-gtest_discover_tests(${CMX_TEST_EXECUTABLE})
+gtest_discover_tests(${CPY_TEST_EXECUTABLE})
