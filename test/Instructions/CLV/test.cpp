@@ -10,13 +10,16 @@ static std::shared_ptr<Bus> bus(new Bus());
 
 TEST(instructions, clv_implied)
 {
-    cpu->reset();
-    cpu->setFlag(Flag::V, 1);
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->setFlag(Flag::V, 1);
 
-    std::unique_ptr<CLV> instruction(new CLV(cpu, AddressingMode::Implied, 2));
-    instruction->run();
+        std::unique_ptr<CLV> instruction(new CLV(cpu, AddressingMode::Implied, 2));
+        instruction->run();
 
-    ASSERT_EQ(cpu->getFlag(Flag::V), 0);
+        ASSERT_EQ(cpu->getFlag(Flag::V), 0);
+    }
 }
 
 int main(int argc, char** argv)

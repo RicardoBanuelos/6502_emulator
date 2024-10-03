@@ -17,54 +17,63 @@ void ASSERT_ALL(uint16_t X, uint16_t M, uint16_t result)
 
 TEST(instructions, cpx_immediate)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {    
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t X = cpu->getRegister(Register::X);
-    uint16_t M = cpu->readByte(address);
-    uint8_t result = X - M;
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t X = cpu->getRegister(Register::X);
+        uint16_t M = cpu->readByte(address);
+        uint8_t result = X - M;
 
-    std::unique_ptr<CPX> instruction(new CPX(cpu, AddressingMode::Immediate, 2));
-    instruction->run();
+        std::unique_ptr<CPX> instruction(new CPX(cpu, AddressingMode::Immediate, 2));
+        instruction->run();
 
-    ASSERT_ALL(X, M, result);
+        ASSERT_ALL(X, M, result);
+    }
 }
 
 TEST(instructions, cpx_zero_page)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {    
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t zeroPageAddress = cpu->readByte(address);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t zeroPageAddress = cpu->readByte(address);
 
-    uint16_t X = cpu->getRegister(Register::X);
-    uint16_t M = cpu->readByte(zeroPageAddress);
-    uint8_t result = X - M;
+        uint16_t X = cpu->getRegister(Register::X);
+        uint16_t M = cpu->readByte(zeroPageAddress);
+        uint8_t result = X - M;
 
-    std::unique_ptr<CPX> instruction(new CPX(cpu, AddressingMode::ZeroPage, 3));
-    instruction->run();
+        std::unique_ptr<CPX> instruction(new CPX(cpu, AddressingMode::ZeroPage, 3));
+        instruction->run();
 
-    ASSERT_ALL(X, M, result);
+        ASSERT_ALL(X, M, result);
+    }
 }
 
 TEST(instructions, cpx_absolute)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {    
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t absoluteAddress = cpu->readWord(address);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t absoluteAddress = cpu->readWord(address);
 
-    uint16_t X = cpu->getRegister(Register::X);
-    uint16_t M = cpu->readByte(absoluteAddress);
-    uint8_t result = X - M;
+        uint16_t X = cpu->getRegister(Register::X);
+        uint16_t M = cpu->readByte(absoluteAddress);
+        uint8_t result = X - M;
 
-    std::unique_ptr<CPX> instruction(new CPX(cpu, AddressingMode::Absolute, 4));
-    instruction->run();
+        std::unique_ptr<CPX> instruction(new CPX(cpu, AddressingMode::Absolute, 4));
+        instruction->run();
 
-    ASSERT_ALL(X, M, result);
+        ASSERT_ALL(X, M, result);
+    }
 }
 
 int main(int argc, char** argv)

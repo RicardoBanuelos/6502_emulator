@@ -10,17 +10,20 @@ static std::shared_ptr<Bus> bus(new Bus());
 
 TEST(instructions, inx_implied)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {    
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint8_t result = cpu->getRegister(Register::X) + 1;
+        uint8_t result = cpu->getRegister(Register::X) + 1;
 
-    std::unique_ptr<INX> instruction(new INX(cpu, AddressingMode::Implied, 2));
-    instruction->run();
+        std::unique_ptr<INX> instruction(new INX(cpu, AddressingMode::Implied, 2));
+        instruction->run();
 
-    ASSERT_EQ(cpu->getFlag(Flag::Z), result == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(result & (1 << 7)));
-    ASSERT_EQ(cpu->getRegister(Register::X), result);
+        ASSERT_EQ(cpu->getFlag(Flag::Z), result == 0);
+        ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(result & (1 << 7)));
+        ASSERT_EQ(cpu->getRegister(Register::X), result);
+    }
 }
 
 int main(int argc, char** argv)

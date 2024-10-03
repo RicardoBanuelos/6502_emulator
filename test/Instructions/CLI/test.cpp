@@ -10,13 +10,16 @@ static std::shared_ptr<Bus> bus(new Bus());
 
 TEST(instructions, cli_implied)
 {
-    cpu->reset();
-    cpu->setFlag(Flag::I, 1);
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->setFlag(Flag::I, 1);
 
-    std::unique_ptr<CLI> instruction(new CLI(cpu, AddressingMode::Implied, 2));
-    instruction->run();
+        std::unique_ptr<CLI> instruction(new CLI(cpu, AddressingMode::Implied, 2));
+        instruction->run();
 
-    ASSERT_EQ(cpu->getFlag(Flag::I), 0);
+        ASSERT_EQ(cpu->getFlag(Flag::I), 0);
+    }
 }
 
 int main(int argc, char** argv)

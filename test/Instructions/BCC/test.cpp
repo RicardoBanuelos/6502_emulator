@@ -10,25 +10,28 @@ static std::shared_ptr<Bus> bus(new Bus());
 
 TEST(instructions, bcc_relative)
 {
-    cpu->reset();
-    cpu->setFlag(Flag::C, 1);
-    uint16_t expected = cpu->getRegister(Register::PC) + 1;
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->setFlag(Flag::C, 1);
+        uint16_t expected = cpu->getRegister(Register::PC) + 1;
 
-    std::unique_ptr<BCC> instruction(new BCC(cpu, AddressingMode::Relative, 2));
-    instruction->run();
+        std::unique_ptr<BCC> instruction(new BCC(cpu, AddressingMode::Relative, 2));
+        instruction->run();
 
-    uint16_t newPC = cpu->getRegister(Register::PC);
+        uint16_t newPC = cpu->getRegister(Register::PC);
 
-    ASSERT_EQ(expected, newPC);
+        ASSERT_EQ(expected, newPC);
 
-    uint16_t relativeAddress = cpu->readByte(cpu->getRegister(Register::PC));
-    expected = cpu->getRegister(Register::PC) + relativeAddress + 1;
-    cpu->setFlag(Flag::C, 0);
+        uint16_t relativeAddress = cpu->readByte(cpu->getRegister(Register::PC));
+        expected = cpu->getRegister(Register::PC) + relativeAddress + 1;
+        cpu->setFlag(Flag::C, 0);
 
-    instruction->run();
-    newPC = cpu->getRegister(Register::PC);
+        instruction->run();
+        newPC = cpu->getRegister(Register::PC);
 
-    ASSERT_EQ(expected, newPC);
+        ASSERT_EQ(expected, newPC);
+    }
 }
 
 int main(int argc, char** argv)

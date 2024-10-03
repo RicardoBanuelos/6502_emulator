@@ -17,144 +17,168 @@ void ASSERT_ALL(uint16_t A, uint16_t M, uint16_t result)
 
 TEST(instructions, cmp_immediate)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t A = cpu->getRegister(Register::A);
-    uint16_t M = cpu->readByte(address);
-    uint8_t result = A - M;
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t A = cpu->getRegister(Register::A);
+        uint16_t M = cpu->readByte(address);
+        uint8_t result = A - M;
 
-    std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::Immediate, 2));
-    instruction->run();
+        std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::Immediate, 2));
+        instruction->run();
 
-    ASSERT_ALL(A, M, result);
+        ASSERT_ALL(A, M, result);
+    }
 }
 
 TEST(instructions, cmp_zero_page)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t zeroPageAddress = cpu->readByte(address);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t zeroPageAddress = cpu->readByte(address);
 
-    uint16_t A = cpu->getRegister(Register::A);
-    uint16_t M = cpu->readByte(zeroPageAddress);
-    uint8_t result = A - M;
+        uint16_t A = cpu->getRegister(Register::A);
+        uint16_t M = cpu->readByte(zeroPageAddress);
+        uint8_t result = A - M;
 
-    std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::ZeroPage, 3));
-    instruction->run();
+        std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::ZeroPage, 3));
+        instruction->run();
 
-    ASSERT_ALL(A, M, result);
+        ASSERT_ALL(A, M, result);
+    }
 }
 
 TEST(instructions, cmp_zero_page_x)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {    
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t zeroPageAddress = cpu->readByte(address) + cpu->getRegister(Register::X);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t zeroPageAddress = cpu->readByte(address) + cpu->getRegister(Register::X);
 
-    uint16_t A = cpu->getRegister(Register::A);
-    uint16_t M = cpu->readByte(zeroPageAddress);
-    uint8_t result = A - M;
+        uint16_t A = cpu->getRegister(Register::A);
+        uint16_t M = cpu->readByte(zeroPageAddress);
+        uint8_t result = A - M;
 
-    std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::ZeroPageX, 4));
-    instruction->run();
+        std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::ZeroPageX, 4));
+        instruction->run();
 
-    ASSERT_ALL(A, M, result);
+        ASSERT_ALL(A, M, result);
+    }
 }
 
 TEST(instructions, cmp_absolute)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {    
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t absoluteAddress = cpu->readWord(address);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t absoluteAddress = cpu->readWord(address);
 
-    uint16_t A = cpu->getRegister(Register::A);
-    uint16_t M = cpu->readByte(absoluteAddress);
-    uint8_t result = A - M;
+        uint16_t A = cpu->getRegister(Register::A);
+        uint16_t M = cpu->readByte(absoluteAddress);
+        uint8_t result = A - M;
 
-    std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::Absolute, 4));
-    instruction->run();
+        std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::Absolute, 4));
+        instruction->run();
 
-    ASSERT_ALL(A, M, result);
+        ASSERT_ALL(A, M, result);
+    }
 }
 
 TEST(instructions, cmp_absolute_x)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {    
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t absoluteAddress = cpu->readWord(address) + cpu->getRegister(Register::X);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t absoluteAddress = cpu->readWord(address) + cpu->getRegister(Register::X);
 
-    uint16_t A = cpu->getRegister(Register::A);
-    uint16_t M = cpu->readByte(absoluteAddress);
-    uint8_t result = A - M;
+        uint16_t A = cpu->getRegister(Register::A);
+        uint16_t M = cpu->readByte(absoluteAddress);
+        uint8_t result = A - M;
 
-    std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::AbsoluteOffsetX, 4));
-    instruction->run();
+        std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::AbsoluteOffsetX, 4));
+        instruction->run();
 
-    ASSERT_ALL(A, M, result);
+        ASSERT_ALL(A, M, result);
+    }
 }
 
 TEST(instructions, cmp_absolute_y)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {    
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t absoluteAddress = cpu->readWord(address) + cpu->getRegister(Register::Y);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t absoluteAddress = cpu->readWord(address) + cpu->getRegister(Register::Y);
 
-    uint16_t A = cpu->getRegister(Register::A);
-    uint16_t M = cpu->readByte(absoluteAddress);
-    uint8_t result = A - M;
+        uint16_t A = cpu->getRegister(Register::A);
+        uint16_t M = cpu->readByte(absoluteAddress);
+        uint8_t result = A - M;
 
-    std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::AbsoluteOffsetY, 4));
-    instruction->run();
+        std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::AbsoluteOffsetY, 4));
+        instruction->run();
 
-    ASSERT_ALL(A, M, result);
+        ASSERT_ALL(A, M, result);
+    }
 }
 
 TEST(instructions, cmp_indirect_x)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {    
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t indirectAddress = cpu->readByte(address) + cpu->getRegister(Register::X);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t indirectAddress = cpu->readByte(address) + cpu->getRegister(Register::X);
 
-    uint16_t A = cpu->getRegister(Register::A);
-    uint16_t M = cpu->readByte(indirectAddress);
-    uint8_t result = A - M;
+        uint16_t A = cpu->getRegister(Register::A);
+        uint16_t M = cpu->readByte(indirectAddress);
+        uint8_t result = A - M;
 
-    std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::IndirectX, 6));
-    instruction->run();
+        std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::IndirectX, 6));
+        instruction->run();
 
-    ASSERT_ALL(A, M, result);
+        ASSERT_ALL(A, M, result);
+    }
 }
 
 TEST(instructions, cmp_indirect_y)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t indirectAddress = cpu->readByte(address) + cpu->getRegister(Register::Y);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t indirectAddress = cpu->readByte(address) + cpu->getRegister(Register::Y);
 
-    uint16_t A = cpu->getRegister(Register::A);
-    uint16_t M = cpu->readByte(indirectAddress);
-    uint8_t result = A - M;
+        uint16_t A = cpu->getRegister(Register::A);
+        uint16_t M = cpu->readByte(indirectAddress);
+        uint8_t result = A - M;
 
-    std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::IndirectY, 5));
-    instruction->run();
+        std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::IndirectY, 5));
+        instruction->run();
 
-    ASSERT_ALL(A, M, result);
+        ASSERT_ALL(A, M, result);
+    }
 }
 
 int main(int argc, char** argv)

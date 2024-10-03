@@ -10,18 +10,21 @@ static std::shared_ptr<Bus> bus(new Bus());
 
 TEST(instructions, brk_implied)
 {
-    cpu->reset();
-    uint16_t prevPC = cpu->getRegister(Register::PC);
-    uint16_t prevFlags = cpu->getRegister(Register::PS);
-    uint16_t newPC = cpu->readWord(0xFFFE);
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        uint16_t prevPC = cpu->getRegister(Register::PC);
+        uint16_t prevFlags = cpu->getRegister(Register::PS);
+        uint16_t newPC = cpu->readWord(0xFFFE);
 
-    std::unique_ptr<BRK> instruction(new BRK(cpu, AddressingMode::Implied, 7));
-    instruction->run();
+        std::unique_ptr<BRK> instruction(new BRK(cpu, AddressingMode::Implied, 7));
+        instruction->run();
 
-    ASSERT_EQ(prevFlags, cpu->popByte());
-    ASSERT_EQ(prevPC, cpu->popWord());
-    ASSERT_EQ(newPC, cpu->getRegister(Register::PC));
-    ASSERT_EQ(cpu->getFlag(Flag::B), 1);
+        ASSERT_EQ(prevFlags, cpu->popByte());
+        ASSERT_EQ(prevPC, cpu->popWord());
+        ASSERT_EQ(newPC, cpu->getRegister(Register::PC));
+        ASSERT_EQ(cpu->getFlag(Flag::B), 1);
+    }
 }
 
 int main(int argc, char** argv)

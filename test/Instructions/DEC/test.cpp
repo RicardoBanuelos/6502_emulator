@@ -16,70 +16,82 @@ void ASSERT_ALL(uint16_t M)
 
 TEST(instructions, dec_zero_page)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t zeroPageAddress = cpu->readByte(address);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t zeroPageAddress = cpu->readByte(address);
 
-    uint16_t M = cpu->readByte(zeroPageAddress) - 1;
+        uint16_t M = cpu->readByte(zeroPageAddress) - 1;
 
-    std::unique_ptr<DEC> instruction(new DEC(cpu, AddressingMode::ZeroPage, 3));
-    instruction->run();
+        std::unique_ptr<DEC> instruction(new DEC(cpu, AddressingMode::ZeroPage, 3));
+        instruction->run();
 
-    ASSERT_ALL(M);
-    ASSERT_EQ(cpu->readByte(zeroPageAddress), M);
+        ASSERT_ALL(M);
+        ASSERT_EQ(cpu->readByte(zeroPageAddress), M);
+    }
 }
 
 TEST(instructions, dec_zero_page_x)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t zeroPageAddress = cpu->readByte(address) + cpu->getRegister(Register::X);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t zeroPageAddress = cpu->readByte(address) + cpu->getRegister(Register::X);
 
-    uint16_t M = cpu->readByte(zeroPageAddress) - 1;
+        uint16_t M = cpu->readByte(zeroPageAddress) - 1;
 
-    std::unique_ptr<DEC> instruction(new DEC(cpu, AddressingMode::ZeroPageX, 3));
-    instruction->run();
+        std::unique_ptr<DEC> instruction(new DEC(cpu, AddressingMode::ZeroPageX, 3));
+        instruction->run();
 
-    ASSERT_ALL(M);
-    ASSERT_EQ(cpu->readByte(zeroPageAddress), M);
+        ASSERT_ALL(M);
+        ASSERT_EQ(cpu->readByte(zeroPageAddress), M);
+    }
 }
 
 TEST(instructions, dec_absolute)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {    
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t absoluteAddress = cpu->readWord(address);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t absoluteAddress = cpu->readWord(address);
 
-    uint16_t M = cpu->readByte(absoluteAddress) - 1;
+        uint16_t M = cpu->readByte(absoluteAddress) - 1;
 
-    std::unique_ptr<DEC> instruction(new DEC(cpu, AddressingMode::Absolute, 4));
-    instruction->run();
+        std::unique_ptr<DEC> instruction(new DEC(cpu, AddressingMode::Absolute, 4));
+        instruction->run();
 
-    ASSERT_ALL(M);
-    ASSERT_EQ(cpu->readByte(absoluteAddress), M);
+        ASSERT_ALL(M);
+        ASSERT_EQ(cpu->readByte(absoluteAddress), M);
+    }
 }
 
 TEST(instructions, dec_absolute_x)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
+    for(int i = 0; i < 1000; ++i)
+    {    
+        cpu->reset();
+        cpu->randomizeRegisters();
 
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t absoluteAddress = cpu->readWord(address) + cpu->getRegister(Register::X);
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t absoluteAddress = cpu->readWord(address) + cpu->getRegister(Register::X);
 
-    uint16_t M = cpu->readByte(absoluteAddress) - 1;
+        uint16_t M = cpu->readByte(absoluteAddress) - 1;
 
-    std::unique_ptr<DEC> instruction(new DEC(cpu, AddressingMode::AbsoluteOffsetX, 4));
-    instruction->run();
+        std::unique_ptr<DEC> instruction(new DEC(cpu, AddressingMode::AbsoluteOffsetX, 4));
+        instruction->run();
 
-    ASSERT_ALL(M);
-    ASSERT_EQ(cpu->readByte(absoluteAddress), M);
+        ASSERT_ALL(M);
+        ASSERT_EQ(cpu->readByte(absoluteAddress), M);
+    }
 }
 
 int main(int argc, char** argv)

@@ -17,81 +17,96 @@ void ASSERT_ALL(uint16_t expected)
 
 TEST(instructions, asl_accumulator)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
-    uint8_t expected = cpu->getRegister(Register::A) << 1;    
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
+        uint8_t expected = cpu->getRegister(Register::A) << 1;    
 
-    std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::Implied, 2));
-    instruction->run();
+        std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::Implied, 2));
+        instruction->run();
 
-    ASSERT_ALL(expected);
-    ASSERT_EQ(expected, cpu->getRegister(Register::A));
+        ASSERT_ALL(expected);
+        ASSERT_EQ(expected, cpu->getRegister(Register::A));
+    }
 }
 
 TEST(instructions, asl_zero_page)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t zeroPageAddress = cpu->readByte(address);
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t zeroPageAddress = cpu->readByte(address);
 
-    uint8_t expected = cpu->readByte(zeroPageAddress) << 1;
+        uint8_t expected = cpu->readByte(zeroPageAddress) << 1;
 
-    std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::ZeroPage, 5));
-    instruction->run();
+        std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::ZeroPage, 5));
+        instruction->run();
 
-    ASSERT_ALL(expected);
-    ASSERT_EQ(expected, cpu->readByte(zeroPageAddress));
+        ASSERT_ALL(expected);
+        ASSERT_EQ(expected, cpu->readByte(zeroPageAddress));   
+    }
 }
 
 TEST(instructions, asl_zero_page_x)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t zeroPageAddress = cpu->readByte(address) 
-                             + cpu->getRegister(Register::X);
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t zeroPageAddress = cpu->readByte(address) 
+                                + cpu->getRegister(Register::X);
 
-    uint8_t expected = cpu->readByte(zeroPageAddress) << 1;
+        uint8_t expected = cpu->readByte(zeroPageAddress) << 1;
 
-    std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::ZeroPageX, 6));
-    instruction->run();
+        std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::ZeroPageX, 6));
+        instruction->run();
 
-    ASSERT_ALL(expected);
-    ASSERT_EQ(expected, cpu->readByte(zeroPageAddress));
+        ASSERT_ALL(expected);
+        ASSERT_EQ(expected, cpu->readByte(zeroPageAddress));   
+    }
 }
 
 TEST(instructions, asl_absolute)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t absoluteAddress = cpu->readWord(address);
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t absoluteAddress = cpu->readWord(address);
 
-    uint8_t expected = cpu->readByte(absoluteAddress) << 1;
+        uint8_t expected = cpu->readByte(absoluteAddress) << 1;
 
-    std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::Absolute, 6));
-    instruction->run();
+        std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::Absolute, 6));
+        instruction->run();
 
-    ASSERT_ALL(expected);
-    ASSERT_EQ(expected, cpu->readByte(absoluteAddress));
+        ASSERT_ALL(expected);
+        ASSERT_EQ(expected, cpu->readByte(absoluteAddress));   
+    }
 }
 
 TEST(instructions, asl_absolute_x)
 {
-    cpu->reset();
-    cpu->randomizeRegisters();
-    uint16_t address = cpu->getRegister(Register::PC);
-    uint16_t absoluteAddress = cpu->readWord(address)
-                             + cpu->getRegister(Register::X);;
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        cpu->randomizeRegisters();
+        uint16_t address = cpu->getRegister(Register::PC);
+        uint16_t absoluteAddress = cpu->readWord(address)
+                                + cpu->getRegister(Register::X);;
 
-    uint8_t expected = cpu->readByte(absoluteAddress) << 1;
+        uint8_t expected = cpu->readByte(absoluteAddress) << 1;
 
-    std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::AbsoluteOffsetX, 7));
-    instruction->run();
+        std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::AbsoluteOffsetX, 7));
+        instruction->run();
 
-    ASSERT_ALL(expected);
-    ASSERT_EQ(expected, cpu->readByte(absoluteAddress));
+        ASSERT_ALL(expected);
+        ASSERT_EQ(expected, cpu->readByte(absoluteAddress));   
+    }
 }
 
 int main(int argc, char** argv)

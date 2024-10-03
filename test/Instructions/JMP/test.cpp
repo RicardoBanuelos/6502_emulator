@@ -10,30 +10,36 @@ static std::shared_ptr<Bus> bus(new Bus());
 
 TEST(instructions, jmp_absolute)
 {
-    cpu->reset();
-    
-    uint16_t PC = cpu->getRegister(Register::PC);
-    uint16_t absoluteAddress = cpu->readWord(PC);
-    uint16_t expected = cpu->readByte(absoluteAddress);
+    for(int i = 0; i < 1000; ++i)
+    {
+        cpu->reset();
+        
+        uint16_t PC = cpu->getRegister(Register::PC);
+        uint16_t absoluteAddress = cpu->readWord(PC);
+        uint16_t expected = cpu->readByte(absoluteAddress);
 
-    std::unique_ptr<JMP> instruction(new JMP(cpu, AddressingMode::Absolute, 3));
-    instruction->run();
+        std::unique_ptr<JMP> instruction(new JMP(cpu, AddressingMode::Absolute, 3));
+        instruction->run();
 
-    ASSERT_EQ(cpu->getRegister(Register::PC), expected);
+        ASSERT_EQ(cpu->getRegister(Register::PC), expected);
+    }
 }
 
 TEST(instructions, jmp_indirect)
 {
-    cpu->reset();
+    for(int i = 0; i < 1000; ++i)
+    {    
+        cpu->reset();
 
-    uint16_t PC = cpu->getRegister(Register::PC);
-    uint16_t indirectAddress = cpu->readWord(PC);
-    uint16_t expected = cpu->readWord(indirectAddress);
-    
-    std::unique_ptr<JMP> instruction(new JMP(cpu, AddressingMode::Indirect, 5));
-    instruction->run();
+        uint16_t PC = cpu->getRegister(Register::PC);
+        uint16_t indirectAddress = cpu->readWord(PC);
+        uint16_t expected = cpu->readWord(indirectAddress);
+        
+        std::unique_ptr<JMP> instruction(new JMP(cpu, AddressingMode::Indirect, 5));
+        instruction->run();
 
-    ASSERT_EQ(cpu->getRegister(Register::PC), expected);
+        ASSERT_EQ(cpu->getRegister(Register::PC), expected);
+    }
 }
 
 int main(int argc, char** argv)
