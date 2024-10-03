@@ -14,6 +14,21 @@ add_library(${INTRUCTIONS_LIBRARY}
     Instructions/BPL.cpp
     Instructions/BRK.cpp
     Instructions/BVC.cpp
+    Instructions/BVS.cpp
+    Instructions/CLC.cpp
+    Instructions/CLD.cpp
+    Instructions/CLI.cpp
+    Instructions/CLV.cpp
+    Instructions/CMP.cpp
+    Instructions/CPX.cpp
+    Instructions/CPY.cpp
+    Instructions/DEC.cpp
+    Instructions/DEX.cpp
+    Instructions/EOR.cpp
+    Instructions/INC.cpp
+    Instructions/INX.cpp
+    Instructions/INY.cpp
+    Instructions/JMP.cpp
     Instructions/JSR.cpp
     Instructions/LDA.cpp
     Instructions/JSR.cpp

@@ -1,5 +1,4 @@
 #include "Instruction/Instructions/EOR.h"
-#include "EOR.h"
 
 EOR::EOR(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("EOR", icpu, addressingMode, cycles)
