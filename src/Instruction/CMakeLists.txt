@@ -24,6 +24,7 @@ add_library(${INTRUCTIONS_LIBRARY}
     Instructions/CPY.cpp
     Instructions/DEC.cpp
     Instructions/DEX.cpp
+    Instructions/DEY.cpp
     Instructions/EOR.cpp
     Instructions/INC.cpp
     Instructions/INX.cpp

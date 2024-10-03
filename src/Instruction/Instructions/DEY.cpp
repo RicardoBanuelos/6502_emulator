@@ -11,9 +11,10 @@ DEY::~DEY()
 
 void DEY::run()
 {
-    uint8_t Y = mIcpu->getRegister(Register::Y);
-    mIcpu->setRegister(Register::Y, --Y);
+    uint8_t Y = mIcpu->getRegister(Register::Y) - 1;
+    mIcpu->setRegister(Register::Y, Y);
 
+    Y = mIcpu->getRegister(Register::Y);
     mIcpu->setFlag(Flag::Z, Y == 0);
     mIcpu->setFlag(Flag::N, Y & 0x80);
 }
