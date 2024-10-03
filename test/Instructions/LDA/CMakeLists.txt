@@ -1,7 +1,7 @@
 set(LDA_TEST_EXECUTABLE lda_test CACHE INTERNAL "")
 
 
-add_executable(${LDA_TEST_EXECUTABLE} LDA_test.cpp)
+add_executable(${LDA_TEST_EXECUTABLE} test.cpp)
 
 
 target_link_libraries(${LDA_TEST_EXECUTABLE}

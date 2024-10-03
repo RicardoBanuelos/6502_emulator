@@ -13,17 +13,13 @@ ORA::~ORA()
 
 void ORA::run()
 {
-    // AddressingData addressingData = mIcpu->addressing(mAddressingMode);
+    auto [data, address] = mIcpu->addressing(mAddressingMode);
+    uint8_t accumulator = mIcpu->getRegister(Register::A);
 
-    // if(AddressingMode::Immediate == mAddressingMode)
-    // {
-    //     mIcpu->registers().A |= addressingData.address;
-    // }
-    // else 
-    // {
-    //     mIcpu->registers().A |= addressingData.data;
-    // }
+    accumulator |= data;
 
-    // mIcpu->registers().statusRegister.setFlag(Flag::Z, mIcpu->registers().A == 0);
-    // mIcpu->registers().statusRegister.setFlag(Flag::N, mIcpu->registers().A & (1 << 7));
+    mIcpu->setRegister(Register::A, accumulator);
+
+    mIcpu->setFlag(Flag::Z, accumulator == 0);
+    mIcpu->setFlag(Flag::N, accumulator & Flag::N);
 }

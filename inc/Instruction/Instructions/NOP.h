@@ -6,9 +6,9 @@ class NOP : public Instruction
 {
     
 public:
-    NOP(std::shared_ptr<ICPU> icpu, 
-        uint8_t cycles = 0);
+    NOP(std::shared_ptr<ICPU> icpu);
     
     ~NOP();
+    void run() override;
 private:
 };
