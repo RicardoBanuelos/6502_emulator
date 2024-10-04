@@ -1,7 +1,7 @@
 set(CPU_TEST cpu_test CACHE INTERNAL "")
 
 
-add_executable(${CPU_TEST} cpu_test.cpp)
+add_executable(${CPU_TEST} cpu_test.cpp cpu_test.cpp)
 
 
 target_link_libraries(${CPU_TEST}
@@ -13,3 +13,4 @@ target_link_libraries(${CPU_TEST}
   )
 
 gtest_discover_tests(${CPU_TEST})
+add_subdirectory(opcodes)
