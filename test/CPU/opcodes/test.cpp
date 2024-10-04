@@ -72,6 +72,198 @@ TEST(cpu_opcodes, test_bne)
     ASSERT_TEMPLATE<BNE>(AddressingMode::Relative, OpCode::OC_BNE_RELATIVE);
 }
 
+TEST(cpu_opcodes, test_jsr)
+{
+    ASSERT_TEMPLATE<JSR>(AddressingMode::Absolute, OpCode::OC_JSR_ABSOLUTE);
+}
+
+TEST(cpu_opcodes, test_lda)
+{
+    ASSERT_TEMPLATE<LDA>(AddressingMode::Immediate, OpCode::OC_LDA_IMMEDIATE);
+    ASSERT_TEMPLATE<LDA>(AddressingMode::ZeroPage, OpCode::OC_LDA_ZERO_PAGE);
+    ASSERT_TEMPLATE<LDA>(AddressingMode::ZeroPageX, OpCode::OC_LDA_ZERO_PAGE_X);
+    ASSERT_TEMPLATE<LDA>(AddressingMode::Absolute, OpCode::OC_LDA_ABSOLUTE);
+    ASSERT_TEMPLATE<LDA>(AddressingMode::AbsoluteX, OpCode::OC_LDA_ABSOLUTE_X);
+    ASSERT_TEMPLATE<LDA>(AddressingMode::AbsoluteY, OpCode::OC_LDA_ABSOLUTE_Y);
+    ASSERT_TEMPLATE<LDA>(AddressingMode::IndirectX, OpCode::OC_LDA_INDIRECT_X);
+    ASSERT_TEMPLATE<LDA>(AddressingMode::IndirectY, OpCode::OC_LDA_INDIRECT_Y);
+}
+
+TEST(cpu_opcodes, test_ldx)
+{
+    ASSERT_TEMPLATE<LDX>(AddressingMode::Immediate, OpCode::OC_LDX_IMMEDIATE);
+    ASSERT_TEMPLATE<LDX>(AddressingMode::ZeroPage, OpCode::OC_LDX_ZERO_PAGE);
+    ASSERT_TEMPLATE<LDX>(AddressingMode::ZeroPageY, OpCode::OC_LDX_ZERO_PAGE_Y);
+    ASSERT_TEMPLATE<LDX>(AddressingMode::Absolute, OpCode::OC_LDX_ABSOLUTE);
+    ASSERT_TEMPLATE<LDX>(AddressingMode::AbsoluteY, OpCode::OC_LDX_ABSOLUTE_Y);
+}
+
+TEST(cpu_opcodes, test_ldy)
+{
+    ASSERT_TEMPLATE<LDY>(AddressingMode::Immediate, OpCode::OC_LDY_IMMEDIATE);
+    ASSERT_TEMPLATE<LDY>(AddressingMode::ZeroPage, OpCode::OC_LDY_ZERO_PAGE);
+    ASSERT_TEMPLATE<LDY>(AddressingMode::ZeroPageX, OpCode::OC_LDY_ZERO_PAGE_X);
+    ASSERT_TEMPLATE<LDY>(AddressingMode::Absolute, OpCode::OC_LDY_ABSOLUTE);
+    ASSERT_TEMPLATE<LDY>(AddressingMode::AbsoluteX, OpCode::OC_LDY_ABSOLUTE_X);
+}
+
+TEST(cpu_opcodes, test_lsr)
+{
+    ASSERT_TEMPLATE<LSR>(AddressingMode::Accumulator, OpCode::OC_LSR_ACCUMULATOR);
+    ASSERT_TEMPLATE<LSR>(AddressingMode::ZeroPage, OpCode::OC_LSR_ZERO_PAGE);
+    ASSERT_TEMPLATE<LSR>(AddressingMode::ZeroPageX, OpCode::OC_LSR_ZERO_PAGE_X);
+    ASSERT_TEMPLATE<LSR>(AddressingMode::Absolute, OpCode::OC_LSR_ABSOLUTE);
+    ASSERT_TEMPLATE<LSR>(AddressingMode::AbsoluteX, OpCode::OC_LSR_ABSOLUTE_X);
+}
+
+TEST(cpu_opcodes, test_nop)
+{
+    ASSERT_TEMPLATE<NOP>(AddressingMode::Implied, OpCode::OC_NOP_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_ora)
+{
+    ASSERT_TEMPLATE<ORA>(AddressingMode::Immediate, OpCode::OC_ORA_IMMEDIATE);
+    ASSERT_TEMPLATE<ORA>(AddressingMode::ZeroPage, OpCode::OC_ORA_ZERO_PAGE);
+    ASSERT_TEMPLATE<ORA>(AddressingMode::ZeroPageX, OpCode::OC_ORA_ZERO_PAGE_X);
+    ASSERT_TEMPLATE<ORA>(AddressingMode::ZeroPage, OpCode::OC_ORA_ZERO_PAGE);
+    ASSERT_TEMPLATE<ORA>(AddressingMode::Absolute, OpCode::OC_ORA_ABSOLUTE);
+    ASSERT_TEMPLATE<ORA>(AddressingMode::AbsoluteX, OpCode::OC_ORA_ABSOLUTE_X);
+    ASSERT_TEMPLATE<ORA>(AddressingMode::AbsoluteY, OpCode::OC_ORA_ABSOLUTE_Y);
+    ASSERT_TEMPLATE<ORA>(AddressingMode::IndirectX, OpCode::OC_ORA_INDIRECT_X);
+    ASSERT_TEMPLATE<ORA>(AddressingMode::IndirectY, OpCode::OC_ORA_INDIRECT_Y);
+}
+
+TEST(cpu_opcodes, test_pha)
+{
+    ASSERT_TEMPLATE<PHA>(AddressingMode::Implied, OpCode::OC_PHA_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_php)
+{
+    ASSERT_TEMPLATE<PHP>(AddressingMode::Implied, OpCode::OC_PHP_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_pla)
+{
+    ASSERT_TEMPLATE<PLA>(AddressingMode::Implied, OpCode::OC_PLA_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_plp)
+{
+    ASSERT_TEMPLATE<PLP>(AddressingMode::Implied, OpCode::OC_PLP_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_rol)
+{
+    ASSERT_TEMPLATE<ROL>(AddressingMode::Accumulator, OpCode::OC_ROL_ACCUMULATOR);
+    ASSERT_TEMPLATE<ROL>(AddressingMode::ZeroPage, OpCode::OC_ROL_ZERO_PAGE);
+    ASSERT_TEMPLATE<ROL>(AddressingMode::ZeroPageX, OpCode::OC_ROL_ZERO_PAGE_X);
+    ASSERT_TEMPLATE<ROL>(AddressingMode::Absolute, OpCode::OC_ROL_ABSOLUTE);
+    ASSERT_TEMPLATE<ROL>(AddressingMode::AbsoluteX, OpCode::OC_ROL_ABSOLUTE_X);
+}
+
+TEST(cpu_opcodes, test_ror)
+{
+    ASSERT_TEMPLATE<ROR>(AddressingMode::Accumulator, OpCode::OC_ROR_ACCUMULATOR);
+    ASSERT_TEMPLATE<ROR>(AddressingMode::ZeroPage, OpCode::OC_ROR_ZERO_PAGE);
+    ASSERT_TEMPLATE<ROR>(AddressingMode::ZeroPageX, OpCode::OC_ROR_ZERO_PAGE_X);
+    ASSERT_TEMPLATE<ROR>(AddressingMode::Absolute, OpCode::OC_ROR_ABSOLUTE);
+    ASSERT_TEMPLATE<ROR>(AddressingMode::AbsoluteX, OpCode::OC_ROR_ABSOLUTE_X);
+}
+
+TEST(cpu_opcodes, test_rti)
+{
+    ASSERT_TEMPLATE<RTI>(AddressingMode::Implied, OpCode::OC_RTI_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_rts)
+{
+    ASSERT_TEMPLATE<RTS>(AddressingMode::Implied, OpCode::OC_RTS_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_sbc)
+{
+    ASSERT_TEMPLATE<SBC>(AddressingMode::Immediate, OpCode::OC_SBC_IMMEDIATE);
+    ASSERT_TEMPLATE<SBC>(AddressingMode::ZeroPage, OpCode::OC_SBC_ZERO_PAGE);
+    ASSERT_TEMPLATE<SBC>(AddressingMode::ZeroPageX, OpCode::OC_SBC_ZERO_PAGE_X);
+    ASSERT_TEMPLATE<SBC>(AddressingMode::ZeroPage, OpCode::OC_SBC_ZERO_PAGE);
+    ASSERT_TEMPLATE<SBC>(AddressingMode::Absolute, OpCode::OC_SBC_ABSOLUTE);
+    ASSERT_TEMPLATE<SBC>(AddressingMode::AbsoluteX, OpCode::OC_SBC_ABSOLUTE_X);
+    ASSERT_TEMPLATE<SBC>(AddressingMode::AbsoluteY, OpCode::OC_SBC_ABSOLUTE_Y);
+    ASSERT_TEMPLATE<SBC>(AddressingMode::IndirectX, OpCode::OC_SBC_INDIRECT_X);
+    ASSERT_TEMPLATE<SBC>(AddressingMode::IndirectY, OpCode::OC_SBC_INDIRECT_Y);
+}
+
+TEST(cpu_opcodes, test_sec)
+{
+    ASSERT_TEMPLATE<SEC>(AddressingMode::Implied, OpCode::OC_SEC_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_sed)
+{
+    ASSERT_TEMPLATE<SED>(AddressingMode::Implied, OpCode::OC_SED_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_sei)
+{
+    ASSERT_TEMPLATE<SEI>(AddressingMode::Implied, OpCode::OC_SEI_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_sta)
+{
+    ASSERT_TEMPLATE<STA>(AddressingMode::ZeroPage, OpCode::OC_STA_ZERO_PAGE);
+    ASSERT_TEMPLATE<STA>(AddressingMode::ZeroPageX, OpCode::OC_STA_ZERO_PAGE_X);
+    ASSERT_TEMPLATE<STA>(AddressingMode::Absolute, OpCode::OC_STA_ABSOLUTE);
+    ASSERT_TEMPLATE<STA>(AddressingMode::AbsoluteX, OpCode::OC_STA_ABSOLUTE_X);
+    ASSERT_TEMPLATE<STA>(AddressingMode::AbsoluteY, OpCode::OC_STA_ABSOLUTE_Y);
+    ASSERT_TEMPLATE<STA>(AddressingMode::IndirectX, OpCode::OC_STA_INDIRECT_X);
+    ASSERT_TEMPLATE<STA>(AddressingMode::IndirectY, OpCode::OC_STA_INDIRECT_Y);
+}
+
+TEST(cpu_opcodes, test_stx)
+{
+    ASSERT_TEMPLATE<STX>(AddressingMode::ZeroPage, OpCode::OC_STX_ZERO_PAGE);
+    ASSERT_TEMPLATE<STX>(AddressingMode::ZeroPageY, OpCode::OC_STX_ZERO_PAGE_Y);
+    ASSERT_TEMPLATE<STX>(AddressingMode::Absolute, OpCode::OC_STX_ABSOLUTE);
+}
+
+TEST(cpu_opcodes, test_sty)
+{
+    ASSERT_TEMPLATE<STY>(AddressingMode::ZeroPage, OpCode::OC_STY_ZERO_PAGE);
+    ASSERT_TEMPLATE<STY>(AddressingMode::ZeroPageX, OpCode::OC_STY_ZERO_PAGE_X);
+    ASSERT_TEMPLATE<STY>(AddressingMode::Absolute, OpCode::OC_STY_ABSOLUTE);
+}
+
+TEST(cpu_opcodes, test_tax)
+{
+    ASSERT_TEMPLATE<TAX>(AddressingMode::Implied, OpCode::OC_TAX_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_tay)
+{
+    ASSERT_TEMPLATE<TAY>(AddressingMode::Implied, OpCode::OC_TAY_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_tsx)
+{
+    ASSERT_TEMPLATE<TSX>(AddressingMode::Implied, OpCode::OC_TSX_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_txa)
+{
+    ASSERT_TEMPLATE<TXA>(AddressingMode::Implied, OpCode::OC_TXA_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_txs)
+{
+    ASSERT_TEMPLATE<TXS>(AddressingMode::Implied, OpCode::OC_TXS_IMPLIED);
+}
+
+TEST(cpu_opcodes, test_tya)
+{
+    ASSERT_TEMPLATE<TYA>(AddressingMode::Implied, OpCode::OC_TYA_IMPLIED);
+}
 
 int main(int argc, char** argv)
 {
