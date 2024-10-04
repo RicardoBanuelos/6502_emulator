@@ -301,7 +301,7 @@ void CPU::initInstructions()
     mInstructions[OC_EOR_INDIRECT_Y].reset(new EOR(shared_from_this(), AddressingMode::IndirectY, 5));
     //INC
     mInstructions[OC_INC_ZERO_PAGE].reset(new INC(shared_from_this(), AddressingMode::ZeroPage, 5));
-    mInstructions[OC_INC_ZERO_PAGE_X].reset(new INC(shared_from_this(), AddressingMode::IndirectX, 6));
+    mInstructions[OC_INC_ZERO_PAGE_X].reset(new INC(shared_from_this(), AddressingMode::ZeroPageX, 6));
     mInstructions[OC_INC_ABSOLUTE].reset(new INC(shared_from_this(), AddressingMode::Absolute, 6));
     mInstructions[OC_INC_ABSOLUTE_X].reset(new INC(shared_from_this(), AddressingMode::AbsoluteX, 6));
     //INX
