@@ -20,13 +20,18 @@ public:
     void execute();
     void connectBus(std::shared_ptr<IBus> bus);
 
+    void setFlag(Flag flag, bool value) override;
+    bool getFlag(Flag flag) override;
+    void setRegister(Register reg, uint16_t value) override;
+    uint16_t getRegister(Register reg) override;
+
     AddressingData addressing(AddressingMode mode) const override;
     const Instruction* getInstruction(OpCode opcode) const;
+    uint8_t fetchByte() override;
+    uint16_t fetchWord() override;
 private:
     void initInstructions();
 
-    uint8_t fetchByte() override;
-    uint16_t fetchWord() override;
     
     void writeByte(uint16_t address, uint8_t byte) override;
     void writeWord(uint16_t address, uint16_t word) override;
@@ -39,10 +44,6 @@ private:
     uint8_t readByte(uint16_t address) override;
     uint16_t readWord(uint16_t address) override;
 
-    void setFlag(Flag flag, bool value) override;
-    bool getFlag(Flag flag) override;
-    void setRegister(Register reg, uint16_t value) override;
-    uint16_t getRegister(Register reg) override;
 
     Registers mRegisters;
     std::unique_ptr<Addressing> mAddressingModes;

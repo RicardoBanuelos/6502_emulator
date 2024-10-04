@@ -12,5 +12,14 @@ JMP::~JMP()
 void JMP::run()
 {
     AddressingData addressingData = mIcpu->addressing(mAddressingMode);
-    mIcpu->setRegister(Register::PC, addressingData.data);
+
+    if(mAddressingMode == AddressingMode::Absolute)
+    {
+        mIcpu->setRegister(Register::PC, addressingData.address);
+    }
+    else 
+    {
+        mIcpu->setRegister(Register::PC, addressingData.data);
+    }
+
 }

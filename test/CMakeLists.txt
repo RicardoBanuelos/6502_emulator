@@ -24,6 +24,10 @@ if(TEST_INSTRUCTIONS)
   add_subdirectory(Instructions)
 endif()
 
+if(TEST_PROGRAMS)
+  add_subdirectory(Programs)
+endif()
+
 
 
 
