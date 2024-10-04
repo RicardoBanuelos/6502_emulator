@@ -420,5 +420,5 @@ void CPU::initInstructions()
     //TXS
     mInstructions[OC_TXS_IMPLIED].reset(new TXS(shared_from_this()));
     //TYA
-    mInstructions[OC_TXS_IMPLIED].reset(new TYA(shared_from_this()));
+    mInstructions[OC_TYA_IMPLIED].reset(new TYA(shared_from_this()));
 }
