@@ -11,8 +11,20 @@ add_library(GTest::GTest INTERFACE IMPORTED)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
 include(GoogleTest)
 
-add_subdirectory(Memory)
-add_subdirectory(CPU)
-add_subdirectory(Instructions)
+
+if(TEST_CPU)
+  add_subdirectory(CPU)
+endif()
+
+if(TEST_MEMORY)
+  add_subdirectory(Memory)
+endif()
+
+if(TEST_INSTRUCTIONS)
+  add_subdirectory(Instructions)
+endif()
+
+
+
 
 

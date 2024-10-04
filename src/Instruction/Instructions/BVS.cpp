@@ -1,7 +1,7 @@
 #include "Instruction/Instructions/BVS.h"
 
-BVS::BVS(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
-    :   Instruction("BVS", icpu, addressingMode, cycles)
+BVS::BVS(std::shared_ptr<ICPU> icpu)
+    :   Instruction("BVS", icpu, AddressingMode::Relative, 2)
 {
 }
 

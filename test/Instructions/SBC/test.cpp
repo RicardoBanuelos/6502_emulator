@@ -137,7 +137,7 @@ TEST(instructions, sbc_test_absoluteX)
 
         uint16_t expected = a - fetched - carry;
 
-        SBC ins(cpu, AddressingMode::AbsoluteOffsetX, 2);
+        SBC ins(cpu, AddressingMode::AbsoluteX, 2);
         ins.run();
 
         ASSERT_ALL(a, fetched, expected);
@@ -216,7 +216,7 @@ TEST(instructions, sbc_test_absoluteY)
 
         uint16_t expected = a - fetched - carry;
 
-        SBC ins(cpu, AddressingMode::AbsoluteOffsetY, 2);
+        SBC ins(cpu, AddressingMode::AbsoluteY, 2);
         ins.run();
 
         ASSERT_ALL(a, fetched, expected);

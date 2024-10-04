@@ -106,7 +106,7 @@ TEST(instructions, and_absolute_x)
         uint16_t expected = cpu->readByte(absoluteAddress) 
                         & cpu->getRegister(Register::A);
 
-        std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::AbsoluteOffsetX, 4));
+        std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::AbsoluteX, 4));
         instruction->run();
 
         ASSERT_ALL(expected);   
@@ -126,7 +126,7 @@ TEST(instructions, and_absolute_y)
         uint16_t expected = cpu->readByte(absoluteAddress) 
                         & cpu->getRegister(Register::A);
 
-        std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::AbsoluteOffsetY, 4));
+        std::unique_ptr<AND> instruction(new AND(cpu, AddressingMode::AbsoluteY, 4));
         instruction->run();
 
         ASSERT_ALL(expected);   

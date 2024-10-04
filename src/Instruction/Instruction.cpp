@@ -15,3 +15,13 @@ Instruction::Instruction(const std::string &name, std::shared_ptr<ICPU> icpu, Ad
 Instruction::~Instruction()
 {
 }
+
+AddressingMode Instruction::mode() const
+{
+    return mAddressingMode;
+}
+
+uint8_t Instruction::cycles() const
+{
+    return mCycles;
+}

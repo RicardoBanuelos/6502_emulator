@@ -115,7 +115,7 @@ TEST(instructions, rol_test_absoluteX)
         uint8_t expected = (cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) << 1) | (cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) >> 7);
         uint8_t carry = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) & (1 << 7);
 
-        ROL ins(cpu, AddressingMode::AbsoluteOffsetX, 2);
+        ROL ins(cpu, AddressingMode::AbsoluteX, 2);
         ins.run();
 
         ASSERT_EQ(expected, cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)));

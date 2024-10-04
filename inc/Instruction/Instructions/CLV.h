@@ -4,9 +4,7 @@
 class CLV : public Instruction 
 {
 public:
-    CLV(std::shared_ptr<ICPU> icpu, 
-        AddressingMode addressingMode,
-        uint8_t cycles = 0);
+    CLV(std::shared_ptr<ICPU> icpu);
 
     ~CLV();
 

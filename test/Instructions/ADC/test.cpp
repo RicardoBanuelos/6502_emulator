@@ -126,7 +126,7 @@ TEST(instructions, adc_absolute_x)
                         + a
                         + cpu->getFlag(Flag::C);
 
-        std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::AbsoluteOffsetX, 4));
+        std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::AbsoluteX, 4));
         adc->run();
 
         ASSERT_ALL(a, fetched, expected);   
@@ -149,7 +149,7 @@ TEST(instructions, adc_absolute_y)
                         + a
                         + cpu->getFlag(Flag::C);
 
-        std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::AbsoluteOffsetY, 4));
+        std::unique_ptr<ADC> adc(new ADC(cpu, AddressingMode::AbsoluteY, 4));
         adc->run();
 
         ASSERT_ALL(a, fetched, expected);   

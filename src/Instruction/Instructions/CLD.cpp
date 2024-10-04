@@ -1,7 +1,7 @@
 #include "Instruction/Instructions/CLD.h"
 
-CLD::CLD(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
-    :   Instruction("CLD", icpu, addressingMode, cycles)
+CLD::CLD(std::shared_ptr<ICPU> icpu)
+    :   Instruction("CLD", icpu, AddressingMode::Implied, 2)
 {
 }
 

@@ -111,7 +111,7 @@ TEST(instructions, eor_absolute_x)
         uint8_t M = cpu->readByte(absoluteAddress);
         uint8_t result = A ^ M;
 
-        std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::AbsoluteOffsetX, 4));
+        std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::AbsoluteX, 4));
         instruction->run();
 
         ASSERT_ALL(result);
@@ -132,7 +132,7 @@ TEST(instructions, eor_absolute_y)
         uint8_t M = cpu->readByte(absoluteAddress);
         uint8_t result = A ^ M;
 
-        std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::AbsoluteOffsetY, 4));
+        std::unique_ptr<EOR> instruction(new EOR(cpu, AddressingMode::AbsoluteY, 4));
         instruction->run();
 
         ASSERT_ALL(result);

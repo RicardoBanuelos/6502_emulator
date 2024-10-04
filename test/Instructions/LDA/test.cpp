@@ -129,7 +129,7 @@ TEST(instructions, lda_test_absoluteX)
         uint16_t lookUpAddr = cpu->readWord(currentAddr);
         uint8_t expected = cpu->readByte(lookUpAddr + currentXvalue);
 
-        LDA lda(cpu, AddressingMode::AbsoluteOffsetX, 2);
+        LDA lda(cpu, AddressingMode::AbsoluteX, 2);
         lda.run();
 
         ASSERT_EQ(cpu->getRegister(Register::A), expected);
@@ -151,7 +151,7 @@ TEST(instructions, lda_test_absoluteY)
         uint16_t lookUpAddr = cpu->readWord(currentAddr);
         uint8_t expected = cpu->readByte(lookUpAddr + currentYvalue);
 
-        LDA lda(cpu, AddressingMode::AbsoluteOffsetY, 2);
+        LDA lda(cpu, AddressingMode::AbsoluteY, 2);
         lda.run();
 
         ASSERT_EQ(cpu->getRegister(Register::A), expected);

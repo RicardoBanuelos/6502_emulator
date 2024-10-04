@@ -86,7 +86,7 @@ TEST(instructions, dec_absolute_x)
 
         uint16_t M = cpu->readByte(absoluteAddress) - 1;
 
-        std::unique_ptr<DEC> instruction(new DEC(cpu, AddressingMode::AbsoluteOffsetX, 4));
+        std::unique_ptr<DEC> instruction(new DEC(cpu, AddressingMode::AbsoluteX, 4));
         instruction->run();
 
         ASSERT_ALL(M);

@@ -108,7 +108,7 @@ TEST(instructions, lsr_test_absoluteX)
         uint8_t original = cpu->readByte(lookUpAddr + xValue);
         uint8_t expected = original >> 1;
 
-        LSR ins(cpu, AddressingMode::AbsoluteOffsetX, 2);
+        LSR ins(cpu, AddressingMode::AbsoluteX, 2);
         ins.run();
 
         ASSERT_EQ(expected, cpu->readByte(lookUpAddr + xValue));

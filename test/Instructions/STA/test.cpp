@@ -83,7 +83,7 @@ TEST(instructions, sta_test_absoluteX)
 
         uint16_t lookUp = cpu->readWord(currentAddr);
 
-        STA ins(cpu, AddressingMode::AbsoluteOffsetX, 3);
+        STA ins(cpu, AddressingMode::AbsoluteX, 3);
         ins.run();
 
 
@@ -103,7 +103,7 @@ TEST(instructions, sta_test_absoluteY)
 
         uint16_t lookUp = cpu->readWord(currentAddr);
 
-        STA ins(cpu, AddressingMode::AbsoluteOffsetY, 3);
+        STA ins(cpu, AddressingMode::AbsoluteY, 3);
         ins.run();
 
 

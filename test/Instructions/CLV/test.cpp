@@ -15,7 +15,7 @@ TEST(instructions, clv_implied)
         cpu->reset();
         cpu->setFlag(Flag::V, 1);
 
-        std::unique_ptr<CLV> instruction(new CLV(cpu, AddressingMode::Implied, 2));
+        std::unique_ptr<CLV> instruction(new CLV(cpu));
         instruction->run();
 
         ASSERT_EQ(cpu->getFlag(Flag::V), 0);

@@ -108,7 +108,7 @@ TEST(instructions, ldx_test_absoluteY)
         uint16_t lookUpAddr = cpu->readWord(currentAddr);
         uint8_t expected = cpu->readByte(lookUpAddr + currentYvalue);
 
-        LDX ins(cpu, AddressingMode::AbsoluteOffsetY, 2);
+        LDX ins(cpu, AddressingMode::AbsoluteY, 2);
         ins.run();
 
         ASSERT_EQ(cpu->getRegister(Register::X), expected);

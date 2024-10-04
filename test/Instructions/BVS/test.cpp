@@ -16,7 +16,7 @@ TEST(instructions, bvs_relative)
         cpu->setFlag(Flag::V, 0);
         uint16_t expected = cpu->getRegister(Register::PC) + 1;
 
-        std::unique_ptr<BVS> instruction(new BVS(cpu, AddressingMode::Relative, 2));
+        std::unique_ptr<BVS> instruction(new BVS(cpu));
         instruction->run();
 
         uint16_t newPC = cpu->getRegister(Register::PC);

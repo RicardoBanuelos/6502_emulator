@@ -17,7 +17,7 @@ TEST(instructions, brk_implied)
         uint16_t prevFlags = cpu->getRegister(Register::PS);
         uint16_t newPC = cpu->readWord(0xFFFE);
 
-        std::unique_ptr<BRK> instruction(new BRK(cpu, AddressingMode::Implied, 7));
+        std::unique_ptr<BRK> instruction(new BRK(cpu));
         instruction->run();
 
         ASSERT_EQ(prevFlags, cpu->popByte());

@@ -17,7 +17,8 @@ public:
 
     virtual ~Instruction();
     virtual void run() = 0;
-
+    AddressingMode mode() const;
+    uint8_t cycles() const;
 protected:
     std::string mName;
     AddressingMode mAddressingMode;

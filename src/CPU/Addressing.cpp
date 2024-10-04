@@ -121,8 +121,8 @@ AddressingData Addressing::addressing(AddressingMode mode)
         case AddressingMode::ZeroPageY: return ZeroPageY();
         case AddressingMode::Relative: return Relative();
         case AddressingMode::Absolute: return Absolute();
-        case AddressingMode::AbsoluteOffsetX: return AbsoluteOffsetX();
-        case AddressingMode::AbsoluteOffsetY: return AbsoluteOffsetY();
+        case AddressingMode::AbsoluteX: return AbsoluteOffsetX();
+        case AddressingMode::AbsoluteY: return AbsoluteOffsetY();
         case AddressingMode::Indirect: return Indirect();
         case AddressingMode::IndirectX: return IndirectX();
         case AddressingMode::IndirectY: return IndirectY();

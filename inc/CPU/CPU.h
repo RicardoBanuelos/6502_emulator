@@ -21,6 +21,7 @@ public:
     void connectBus(std::shared_ptr<IBus> bus);
 
     AddressingData addressing(AddressingMode mode) const override;
+    const Instruction* getInstruction(OpCode opcode) const;
 private:
     void initInstructions();
 

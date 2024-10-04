@@ -86,7 +86,7 @@ TEST(instructions, inc_absolute_x)
 
         uint8_t M = cpu->readByte(absoluteAddress) + 1;
 
-        std::unique_ptr<INC> instruction(new INC(cpu, AddressingMode::AbsoluteOffsetX, 4));
+        std::unique_ptr<INC> instruction(new INC(cpu, AddressingMode::AbsoluteX, 4));
         instruction->run();
 
         ASSERT_ALL(M);

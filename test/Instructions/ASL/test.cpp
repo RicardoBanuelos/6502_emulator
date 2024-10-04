@@ -101,7 +101,7 @@ TEST(instructions, asl_absolute_x)
 
         uint8_t expected = cpu->readByte(absoluteAddress) << 1;
 
-        std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::AbsoluteOffsetX, 7));
+        std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::AbsoluteX, 7));
         instruction->run();
 
         ASSERT_ALL(expected);

@@ -15,7 +15,7 @@ TEST(instructions, cli_implied)
         cpu->reset();
         cpu->setFlag(Flag::I, 1);
 
-        std::unique_ptr<CLI> instruction(new CLI(cpu, AddressingMode::Implied, 2));
+        std::unique_ptr<CLI> instruction(new CLI(cpu));
         instruction->run();
 
         ASSERT_EQ(cpu->getFlag(Flag::I), 0);

@@ -4,9 +4,7 @@
 class CLI : public Instruction 
 {
 public:
-    CLI(std::shared_ptr<ICPU> icpu, 
-        AddressingMode addressingMode,
-        uint8_t cycles = 0);
+    CLI(std::shared_ptr<ICPU> icpu);
 
     ~CLI();
 

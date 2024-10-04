@@ -15,7 +15,7 @@ TEST(instructions, clc_implied)
         cpu->reset();
         cpu->setFlag(Flag::C, 1);
 
-        std::unique_ptr<CLC> instruction(new CLC(cpu, AddressingMode::Implied, 2));
+        std::unique_ptr<CLC> instruction(new CLC(cpu));
         instruction->run();
 
         ASSERT_EQ(cpu->getFlag(Flag::C), 0);

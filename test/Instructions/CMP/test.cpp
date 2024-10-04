@@ -111,7 +111,7 @@ TEST(instructions, cmp_absolute_x)
         uint16_t M = cpu->readByte(absoluteAddress);
         uint8_t result = A - M;
 
-        std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::AbsoluteOffsetX, 4));
+        std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::AbsoluteX, 4));
         instruction->run();
 
         ASSERT_ALL(A, M, result);
@@ -132,7 +132,7 @@ TEST(instructions, cmp_absolute_y)
         uint16_t M = cpu->readByte(absoluteAddress);
         uint8_t result = A - M;
 
-        std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::AbsoluteOffsetY, 4));
+        std::unique_ptr<CMP> instruction(new CMP(cpu, AddressingMode::AbsoluteY, 4));
         instruction->run();
 
         ASSERT_ALL(A, M, result);

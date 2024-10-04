@@ -10,10 +10,9 @@ enum AddressingMode : int
     ZeroPageY,
     Relative,
     Absolute,
-    AbsoluteOffsetX,
-    AbsoluteOffsetY,
+    AbsoluteX,
+    AbsoluteY,
     Indirect,
     IndirectX,
     IndirectY,
-    NA
 };

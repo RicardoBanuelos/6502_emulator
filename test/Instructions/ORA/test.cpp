@@ -125,7 +125,7 @@ TEST(instructions, ora_test_absoluteX)
         uint16_t lookUpAddr = cpu->readWord(currentAddr);
         uint8_t expected = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) | cpu->getRegister(Register::A);
 
-        ORA lda(cpu, AddressingMode::AbsoluteOffsetX, 2);
+        ORA lda(cpu, AddressingMode::AbsoluteX, 2);
         lda.run();
 
         ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
@@ -144,7 +144,7 @@ TEST(instructions, ora_test_absoluteY)
         uint16_t lookUpAddr = cpu->readWord(currentAddr);
         uint8_t expected = cpu->readByte(lookUpAddr + cpu->getRegister(Register::Y)) | cpu->getRegister(Register::A);
 
-        ORA lda(cpu, AddressingMode::AbsoluteOffsetY, 2);
+        ORA lda(cpu, AddressingMode::AbsoluteY, 2);
         lda.run();
 
         ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
