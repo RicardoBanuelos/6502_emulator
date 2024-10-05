@@ -16,12 +16,11 @@ TEST(instructions, jmp_absolute)
         
         uint16_t PC = cpu->getRegister(Register::PC);
         uint16_t absoluteAddress = cpu->readWord(PC);
-        uint16_t expected = absoluteAddress;
 
         std::unique_ptr<JMP> instruction(new JMP(cpu, AddressingMode::Absolute, 3));
         instruction->run();
 
-        ASSERT_EQ(cpu->getRegister(Register::PC), expected);
+        ASSERT_EQ(cpu->getRegister(Register::PC), absoluteAddress);
     }
 }
 
