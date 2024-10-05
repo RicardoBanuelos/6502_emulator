@@ -12,25 +12,21 @@ TEST(instructions, bne_relative)
 {
     for(int i = 0; i < 1000; ++i)
     {
-        cpu->reset();
-        cpu->setFlag(Flag::Z, 1);
-        uint16_t expected = cpu->getRegister(Register::PC) + 1;
+        cpu->randomizeFlags();
+        cpu->setFlag(Flag::Z, 0);
 
+        uint16_t addr = rand() % UINT16_MAX;
+        cpu->setRegister(Register::PC, addr);
+
+
+        uint8_t offset = cpu->readByte(addr);
+        uint16_t expected = (cpu->getRegister(Register::PC) + 1) + static_cast<int8_t>(offset);
+        
         std::unique_ptr<BNE> instruction(new BNE(cpu, AddressingMode::Relative, 2));
         instruction->run();
 
-        uint16_t newPC = cpu->getRegister(Register::PC);
 
-        ASSERT_EQ(expected, newPC);
-
-        uint16_t relativeAddress = cpu->readByte(cpu->getRegister(Register::PC));
-        expected = cpu->getRegister(Register::PC) + relativeAddress + 1;
-        cpu->setFlag(Flag::Z, 0);
-
-        instruction->run();
-        newPC = cpu->getRegister(Register::PC);
-
-        ASSERT_EQ(expected, newPC);
+        ASSERT_EQ(expected, cpu->getRegister(Register::PC));
     }
 }
 

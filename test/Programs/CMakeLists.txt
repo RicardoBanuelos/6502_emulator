@@ -1,1 +1,1 @@
-add_subdirectory(BasicProgram0)
+add_subdirectory(BasicPrograms)

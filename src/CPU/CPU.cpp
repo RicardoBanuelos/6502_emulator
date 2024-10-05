@@ -179,8 +179,7 @@ uint16_t CPU::getRegister(Register reg)
 
 void CPU::execute()
 {
-    uint8_t fetched = fetchByte();
-    OpCode opCode = static_cast<OpCode>(fetched);
+    OpCode opCode = static_cast<OpCode>(fetchByte());
 
     if(mInstructions.count(opCode) == 0)
     {

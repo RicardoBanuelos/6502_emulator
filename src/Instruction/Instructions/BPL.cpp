@@ -16,6 +16,6 @@ void BPL::run()
     if(mIcpu->getFlag(Flag::N))
         return;
         
-    uint16_t result = mIcpu->getRegister(Register::PC) + addressingData.address;
+    uint16_t result = mIcpu->getRegister(Register::PC) + static_cast<int8_t>(addressingData.address);
     mIcpu->setRegister(Register::PC, result);
 }

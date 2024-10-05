@@ -8,11 +8,14 @@ static std::shared_ptr<CPU> cpu(new CPU());
 static std::shared_ptr<Memory> mem(new Memory());
 static std::shared_ptr<Bus> bus(new Bus());
 
-TEST(programs, basicProgram0)
+TEST(programs, subroutine_test)
 {
-
-    ASSERT_EQ(true,  mem->loadBinary("P:/Github/6502_emulator/test/Programs/BasicProgram0/basic_program_1.bin"));
+    ASSERT_EQ(true, mem->loadBinary("P:/Github/6502_emulator/test/Programs/BasicPrograms/dayoftheweek.bin"));
     cpu->setRegister(Register::PC, 0);
+    cpu->setRegister(Register::X, 10);
+    cpu->setRegister(Register::Y, 2024);
+    cpu->setRegister(Register::A, 3);
+    
     while(true)
     {
         cpu->execute();
