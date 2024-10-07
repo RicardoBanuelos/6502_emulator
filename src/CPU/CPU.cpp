@@ -60,6 +60,17 @@ uint16_t CPU::fetchWord()
     return word;
 }
 
+Instruction *CPU::fetchInstruction()
+{
+    OpCode opCode = static_cast<OpCode>(fetchByte());
+
+    if(mInstructions.count(opCode) == 0)
+    {
+        return nullptr;
+    }
+
+    return mInstructions.at(opCode).get();
+}
 void CPU::writeByte(uint16_t address, uint8_t byte)
 {
     mBus->writeByte(address, byte);

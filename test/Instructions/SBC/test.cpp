@@ -31,10 +31,10 @@ TEST(instructions, sbc_test_immediate)
         cpu->setRegister(Register::PC, address);
 
         uint16_t a = cpu->getRegister(Register::A);
-        uint16_t fetched = cpu->readByte(address);
+        uint16_t fetched = cpu->readByte(address) ^ 0x00FF;
         uint16_t carry = cpu->getFlag(Flag::C);
 
-        uint16_t expected = a - fetched - carry;
+        uint16_t expected = a + fetched + carry;
         
         SBC ins(cpu, AddressingMode::Immediate, 2);
         ins.run();
@@ -56,10 +56,10 @@ TEST(instructions, sbc_test_zeroPage)
         uint8_t lookUpAddr = cpu->readByte(currentAddr);
 
         uint16_t a = cpu->getRegister(Register::A);
-        uint16_t fetched = cpu->readByte(lookUpAddr);
+        uint16_t fetched = cpu->readByte(lookUpAddr) ^ 0x00FF;
         uint16_t carry = cpu->getFlag(Flag::C);
 
-        uint16_t expected = a - fetched - carry;
+        uint16_t expected = a + fetched + carry;
 
         SBC ins(cpu, AddressingMode::ZeroPage, 2);
         ins.run();
@@ -81,10 +81,10 @@ TEST(instructions, sbc_test_zeroPageX)
         uint8_t lookUpAddr = cpu->readByte(currentAddr);
 
         uint16_t a = cpu->getRegister(Register::A);
-        uint16_t fetched = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X));
+        uint16_t fetched = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) ^ 0x00FF;
         uint16_t carry = cpu->getFlag(Flag::C);
 
-        uint16_t expected = a - fetched - carry;
+        uint16_t expected = a + fetched + carry;
 
         SBC ins(cpu, AddressingMode::ZeroPageX, 2);
         ins.run();
@@ -106,10 +106,10 @@ TEST(instructions, sbc_test_absolute)
         uint16_t lookUpAddr = cpu->readWord(currentAddr);
 
         uint16_t a = cpu->getRegister(Register::A);
-        uint16_t fetched = cpu->readByte(lookUpAddr);
+        uint16_t fetched = cpu->readByte(lookUpAddr) ^ 0x00FF;
         uint16_t carry = cpu->getFlag(Flag::C);
 
-        uint16_t expected = a - fetched - carry;
+        uint16_t expected = a + fetched + carry;
 
         SBC ins(cpu, AddressingMode::Absolute, 2);
         ins.run();
@@ -132,10 +132,10 @@ TEST(instructions, sbc_test_absoluteX)
         uint16_t lookUpAddr = cpu->readWord(currentAddr);
 
         uint16_t a = cpu->getRegister(Register::A);
-        uint16_t fetched = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X));
+        uint16_t fetched = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) ^ 0x00FF;
         uint16_t carry = cpu->getFlag(Flag::C);
 
-        uint16_t expected = a - fetched - carry;
+        uint16_t expected = a + fetched + carry;
 
         SBC ins(cpu, AddressingMode::AbsoluteX, 2);
         ins.run();
@@ -158,10 +158,10 @@ TEST(instructions, sbc_test_indirectX)
 
         uint16_t a = cpu->getRegister(Register::A);
         uint16_t indirect = cpu->readWord(lookUpAddr + cpu->getRegister(Register::X));
-        uint16_t fetched = cpu->readByte(indirect);
+        uint16_t fetched = cpu->readByte(indirect) ^ 0x00FF;
         uint16_t carry = cpu->getFlag(Flag::C);
 
-        uint16_t expected = a - fetched - carry;
+        uint16_t expected = a + fetched + carry;
 
         SBC ins(cpu, AddressingMode::IndirectX, 2);
         ins.run();
@@ -184,10 +184,10 @@ TEST(instructions, sbc_test_indirectY)
 
         uint16_t a = cpu->getRegister(Register::A);
         uint16_t indirect = cpu->readWord(lookUpAddr + cpu->getRegister(Register::Y));
-        uint16_t fetched = cpu->readByte(indirect);
+        uint16_t fetched = cpu->readByte(indirect) ^ 0x00FF;
         uint16_t carry = cpu->getFlag(Flag::C);
 
-        uint16_t expected = a - fetched - carry;
+        uint16_t expected = a + fetched + carry;
 
         SBC ins(cpu, AddressingMode::IndirectY, 2);
         ins.run();
@@ -211,10 +211,10 @@ TEST(instructions, sbc_test_absoluteY)
         uint16_t lookUpAddr = cpu->readWord(currentAddr);
 
         uint16_t a = cpu->getRegister(Register::A);
-        uint16_t fetched = cpu->readByte(lookUpAddr + cpu->getRegister(Register::Y));
+        uint16_t fetched = cpu->readByte(lookUpAddr + cpu->getRegister(Register::Y)) ^ 0x00FF;
         uint16_t carry = cpu->getFlag(Flag::C);
 
-        uint16_t expected = a - fetched - carry;
+        uint16_t expected = a + fetched + carry;
 
         SBC ins(cpu, AddressingMode::AbsoluteY, 2);
         ins.run();

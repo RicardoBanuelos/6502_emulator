@@ -17,7 +17,7 @@ void ASSERT_ALL(uint16_t a, uint16_t fetched, uint16_t expected)
     bool overflow = (~(a ^ fetched) & (a ^ expected)) & 0x0080;
     ASSERT_EQ(cpu->getFlag(Flag::V), overflow);
     ASSERT_EQ(cpu->getFlag(Flag::C), expected > 255);
-    ASSERT_EQ(cpu->getFlag(Flag::Z), expected & 0x00FF == 0);
+    ASSERT_EQ(cpu->getFlag(Flag::Z), (expected & 0x00FF) == 0);
     ASSERT_EQ(cpu->getFlag(Flag::N), static_cast<bool>(expected & 0x80));
     ASSERT_EQ(expected & 0x00FF, cpu->getRegister(Register::A));
 }

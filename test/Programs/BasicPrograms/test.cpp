@@ -10,11 +10,11 @@ static std::shared_ptr<Bus> bus(new Bus());
 
 TEST(programs, subroutine_test)
 {
-    ASSERT_EQ(true, mem->loadBinary("P:/Github/6502_emulator/test/Programs/BasicPrograms/dayoftheweek.bin"));
+    ASSERT_EQ(true, mem->loadBinary("P:/Github/6502_emulator/test/Programs/BasicPrograms/basic_program.bin"));
+    
+    cpu->reset();
     cpu->setRegister(Register::PC, 0);
-    cpu->setRegister(Register::X, 10);
-    cpu->setRegister(Register::Y, 2024);
-    cpu->setRegister(Register::A, 3);
+    cpu->setRegister(Register::PS, 0x30);
     
     while(true)
     {

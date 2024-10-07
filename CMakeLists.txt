@@ -3,11 +3,10 @@ project(6502Emulator VERSION 0.1.0 LANGUAGES C CXX)
 
 #Enable Testing
 set(ENABLE_TESTING TRUE)
-set(TEST_CPU FALSE)
-set(TEST_MEMORY FALSE)
+set(TEST_CPU TRUE)
+set(TEST_MEMORY TRUE)
 set(TEST_INSTRUCTIONS TRUE)
 set(TEST_PROGRAMS FALSE)
-
 
 
 include_directories(inc)

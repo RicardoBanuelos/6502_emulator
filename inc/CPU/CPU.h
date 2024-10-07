@@ -29,6 +29,7 @@ public:
     const Instruction* getInstruction(OpCode opcode) const;
     uint8_t fetchByte() override;
     uint16_t fetchWord() override;
+    Instruction *fetchInstruction();
 private:
     void initInstructions();
 
