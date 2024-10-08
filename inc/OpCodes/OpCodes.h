@@ -43,7 +43,7 @@ enum OpCode
     // BPL - Branch if Positive
     OC_BPL_RELATIVE = 0x10,
     // BRK - Force Interrupt
-    OC_BRK_RELATIVE = 0x00,
+    OC_BRK_IMPLIED = 0x00,
     // BVC - Branch if Overflow Clear
     OC_BVC_RELATIVE = 0x50,
     // BVS - Branch if Overflow Set
@@ -66,9 +66,9 @@ enum OpCode
     OC_CMP_INDIRECT_X = 0xC1,
     OC_CMP_INDIRECT_Y = 0xD1,
     // CMC - Compare X Register
-    OC_CMC_IMMEDIATE = 0xE0,
-    OC_CMC_ZERO_PAGE = 0xE4,
-    OC_CMC_ABSOLUTE = 0xEC,
+    OC_CPX_IMMEDIATE = 0xE0,
+    OC_CPX_ZERO_PAGE = 0xE4,
+    OC_CPX_ABSOLUTE = 0xEC,
     // CPY - Compare Y Register
     OC_CPY_IMMEDIATE = 0xC0,
     OC_CPY_ZERO_PAGE = 0xC4,
@@ -168,7 +168,7 @@ enum OpCode
     // RTS - Return from Subroutine
     OC_RTS_IMPLIED = 0X60,
     // SBC - Subtract with Carry
-    OC_SBC_IMMEIATE = 0XE9,
+    OC_SBC_IMMEDIATE = 0XE9,
     OC_SBC_ZERO_PAGE = 0XE5,
     OC_SBC_ZERO_PAGE_X = 0XF5,
     OC_SBC_ABSOLUTE = 0XED,
@@ -192,7 +192,7 @@ enum OpCode
     OC_STA_INDIRECT_Y = 0X91,
     // STX - Store X Register
     OC_STX_ZERO_PAGE = 0X86,
-    OC_STX_ZERO_PAGE_X = 0X96,
+    OC_STX_ZERO_PAGE_Y = 0X96,
     OC_STX_ABSOLUTE = 0X8E,
     // STY - Store Y Register
     OC_STY_ZERO_PAGE = 0X84,

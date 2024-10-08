@@ -1,8 +1,7 @@
 #include "Instruction/Instructions/LDA.h"
-#include <iostream>
 
-LDA::LDA(std::shared_ptr<ICPU> icpu, std::function<uint16_t()> addressingFunction, uint8_t cycles)
-    :   Instruction("LDA", icpu, addressingFunction, cycles)
+LDA::LDA(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
+    :   Instruction("LDA", icpu, addressingMode, cycles)
 {
 }
 
@@ -12,6 +11,11 @@ LDA::~LDA()
 
 void LDA::run()
 {
-    mIcpu->registers().A = mAddressingFunction();
+    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
+    mIcpu->setRegister(Register::A, addressingData.data);
+
     
+    mIcpu->setFlag(Flag::Z, mIcpu->getRegister(Register::A) == 0);
+    mIcpu->setFlag(Flag::N, mIcpu->getRegister(Register::A) & 0x80);
+
 }

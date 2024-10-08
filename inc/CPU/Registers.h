@@ -1,6 +1,14 @@
 #pragma once
 #include<stdint.h>
 
+enum Register {
+    PC,
+    PS,
+    SP,
+    A,
+    X,
+    Y
+};
 
 enum Flag {
     C = 1 << 0,
@@ -12,8 +20,8 @@ enum Flag {
     N = 1 << 7,
 };
 
-union StatusRegister {
-    uint8_t byte;
+struct StatusFlags
+{
     uint8_t C : 1;
     uint8_t Z : 1;
     uint8_t I : 1;
@@ -22,8 +30,15 @@ union StatusRegister {
     uint8_t X : 1;
     uint8_t V : 1;
     uint8_t N : 1;
+};
 
-    void setFlag(Flag flag, bool value){
+union StatusRegister 
+{
+    StatusFlags statusFlags;
+    uint8_t byte;
+
+    void setFlag(Flag flag, bool value)
+    {
         if(value)
         {
             byte |= flag;
@@ -31,6 +46,11 @@ union StatusRegister {
         }
         
         byte &= ~flag;
+    }
+
+    bool getFlag(Flag flag)
+    {
+        return byte & flag;
     }
     
 };
@@ -43,5 +63,5 @@ struct Registers {
     uint8_t X;
     uint8_t Y;
 
-    StatusRegister status;
+    StatusRegister statusRegister;
 };

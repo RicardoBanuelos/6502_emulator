@@ -34,3 +34,4 @@
 # temporaly folders
 build/
 /.vscode
+/tmp
