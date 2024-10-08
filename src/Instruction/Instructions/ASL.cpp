@@ -15,9 +15,9 @@ void ASL::run()
     uint16_t fetched = addressingData.data;
     uint16_t result = fetched << 1; 
 
-    mIcpu->setFlag(Flag::C, result & 0xFF00 > 0);
-    mIcpu->setFlag(Flag::Z, result & 0x00FF == 0);
-    mIcpu->setFlag(Flag::N, result & 0x80 == 0);
+    mIcpu->setFlag(Flag::C, (result & 0xFF00) > 0);
+    mIcpu->setFlag(Flag::Z, (result & 0x00FF) == 0);
+    mIcpu->setFlag(Flag::N, (result & Flag::N));
 
     if(mAddressingMode == AddressingMode::Implied)
     {

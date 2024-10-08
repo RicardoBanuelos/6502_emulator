@@ -11,23 +11,22 @@ ROR::~ROR()
 
 void ROR::run()
 {
-    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
+     AddressingData addressingData = mIcpu->addressing(mAddressingMode);
 
-    uint8_t data = addressingData.data;
-    uint8_t carry = data & (1 >> 7);
-    data = (data >> 1) | (data << 7);
+    uint16_t fetched = addressingData.data;
+    uint16_t result = static_cast<uint16_t>(mIcpu->getFlag(Flag::C) << 7) | (fetched >> 1);
 
-    if(AddressingMode::Accumulator == mAddressingMode)
+    mIcpu->setFlag(Flag::C, result & 0x01);
+    mIcpu->setFlag(Flag::Z, (result & 0x00FF) == 0);
+    mIcpu->setFlag(Flag::N, (result & Flag::N));
+
+    if(mAddressingMode == AddressingMode::Implied)
     {
-        mIcpu->setRegister(Register::A, data);
+        mIcpu->setRegister(Register::A, result);
     }
-    else 
-    {        
-        mIcpu->writeByte(addressingData.address, data);
-    }
-
-    mIcpu->setFlag(Flag::C, carry);
-    mIcpu->setFlag(Flag::Z, data == 0);
-    mIcpu->setFlag(Flag::N, data & Flag::N);
+    else
+    {
+        mIcpu->writeByte(addressingData.address, result);
+    }  
 
 }

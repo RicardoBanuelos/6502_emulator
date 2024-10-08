@@ -65,7 +65,7 @@ void Memory::writeWord(uint32_t address, uint16_t word)
     mData[address + 1] = (word >> 8);
 }
 
-bool Memory::loadBinary(const std::string &path)
+bool Memory::loadBinary(const std::string &path, uint16_t startAddress)
 {
     std::ifstream binaryFile(path, std::ios::in | std::ios::binary);
     if(!binaryFile.is_open())
@@ -75,11 +75,10 @@ bool Memory::loadBinary(const std::string &path)
     }
 
 
-    uint16_t currentAddr = 0;
     char buffer;
     while(binaryFile.read(&buffer, sizeof(char)))
     {
-        mData[currentAddr++] = static_cast<uint8_t>(buffer);
+        mData[startAddress++] = static_cast<uint8_t>(buffer);
     }
 
     return true;

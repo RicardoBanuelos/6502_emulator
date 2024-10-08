@@ -25,3 +25,8 @@ uint8_t Instruction::cycles() const
 {
     return mCycles;
 }
+
+const std::string &Instruction::name() const
+{
+    return mName;
+}
