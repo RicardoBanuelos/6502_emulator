@@ -11,7 +11,7 @@ ROR::~ROR()
 
 void ROR::run()
 {
-     AddressingData addressingData = mIcpu->addressing(mAddressingMode);
+    AddressingData addressingData = mIcpu->addressing(mAddressingMode);
 
     uint16_t fetched = addressingData.data;
     uint16_t result = static_cast<uint16_t>(mIcpu->getFlag(Flag::C) << 7) | (fetched >> 1);
@@ -20,7 +20,7 @@ void ROR::run()
     mIcpu->setFlag(Flag::Z, (result & 0x00FF) == 0);
     mIcpu->setFlag(Flag::N, (result & Flag::N));
 
-    if(mAddressingMode == AddressingMode::Implied)
+    if(mAddressingMode == AddressingMode::Accumulator)
     {
         mIcpu->setRegister(Register::A, result);
     }

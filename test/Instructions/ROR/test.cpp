@@ -9,6 +9,15 @@ static std::shared_ptr<Memory> mem(new Memory());
 static std::shared_ptr<Bus> bus(new Bus());
 static const int MAX_ITERATIONS = 1000;
 
+void ASSERT_ALL(uint16_t result, uint8_t expected)
+{
+    
+    ASSERT_EQ(result & 0x00FF, expected);
+    ASSERT_EQ((result & 0x01) > 0, cpu->getFlag(Flag::C));
+    ASSERT_EQ((result & Flag::N) > 0, cpu->getFlag(Flag::N));
+    ASSERT_EQ((result & 0x00FF) == 0, cpu->getFlag(Flag::Z));
+}
+
 
 TEST(instructions, ror_test_accumulator)
 {
@@ -17,17 +26,15 @@ TEST(instructions, ror_test_accumulator)
         cpu->randomizeRegisters();
         cpu->randomizeFlags();
 
-
-        uint8_t carry = cpu->getRegister(Register::A) & (1 >> 7);
-        uint8_t expected = (cpu->getRegister(Register::A) >> 1) | (cpu->getRegister(Register::A) << 7);
+        
+        cpu->setFlag(Flag::C, rand() % 2);
+        uint16_t fetched = cpu->getRegister(Register::A);
+        uint16_t result = static_cast<uint16_t>(cpu->getFlag(Flag::C) << 7) | (fetched >> 1);
 
         ROR ins(cpu, AddressingMode::Accumulator, 2);
         ins.run();
 
-        ASSERT_EQ(expected, cpu->getRegister(Register::A));
-        ASSERT_EQ(carry > 0, cpu->getFlag(Flag::C));
-        ASSERT_EQ((expected & Flag::N) > 0, cpu->getFlag(Flag::N));
-        ASSERT_EQ(expected == 0, cpu->getFlag(Flag::Z));
+        ASSERT_ALL(result, cpu->getRegister(Register::A));
         
         
     }
@@ -42,17 +49,17 @@ TEST(instructions, ror_test_zeroPage)
         uint16_t currentAddr = rand() % UINT16_MAX;
         cpu->setRegister(Register::PC, currentAddr);
 
+        cpu->setFlag(Flag::C, rand() % 2);
+
         uint8_t lookUpAddr = cpu->readByte(currentAddr);
-        uint8_t expected = (cpu->readByte(lookUpAddr) >> 1) | (cpu->readByte(lookUpAddr) << 7);
-        uint8_t carry = cpu->readByte(lookUpAddr) & (1 >> 7);
+        uint16_t fetched = cpu->readByte(lookUpAddr);
+        uint16_t result = static_cast<uint16_t>(cpu->getFlag(Flag::C) << 7) | (fetched >> 1);
 
         ROR ins(cpu, AddressingMode::ZeroPage, 2);
         ins.run();
 
-        ASSERT_EQ(expected, cpu->readByte(lookUpAddr));
-        ASSERT_EQ(carry > 0, cpu->getFlag(Flag::C));
-        ASSERT_EQ((expected & Flag::N) > 0, cpu->getFlag(Flag::N));
-        ASSERT_EQ(expected == 0, cpu->getFlag(Flag::Z));
+
+        ASSERT_ALL(result, cpu->readByte(lookUpAddr));
     }
 }
 
@@ -66,16 +73,13 @@ TEST(instructions, ror_test_zeroPageX)
         cpu->setRegister(Register::PC, currentAddr);
 
         uint8_t lookUpAddr = cpu->readByte(currentAddr);
-        uint8_t expected = (cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) >> 1) | (cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) << 7);
-        uint8_t carry = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) & (1 >> 7);
+        uint16_t fetched = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X));
+        uint16_t result = static_cast<uint16_t>(cpu->getFlag(Flag::C) << 7) | (fetched >> 1);
 
         ROR ins(cpu, AddressingMode::ZeroPageX, 2);
         ins.run();
 
-        ASSERT_EQ(expected, cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)));
-        ASSERT_EQ(carry > 0, cpu->getFlag(Flag::C));
-        ASSERT_EQ((expected & Flag::N) > 0, cpu->getFlag(Flag::N));
-        ASSERT_EQ(expected == 0, cpu->getFlag(Flag::Z));
+        ASSERT_ALL(result, cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)));
     }
 }
 
@@ -89,16 +93,14 @@ TEST(instructions, ror_test_absolute)
         cpu->setRegister(Register::PC, currentAddr);
 
         uint16_t lookUpAddr = cpu->readWord(currentAddr);
-        uint8_t expected = (cpu->readByte(lookUpAddr) >> 1) | (cpu->readByte(lookUpAddr) << 7);
-        uint8_t carry = cpu->readByte(lookUpAddr) & (1 >> 7);
+        uint16_t fetched = cpu->readByte(lookUpAddr);
+
+        uint16_t result = static_cast<uint16_t>(cpu->getFlag(Flag::C) << 7) | (fetched >> 1);
 
         ROR ins(cpu, AddressingMode::Absolute, 2);
         ins.run();
 
-        ASSERT_EQ(expected, cpu->readByte(lookUpAddr));
-        ASSERT_EQ(carry > 0, cpu->getFlag(Flag::C));
-        ASSERT_EQ((expected & Flag::N) > 0, cpu->getFlag(Flag::N));
-        ASSERT_EQ(expected == 0, cpu->getFlag(Flag::Z));
+        ASSERT_ALL(result, cpu->readByte(lookUpAddr));  
     }
 }
 
@@ -112,16 +114,14 @@ TEST(instructions, ror_test_absoluteX)
         cpu->setRegister(Register::PC, currentAddr);
 
         uint16_t lookUpAddr = cpu->readWord(currentAddr);
-        uint8_t expected = (cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) >> 1) | (cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) << 7);
-        uint8_t carry = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)) & (1 >> 7);
+        uint16_t fetched = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X));
+
+        uint16_t result = static_cast<uint16_t>(cpu->getFlag(Flag::C) << 7) | (fetched >> 1);
 
         ROR ins(cpu, AddressingMode::AbsoluteX, 2);
         ins.run();
 
-        ASSERT_EQ(expected, cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)));
-        ASSERT_EQ(carry > 0, cpu->getFlag(Flag::C));
-        ASSERT_EQ((expected & Flag::N) > 0, cpu->getFlag(Flag::N));
-        ASSERT_EQ(expected == 0, cpu->getFlag(Flag::Z));
+        ASSERT_ALL(result, cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)));  
     }
 }
 

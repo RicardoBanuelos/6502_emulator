@@ -14,19 +14,15 @@ LSR::~LSR()
 void LSR::run()
 {
     const AddressingData addressingData = mIcpu->addressing(mAddressingMode);
-    uint8_t carry = 0;
-    uint8_t result;
+    uint8_t carry = addressingData.data & 0x01;
+    uint8_t result = addressingData.data >> 1;
 
     if(mAddressingMode == AddressingMode::Accumulator)
     {
-        carry = mIcpu->getRegister(Register::A) & 0x01;
-        result = mIcpu->getRegister(Register::A) >> 1;
         mIcpu->setRegister(Register::A, result);
     }
     else 
     {
-        carry = addressingData.data & 0x01;
-        result = addressingData.data >> 1;
         mIcpu->writeByte(addressingData.address, result);
     }
 

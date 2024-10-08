@@ -20,7 +20,7 @@ void ROL::run()
     mIcpu->setFlag(Flag::Z, (result & 0x00FF) == 0);
     mIcpu->setFlag(Flag::N, (result & Flag::N));
 
-    if(mAddressingMode == AddressingMode::Implied)
+    if(mAddressingMode == AddressingMode::Accumulator)
     {
         mIcpu->setRegister(Register::A, result);
     }
