@@ -1,0 +1,64 @@
+set(INTRUCTIONS_LIBRARY libInstructions CACHE INTERNAL "")
+include_directories(${PROJECT_SOURCE_DIR}/inc/Instruction/Instructions)
+add_library(${INTRUCTIONS_LIBRARY} 
+    Instruction.cpp
+    Instructions/ADC.cpp
+    Instructions/AND.cpp
+    Instructions/ASL.cpp
+    Instructions/BCC.cpp
+    Instructions/BCS.cpp
+    Instructions/BEQ.cpp
+    Instructions/BIT.cpp
+    Instructions/BMI.cpp
+    Instructions/BNE.cpp
+    Instructions/BPL.cpp
+    Instructions/BRK.cpp
+    Instructions/BVC.cpp
+    Instructions/BVS.cpp
+    Instructions/CLC.cpp
+    Instructions/CLD.cpp
+    Instructions/CLI.cpp
+    Instructions/CLV.cpp
+    Instructions/CMP.cpp
+    Instructions/CPX.cpp
+    Instructions/CPY.cpp
+    Instructions/DEC.cpp
+    Instructions/DEX.cpp
+    Instructions/DEY.cpp
+    Instructions/EOR.cpp
+    Instructions/INC.cpp
+    Instructions/INX.cpp
+    Instructions/INY.cpp
+    Instructions/JMP.cpp
+    Instructions/JSR.cpp
+    Instructions/LDA.cpp
+    Instructions/JSR.cpp
+    Instructions/LDX.cpp
+    Instructions/LDY.cpp
+    Instructions/LSR.cpp
+    Instructions/NOP.cpp
+    Instructions/ORA.cpp
+    Instructions/PHA.cpp
+    Instructions/PHP.cpp
+    Instructions/PLA.cpp
+    Instructions/PLP.cpp
+    Instructions/ROL.cpp
+    Instructions/ROR.cpp
+    Instructions/RTI.cpp
+    Instructions/RTS.cpp
+    Instructions/SBC.cpp
+    Instructions/SEC.cpp
+    Instructions/SED.cpp
+    Instructions/SEI.cpp
+    Instructions/STA.cpp
+    Instructions/STX.cpp
+    Instructions/STY.cpp
+    Instructions/TAX.cpp
+    Instructions/TAY.cpp
+    Instructions/TSX.cpp
+    Instructions/TXA.cpp
+    Instructions/TXS.cpp
+    Instructions/TYA.cpp
+)
+
+
