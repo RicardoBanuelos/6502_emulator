@@ -100,8 +100,8 @@ TEST(programs, basic_program_square_root)
     for(int i = 0; i < 1000; ++i)
     {
         mem->randomize();
-        //ASSERT_EQ(true, mem->loadBinary("../../../../test/Programs/BasicPrograms/squareRoot.bin", 0x8000));
-        ASSERT_EQ(true, mem->loadBinary("P:/Github/6502_emulator/test/Programs/BasicPrograms/squareRoot.bin", 0x8000));
+        ASSERT_EQ(true, mem->loadBinary("../../../../test/Programs/BasicPrograms/squareRoot.bin", 0x8000));
+        //ASSERT_EQ(true, mem->loadBinary("P:/Github/6502_emulator/test/Programs/BasicPrograms/squareRoot.bin", 0x8000));
         
 
         cpu->reset();
