@@ -1,19 +1,10 @@
-cmake_minimum_required(VERSION 3.5.0)
-project(6502Emulator VERSION 0.1.0 LANGUAGES C CXX)
+cmake_minimum_required(VERSION 3.28)
 
-#Enable Testing
-set(ENABLE_TESTING TRUE)
-set(TEST_CPU TRUE)
-set(TEST_MEMORY TRUE)
-set(TEST_INSTRUCTIONS TRUE)
-set(TEST_PROGRAMS TRUE)
+project(6502_emulator LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-include_directories(inc)
+add_subdirectory(app)
 add_subdirectory(src)
-
-if(ENABLE_TESTING)
-    enable_testing()
-    add_subdirectory(test)
-endif()
-

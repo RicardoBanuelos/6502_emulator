@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <functional>
-#include "CPU/ICPU.h"
+#include "ICPU.h"
 #include "AddressingMode.h"
 #include "AddressingData.h"
 

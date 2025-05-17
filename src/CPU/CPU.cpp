@@ -1,9 +1,6 @@
-#include "CPU/CPU.h"
-#include "Instruction/Instructions/LDA.h"
-#include "Instruction/Instructions.h"
-
-#include <random>
 #include "CPU.h"
+#include "Instructions.h"
+#include <random>
 
 CPU::CPU()
 {

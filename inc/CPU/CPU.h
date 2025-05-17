@@ -2,9 +2,9 @@
 
 #include <unordered_map>
 
-#include "CPU/ICPU.h"
-#include "OpCodes/OpCodes.h"
-#include "Instruction/Instruction.h"
+#include "ICPU.h"
+#include "OpCodes.h"
+#include "Instruction.h"
 #include "Bus/IBus.h"
 
 class CPU : public ICPU, public std::enable_shared_from_this<CPU>
