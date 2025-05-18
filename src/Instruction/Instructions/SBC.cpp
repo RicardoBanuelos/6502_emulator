@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/SBC.h"
+#include "SBC.h"
 
 SBC::SBC(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("SBC", icpu, addressingMode, cycles)

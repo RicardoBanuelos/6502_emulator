@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/INY.h"
+#include "INY.h"
 
 INY::INY(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("INY", icpu, addressingMode, cycles)

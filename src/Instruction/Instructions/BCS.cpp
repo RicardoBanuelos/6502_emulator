@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/BCS.h"
+#include "BCS.h"
 
 BCS::BCS(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("BCS", icpu, addressingMode, cycles)

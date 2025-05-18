@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/CMP.h"
+#include "CMP.h"
 
 CMP::CMP(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("CMP", icpu, addressingMode, cycles)

@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/BIT.h"
+#include "BIT.h"
 
 BIT::BIT(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("BIT", icpu, addressingMode, cycles)

@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/DEC.h"
+#include "DEC.h"
 
 DEC::DEC(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("DEC", icpu, addressingMode, cycles)

@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/CLI.h"
+#include "CLI.h"
 
 CLI::CLI(std::shared_ptr<ICPU> icpu)
     :   Instruction("CLI", icpu, AddressingMode::Implied, 2)

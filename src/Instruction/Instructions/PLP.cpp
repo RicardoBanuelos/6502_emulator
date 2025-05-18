@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/PLP.h"
+#include "PLP.h"
 
 
 PLP::PLP(std::shared_ptr<ICPU> icpu, uint8_t cycles)

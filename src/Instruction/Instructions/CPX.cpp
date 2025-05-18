@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/CPX.h"
+#include "CPX.h"
 
 CPX::CPX(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("CPX", icpu, addressingMode, cycles)

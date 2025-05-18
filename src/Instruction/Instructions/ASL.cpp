@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/ASL.h"
+#include "ASL.h"
 
 ASL::ASL(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("ASL", icpu, addressingMode, cycles)

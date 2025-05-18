@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/ADC.h"
+#include "ADC.h"
 #include <iostream>
 
 ADC::ADC(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)

@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/PLA.h"
+#include "PLA.h"
 
 
 PLA::PLA(std::shared_ptr<ICPU> icpu, uint8_t cycles)

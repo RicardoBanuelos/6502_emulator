@@ -1,5 +1,5 @@
 #pragma once
-#include "Instruction/Instruction.h"
+#include "Instruction.h"
 
 class ORA : public Instruction
 {

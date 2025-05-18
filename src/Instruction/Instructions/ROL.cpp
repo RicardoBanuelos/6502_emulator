@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/ROL.h"
+#include "ROL.h"
 
 ROL::ROL(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("ROL", icpu, addressingMode, cycles)

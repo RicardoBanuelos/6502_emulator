@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/CLD.h"
+#include "CLD.h"
 
 CLD::CLD(std::shared_ptr<ICPU> icpu)
     :   Instruction("CLD", icpu, AddressingMode::Implied, 2)

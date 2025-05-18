@@ -1,9 +1,10 @@
 #pragma once
 
 #include "IBus.h"
-#include "CPU/CPU.h"
-#include "Memory/Memory.h"
+#include "Memory.h"
 #include <memory>
+
+class CPU;
 
 class Bus : public IBus
 {

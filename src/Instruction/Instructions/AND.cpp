@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/AND.h"
+#include "AND.h"
 
 AND::AND(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("AND", icpu, addressingMode, cycles)

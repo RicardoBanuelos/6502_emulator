@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/BVS.h"
+#include "BVS.h"
 
 BVS::BVS(std::shared_ptr<ICPU> icpu)
     :   Instruction("BVS", icpu, AddressingMode::Relative, 2)

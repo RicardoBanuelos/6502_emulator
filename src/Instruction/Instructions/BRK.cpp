@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/BRK.h"
+#include "BRK.h"
 
 BRK::BRK(std::shared_ptr<ICPU> icpu)
     :   Instruction("BRK", icpu, AddressingMode::Implied, 7)

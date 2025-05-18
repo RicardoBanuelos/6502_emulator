@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/ROR.h"
+#include "ROR.h"
 
 ROR::ROR(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("ROR", icpu, addressingMode, cycles)

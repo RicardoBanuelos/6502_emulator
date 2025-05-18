@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/CPY.h"
+#include "CPY.h"
 
 CPY::CPY(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("CPY", icpu, addressingMode, cycles)

@@ -1,6 +1,6 @@
 #pragma once 
 
-#include "Instruction/Instruction.h"
+#include "Instruction.h"
 
 //Load Accumulator with Memory
 class LDA : public Instruction

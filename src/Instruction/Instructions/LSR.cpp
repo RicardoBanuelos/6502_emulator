@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/LSR.h"
+#include "LSR.h"
 
 
 

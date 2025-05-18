@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/SEC.h"
+#include "SEC.h"
 
 
 SEC::SEC(std::shared_ptr<ICPU> icpu)

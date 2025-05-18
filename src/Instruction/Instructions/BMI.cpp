@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/BMI.h"
+#include "BMI.h"
 
 BMI::BMI(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("BMI", icpu, addressingMode, cycles)

@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/DEY.h"
+#include "DEY.h"
 
 DEY::DEY(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("DEX", icpu, addressingMode, cycles)

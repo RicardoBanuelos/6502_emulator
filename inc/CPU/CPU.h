@@ -5,7 +5,7 @@
 #include "ICPU.h"
 #include "OpCodes.h"
 #include "Instruction.h"
-#include "Bus/IBus.h"
+#include "IBus.h"
 
 class CPU : public ICPU, public std::enable_shared_from_this<CPU>
 {

@@ -3,8 +3,8 @@
 #include <functional>
 #include <memory>
 #include <string>
-#include "CPU/ICPU.h"
-#include "CPU/Addressing.h"
+#include "ICPU.h"
+#include "Addressing.h"
 
 class Instruction
 {

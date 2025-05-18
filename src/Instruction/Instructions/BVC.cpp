@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/BVC.h"
+#include "BVC.h"
 
 BVC::BVC(std::shared_ptr<ICPU> icpu)
     :   Instruction("BVC", icpu, AddressingMode::Relative, 2)

@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/CLV.h"
+#include "CLV.h"
 
 CLV::CLV(std::shared_ptr<ICPU> icpu)
     :   Instruction("CLV", icpu, AddressingMode::Implied, 2)

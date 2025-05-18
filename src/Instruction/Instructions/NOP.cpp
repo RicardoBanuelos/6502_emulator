@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/NOP.h"
+#include "NOP.h"
 
 
 NOP::NOP(std::shared_ptr<ICPU> icpu)

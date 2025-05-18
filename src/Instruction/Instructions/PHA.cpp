@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/PHA.h"
+#include "PHA.h"
 
 
 PHA::PHA(std::shared_ptr<ICPU> icpu, uint8_t cycles)
