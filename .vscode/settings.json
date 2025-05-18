@@ -88,6 +88,7 @@
         "xlocnum": "cpp",
         "xloctime": "cpp",
         "xtree": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "*.in": "cpp"
     }
 }

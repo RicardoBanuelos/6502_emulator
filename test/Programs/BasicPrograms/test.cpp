@@ -1,9 +1,10 @@
 #include <gtest/gtest.h>
 #include <math.h>
-#include "Instruction/Instructions/ADC.h"
-#include "CPU/CPU.h"
-#include "Memory/Memory.h"
-#include "Bus/Bus.h"
+#include "Instructions.h"
+#include "CPU.h"
+#include "Memory.h"
+#include "Bus.h"
+#include "test_paths.h"
 
 static std::shared_ptr<CPU> cpu(new CPU());
 static std::shared_ptr<Memory> mem(new Memory());
@@ -15,7 +16,7 @@ TEST(programs, basic_program_test_0)
     for(int i = 0; i < 1000; ++i)
     {
         mem->randomize();
-        ASSERT_EQ(true, mem->loadBinary("../../../../test/Programs/BasicPrograms/basic_program.bin"));
+        ASSERT_EQ(true, mem->loadBinary(BASIC_PROGRAM_0_PATH));
         
         cpu->reset();
 
@@ -52,12 +53,11 @@ TEST(programs, basic_program_test_1)
     for(int i = 0; i < 1000; ++i)
     {
         mem->randomize();
-        ASSERT_EQ(true, mem->loadBinary("../../../../test/Programs/BasicPrograms/basic_program_2.bin"));
+        ASSERT_EQ(true, mem->loadBinary(BASIC_PROGRAM_1_PATH));
         
         cpu->reset();
 
         cpu->setRegister(Register::PC, 0);
-
 
         Instruction *current = cpu->fetchInstruction();
         ASSERT_NE(current, nullptr);
@@ -100,9 +100,7 @@ TEST(programs, basic_program_square_root)
     for(int i = 0; i < 1000; ++i)
     {
         mem->randomize();
-        ASSERT_EQ(true, mem->loadBinary("../../../../test/Programs/BasicPrograms/squareRoot.bin", 0x8000));
-        //ASSERT_EQ(true, mem->loadBinary("P:/Github/6502_emulator/test/Programs/BasicPrograms/squareRoot.bin", 0x8000));
-        
+        ASSERT_EQ(true, mem->loadBinary(BASIC_PROGRAM_SQUARE_ROOT, 0x8000));
 
         cpu->reset();
         cpu->setRegister(Register::PC, 0x8000);
