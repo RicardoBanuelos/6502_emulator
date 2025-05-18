@@ -69,6 +69,6 @@ target_include_directories(${INSTRUCTIONS_LIBRARY_NAME}
 )
 
 target_link_libraries(${INSTRUCTIONS_LIBRARY_NAME} 
-    PRIVATE
+    PUBLIC
     ${ICPU_LIBRARY_NAME}
 )
