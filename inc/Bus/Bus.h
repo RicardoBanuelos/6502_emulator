@@ -13,10 +13,10 @@ public:
     Bus();
     ~Bus();
 
-    uint8_t readByte(uint32_t address);
-    uint16_t readWord(uint32_t address);
-    void writeByte(uint32_t address, uint8_t data);
-    void writeWord(uint32_t address, uint16_t data);
+    virtual uint8_t readByte(uint32_t address);
+    virtual uint16_t readWord(uint32_t address);
+    virtual void writeByte(uint32_t address, uint8_t data);
+    virtual void writeWord(uint32_t address, uint16_t data);
 
     void connectMemory(std::shared_ptr<Memory> memory);
 

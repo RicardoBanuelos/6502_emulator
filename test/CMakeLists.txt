@@ -1,5 +1,9 @@
 include(FetchContent)
 
+# Include CTest to enable testing with ctest
+enable_testing()
+include(CTest)
+
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
@@ -9,22 +13,14 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 add_library(GTest::GTest INTERFACE IMPORTED)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
+
+# We still include GoogleTest for gtest_discover_tests function
 include(GoogleTest)
 
+# No conditionals for simplicity - just include all test directories
+add_subdirectory(CPU)
 
-# if(TEST_CPU)
-
-  add_subdirectory(CPU)
-# endif()
-
-if(TEST_MEMORY)
-  add_subdirectory(Memory)
-endif()
-
-if(TEST_INSTRUCTIONS)
-  add_subdirectory(Instructions)
-endif()
-
-# if(TEST_PROGRAMS)
-  add_subdirectory(Programs)
-# endif()
+# Uncomment these as needed
+# add_subdirectory(Memory)
+# add_subdirectory(Instructions)
+add_subdirectory(Programs)

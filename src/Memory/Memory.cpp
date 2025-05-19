@@ -1,6 +1,8 @@
 #include "Memory.h"
 #include <random>
 #include <fstream>
+#include <iostream>
+#include <iomanip>
 
 Memory::Memory(){}
 Memory::~Memory(){}
@@ -63,6 +65,66 @@ void Memory::writeWord(uint32_t address, uint16_t word)
 
     mData[address] = word & 0x00FF;
     mData[address + 1] = (word >> 8);
+}
+
+void Memory::dumpMemory(uint32_t startAddress, uint32_t endAddress) const
+{
+    if(!validateAddress(startAddress) || !validateAddress(endAddress)) 
+        return;
+
+    const int BYTES_PER_ROW = 16;
+    const int NUM_ROWS = (endAddress - startAddress + BYTES_PER_ROW) / BYTES_PER_ROW;
+    
+    // Print header row with column numbers
+    std::cout << "       ";
+    for (int i = 0; i < BYTES_PER_ROW; i++) {
+        std::cout << std::hex << std::setw(2) << std::setfill('0') << i << " ";
+    }
+    std::cout << "  |  ASCII" << std::endl;
+    
+    // Print divider
+    std::cout << "-------";
+    for (int i = 0; i < BYTES_PER_ROW; i++) {
+        std::cout << "---";
+    }
+    std::cout << "-----------" << std::endl;
+    
+    // Print memory content row by row
+    for (int row = 0; row < NUM_ROWS; row++) {
+        uint32_t rowAddr = startAddress + (row * BYTES_PER_ROW);
+        
+        // Print address at start of row
+        std::cout << std::hex << std::setw(4) << std::setfill('0') << rowAddr << " | ";
+        
+        // Print hex values
+        std::string asciiRow;
+        for (int i = 0; i < BYTES_PER_ROW; i++) {
+            uint32_t addr = rowAddr + i;
+            if (addr <= endAddress && validateAddress(addr)) {
+                uint8_t value = mData[addr];
+                std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(value) << " ";
+                
+                // Collect ASCII representation
+                if (value >= 32 && value <= 126) { // Printable ASCII
+                    asciiRow += static_cast<char>(value);
+                } else {
+                    asciiRow += '.'; // Non-printable
+                }
+            } else {
+                std::cout << "   ";
+                asciiRow += ' ';
+            }
+        }
+        
+        // Print ASCII representation
+        std::cout << " | " << asciiRow << std::endl;
+        
+        // Stop if we've reached the end address
+        if (rowAddr + BYTES_PER_ROW > endAddress)
+            break;
+    }
+    
+    std::cout << std::dec; // Reset to decimal output
 }
 
 bool Memory::loadBinary(const std::string &path, uint16_t startAddress)
