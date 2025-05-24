@@ -22,10 +22,10 @@ void CPU::reset()
     mRegisters.PC = 0xFFCC;
     mRegisters.SP = 0xFF;
     mRegisters.statusRegister.statusFlags.D = 0;
+    mRegisters.statusRegister.byte = 0;
     mRegisters.A = 0;
     mRegisters.X = 0;
     mRegisters.Y = 0;
-    mRegisters.statusRegister.byte = 0;
 }
 
 void CPU::randomizeRegisters()
