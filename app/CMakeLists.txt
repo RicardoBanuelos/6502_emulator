@@ -8,7 +8,7 @@ set(SFML_STATIC_LIBRARIES TRUE CACHE BOOL "Use static SFML libraries" FORCE)
 CPMAddPackage(
   NAME SFML
   GITHUB_REPOSITORY SFML/SFML
-  GIT_TAG 2.5.1
+  GIT_TAG 3.0.1
 )
 
 add_executable(${EXECUTABLE_NAME} main.cpp)
