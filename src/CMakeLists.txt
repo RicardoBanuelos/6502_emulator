@@ -11,4 +11,5 @@ add_subdirectory(Instruction)
 add_subdirectory(ICPU)
 add_subdirectory(CPU)
 add_subdirectory(Addressing)
+add_subdirectory(Nes)
 

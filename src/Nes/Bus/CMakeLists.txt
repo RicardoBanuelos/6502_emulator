@@ -1,0 +1,15 @@
+message("Configuring NesBus library...")
+
+set(NES_BUS_LIB libNesBus CACHE INTERNAL "Library for NesBus")
+
+set(LIBRARY_SOURCE 
+    NesBus.cpp
+)
+
+set(LIBRARY_HEADERS_DIRS
+    ${CMAKE_SOURCE_DIR}/inc/Nes/Bus
+)
+
+add_library(${NES_BUS_LIB} STATIC ${LIBRARY_SOURCE})
+target_include_directories(${NES_BUS_LIB} PUBLIC ${LIBRARY_HEADERS_DIRS})
+target_link_libraries(${NES_BUS_LIB} PUBLIC ${BUS_LIBRARY_NAME})

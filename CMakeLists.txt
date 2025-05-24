@@ -7,19 +7,23 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 
-#Enable Testing
-option(ENABLE_TESTING TRUE)
-option(TEST_CPU TRUE)
-option(TEST_MEMORY FALSE)
-option(TEST_INSTRUCTIONS FALSE)
-option(TEST_PROGRAMS FALSE)
+option(ENABLE_TESTING FALSE)
+option(CREATE_EXECUTABLE FALSE)
 
 include(CPM)
 
 
-add_subdirectory(app)
+if(CREATE_EXECUTABLE)
+    add_subdirectory(app)
+endif()
+
+
 add_subdirectory(src)
 
-
-enable_testing()
-add_subdirectory(test)
+#Enable Testing
+if(ENABLE_TESTING)
+    message("Configuring tests...")
+    include(CTest)
+    include(CMakeTesting)
+    enable_testing()
+endif()
