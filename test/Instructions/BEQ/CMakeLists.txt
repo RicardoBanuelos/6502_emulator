@@ -1,13 +1,11 @@
-set(BCS_TEST_EXECUTABLE bcs_test CACHE INTERNAL "")
+set(BCS_TEST_EXECUTABLE bcs_test)
 
 
 add_executable(${BCS_TEST_EXECUTABLE} test.cpp)
 
 target_link_libraries(${BCS_TEST_EXECUTABLE}
   GTest::GTest
-  ${CPU_LIBRARY}
-  ${INTRUCTIONS_LIBRARY} 
-  ${MEMORY_LIBRARY}
-  ${BUS_LIBRARY})
+  ${CPU_LIBRARY_NAME}
+)
 
 gtest_discover_tests(${BCS_TEST_EXECUTABLE})

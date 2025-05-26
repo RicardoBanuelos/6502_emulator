@@ -1,13 +1,11 @@
-set(ADC_TEST_EXECUTABLE adc_test CACHE INTERNAL "")
+set(ADC_TEST_EXECUTABLE adc_test)
 
 
 add_executable(${ADC_TEST_EXECUTABLE} test.cpp)
 
 target_link_libraries(${ADC_TEST_EXECUTABLE}
   GTest::GTest
-  ${CPU_LIBRARY}
-  ${INTRUCTIONS_LIBRARY} 
-  ${MEMORY_LIBRARY}
-  ${BUS_LIBRARY})
+  ${CPU_LIBRARY_NAME}
+)
 
 gtest_discover_tests(${ADC_TEST_EXECUTABLE})

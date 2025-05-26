@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
-#include "Instruction/Instructions/BIT.h"
-#include "CPU/CPU.h"
-#include "Memory/Memory.h"
-#include "Bus/Bus.h"
+#include "BIT.h"
+#include "CPU.h"
+#include "Memory.h"
+#include "Bus.h"
 
 static std::shared_ptr<ICPU> cpu(new CPU());
 static std::shared_ptr<Memory> mem(new Memory());
@@ -17,7 +17,7 @@ void ASSERT_ALL(uint16_t result, uint16_t fetched)
 
 TEST(instructions, bit_zero_page)
 {
-    for(int i = 0; i < 1000; ++i)
+    for (int i = 0; i < 1000; ++i)
     {
         cpu->reset();
         cpu->randomizeRegisters();
@@ -36,7 +36,7 @@ TEST(instructions, bit_zero_page)
 
 TEST(instructions, bit_absolute)
 {
-    for(int i = 0; i < 1000; ++i)
+    for (int i = 0; i < 1000; ++i)
     {
         cpu->reset();
         cpu->randomizeRegisters();
@@ -49,21 +49,21 @@ TEST(instructions, bit_absolute)
         std::unique_ptr<BIT> instruction(new BIT(cpu, AddressingMode::Absolute, 4));
         instruction->run();
 
-        ASSERT_ALL(result, M);   
+        ASSERT_ALL(result, M);
     }
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
     mem->initialize();
     mem->randomize();
 
-    CPU *cppu = static_cast<CPU*>(cpu.get());
+    CPU *cppu = static_cast<CPU *>(cpu.get());
     cppu->init();
 
     cppu->connectBus(bus);
     bus->connectMemory(mem);
-   
+
     return RUN_ALL_TESTS();
 }
