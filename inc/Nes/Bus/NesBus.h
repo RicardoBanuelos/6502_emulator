@@ -15,6 +15,7 @@
     $8000–$FFFF	32 KB	    Cartridge PRG-ROM (game code/data)
 */
 
+
 class NesBus : public Bus
 {
     
