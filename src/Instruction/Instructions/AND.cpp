@@ -16,7 +16,7 @@ void AND::run()
 
     uint16_t result = A & M;
 
-    mIcpu->setFlag(Flag::Z, result & 0x00FF == 0);
+    mIcpu->setFlag(Flag::Z, (result & 0x00FF) == 0);
     mIcpu->setFlag(Flag::N, result & 0x80);
     mIcpu->setRegister(Register::A, result & 0x00FF);
 }

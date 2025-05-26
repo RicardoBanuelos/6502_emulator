@@ -36,7 +36,7 @@ AddressingData Addressing::ZeroPage() const
 
 AddressingData Addressing::ZeroPageX() const
 {
-    uint16_t address = mIcpu->fetchByte() + mIcpu->getRegister(Register::X);
+    uint16_t address = (mIcpu->fetchByte() + mIcpu->getRegister(Register::X)) & 0xFF;
     uint8_t data = mIcpu->readByte(address);
 
     return AddressingData(address, data);
@@ -44,7 +44,7 @@ AddressingData Addressing::ZeroPageX() const
 
 AddressingData Addressing::ZeroPageY() const
 {
-    uint16_t address = (mIcpu->fetchByte() + mIcpu->getRegister(Register::Y));
+    uint16_t address = (mIcpu->fetchByte() + mIcpu->getRegister(Register::Y)) & 0xFF;
     uint8_t data = mIcpu->readByte(address);
 
     return AddressingData(address, data);
@@ -93,8 +93,11 @@ AddressingData Addressing::Indirect() const
 
 AddressingData Addressing::IndirectX() const
 {
-    uint16_t addressPointer = mIcpu->fetchByte() + mIcpu->getRegister(Register::X);
-    uint16_t indirect = mIcpu->readWord(addressPointer);
+    // Apply zero page wrap when adding X register to zero page address
+    uint16_t zeroPageAddr = (mIcpu->fetchByte() + mIcpu->getRegister(Register::X)) & 0xFF;
+    
+    // Read the target address from the wrapped zero page location
+    uint16_t indirect = mIcpu->readWord(zeroPageAddr);
     uint8_t data = mIcpu->readByte(indirect);
 
     return AddressingData(indirect, data);
@@ -102,11 +105,12 @@ AddressingData Addressing::IndirectX() const
 
 AddressingData Addressing::IndirectY() const
 {
-    uint16_t addressPointer = mIcpu->fetchByte() + mIcpu->getRegister(Register::Y);
-    uint16_t indirect = mIcpu->readWord(addressPointer);
-    uint8_t data = mIcpu->readByte(indirect);
+    uint16_t zeroPageAddress = mIcpu->fetchByte();
+    uint16_t indirect = mIcpu->readWord(zeroPageAddress);
+    uint16_t finalAddress = indirect + mIcpu->getRegister(Register::Y);
+    uint8_t data = mIcpu->readByte(finalAddress);
 
-    return AddressingData(indirect, data);
+    return AddressingData(finalAddress, data);
 }
 
 AddressingData Addressing::addressing(AddressingMode mode)

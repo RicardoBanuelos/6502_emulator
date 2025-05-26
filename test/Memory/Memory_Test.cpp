@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <vector>
-#include "Memory/Memory.h"
+#include "Memory.h"
 
 
 static Memory mem;
