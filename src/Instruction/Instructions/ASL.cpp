@@ -17,9 +17,9 @@ void ASL::run()
 
     mIcpu->setFlag(Flag::C, (result & 0xFF00) > 0);
     mIcpu->setFlag(Flag::Z, (result & 0x00FF) == 0);
-    mIcpu->setFlag(Flag::N, (result & Flag::N));
+    mIcpu->setFlag(Flag::N, (result & 0x0080));
 
-    if(mAddressingMode == AddressingMode::Implied)
+    if(mAddressingMode == AddressingMode::Accumulator)
     {
         mIcpu->setRegister(Register::A, result & 0x00FF);
     }
