@@ -4,8 +4,6 @@
 #include "Memory.h"
 #include <memory>
 
-class CPU;
-
 class Bus : public IBus
 {
     
@@ -20,7 +18,7 @@ public:
 
     virtual void connectMemory(std::shared_ptr<Memory> memory);
 
-private:
-    std::shared_ptr<CPU> mCPU;
+protected:
     std::shared_ptr<Memory> mMemory;
+
 };

@@ -1,5 +1,6 @@
 include(FetchContent)
 
+
 # Include CTest to enable testing with ctest
 enable_testing()
 include(CTest)
@@ -20,3 +21,4 @@ include(GoogleTest)
 # No conditionals for simplicity - just include all test directories
 add_subdirectory(CPU)
 add_subdirectory(Programs)
+add_subdirectory(Nes)

@@ -20,5 +20,5 @@ public:
 private:
     bool validateAddress(uint32_t address) const;
 
-    uint8_t mData[MAX_MEMORY];
+    uint8_t mData[MAX_MEMORY]={0};
 };
