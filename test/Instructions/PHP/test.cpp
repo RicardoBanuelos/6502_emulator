@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
-#include "Instruction/Instructions/PHP.h"
-#include "CPU/CPU.h"
-#include "Memory/Memory.h"
-#include "Bus/Bus.h"
+#include "PHP.h"
+#include "CPU.h"
+#include "Memory.h"
+#include "Bus.h"
 
 static std::shared_ptr<ICPU> cpu(new CPU());
 static std::shared_ptr<Memory> mem(new Memory());
