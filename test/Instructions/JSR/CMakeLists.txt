@@ -1,14 +1,14 @@
-set(JSR_TEST_EXECUTABLE jsr_test CACHE INTERNAL "")
+set(JSR_TEST_EXECUTABLE jsr_test )
 
 
 add_executable(${JSR_TEST_EXECUTABLE} test.cpp)
 
 
 target_link_libraries(${JSR_TEST_EXECUTABLE}
-  GTest::GTest
-  ${CPU_LIBRARY}
-  ${INTRUCTIONS_LIBRARY} 
-  ${MEMORY_LIBRARY}
-  ${BUS_LIBRARY})
+ GTest::GTest
+ ${CPU_LIBRARY_NAME}
+
+
+ )
 
 gtest_discover_tests(${JSR_TEST_EXECUTABLE})

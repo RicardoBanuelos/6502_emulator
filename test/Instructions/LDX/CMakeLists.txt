@@ -1,14 +1,14 @@
-set(LDX_TEST_EXECUTABLE ldx_test CACHE INTERNAL "")
+set(LDX_TEST_EXECUTABLE ldx_test )
 
 
 add_executable(${LDX_TEST_EXECUTABLE} test.cpp)
 
 
 target_link_libraries(${LDX_TEST_EXECUTABLE}
-  GTest::GTest
-  ${CPU_LIBRARY}
-  ${INTRUCTIONS_LIBRARY} 
-  ${MEMORY_LIBRARY}
-  ${BUS_LIBRARY})
+ GTest::GTest
+ ${CPU_LIBRARY_NAME}
+
+
+ )
 
 gtest_discover_tests(${LDX_TEST_EXECUTABLE})
