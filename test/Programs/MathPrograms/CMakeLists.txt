@@ -7,6 +7,7 @@ set(CUSTOM_TARGET_NAME math_generate_test_paths)
 
 set(MULTIPLY_TEST_PROGRAM "${PROGRAMS_RESOURCES_DIR}/multiplyProgram.bin")
 set(BITWISE_AND_TEST_PROGRAM "${PROGRAMS_RESOURCES_DIR}/bitwiseAnd.bin")
+set(BITWISE_XOR_TEST_PROGRAM "${PROGRAMS_RESOURCES_DIR}/bitwisexor.bin")
 
 # Move this before executable definition to ensure it runs first
 add_custom_target(

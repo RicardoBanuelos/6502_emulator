@@ -85,7 +85,7 @@ TEST(math_programs, bitwise_xor)
     for (int i = 0; i < 1000; ++i)
     {
         cpu->reset();
-        ASSERT_EQ(true, mem->loadBinary(BITWISE_AND_TEST_PROGRAM));
+        ASSERT_EQ(true, mem->loadBinary(BITWISE_XOR_TEST_PROGRAM));
         cpu->setRegister(Register::PC, 0x0000);
         uint8_t operand1 = rand() % 256;
         uint8_t operand2 = rand() % 256;
@@ -95,7 +95,7 @@ TEST(math_programs, bitwise_xor)
         // Run the program
         RunProgram();
         uint8_t result = mem->readByte(0x0032);
-        uint8_t expected = operand1 ^ operand2;
+        uint8_t expected = (operand1 ^ operand2) ^ 0xFF;
         ASSERT_EQ(result, expected) << "Expected: " << (expected) 
                                     << ", got: " << (result)
                                     << ", operand1: " << (operand1)
