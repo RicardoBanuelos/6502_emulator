@@ -1,11 +1,11 @@
-set(BCS_TEST_EXECUTABLE bcs_test)
+set(BEQ_TEST_EXECUTABLE beq_test)
 
 
-add_executable(${BCS_TEST_EXECUTABLE} test.cpp)
+add_executable(${BEQ_TEST_EXECUTABLE} test.cpp)
 
-target_link_libraries(${BCS_TEST_EXECUTABLE}
+target_link_libraries(${BEQ_TEST_EXECUTABLE}
  GTest::GTest
  ${CPU_LIBRARY_NAME}
 )
 
-gtest_discover_tests(${BCS_TEST_EXECUTABLE})
+gtest_discover_tests(${BEQ_TEST_EXECUTABLE})

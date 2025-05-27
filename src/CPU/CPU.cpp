@@ -23,6 +23,7 @@ void CPU::reset()
     mRegisters.SP = 0xFF;
     mRegisters.statusRegister.statusFlags.D = 0;
     mRegisters.statusRegister.byte = 0;
+    mRegisters.statusRegister.statusFlags.I = 1; // Interrupts disabled on reset
     mRegisters.A = 0;
     mRegisters.X = 0;
     mRegisters.Y = 0;

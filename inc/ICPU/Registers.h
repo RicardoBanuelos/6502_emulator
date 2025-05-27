@@ -50,7 +50,7 @@ union StatusRegister
 
     bool getFlag(Flag flag)
     {
-        return byte & flag;
+        return (byte & flag) != 0;
     }
     
 };

@@ -18,7 +18,7 @@ void BIT::run()
 
     uint16_t result = A & M;
 
-    mIcpu->setFlag(Flag::Z, result & 0x00FF == 0x00);
-    mIcpu->setFlag(Flag::V, M & (1 << 6));
-    mIcpu->setFlag(Flag::N, M & (1 << 7));
+    mIcpu->setFlag(Flag::Z, result == 0);
+    mIcpu->setFlag(Flag::V, (M & 0x40) != 0);  // Copy bit 6 from memory
+    mIcpu->setFlag(Flag::N, (M & 0x80) != 0);  // Copy bit 7 from memory
 }

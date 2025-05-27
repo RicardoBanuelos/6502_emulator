@@ -1,7 +1,7 @@
 #include "BVC.h"
 
-BVC::BVC(std::shared_ptr<ICPU> icpu)
-    :   Instruction("BVC", icpu, AddressingMode::Relative, 2)
+BVC::BVC(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
+    :   Instruction("BVC", icpu, addressingMode, cycles)
 {
 }
 
