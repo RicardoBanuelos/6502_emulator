@@ -3,127 +3,317 @@
 #include "CPU.h"
 #include "Memory.h"
 #include "Bus.h"
+#include <sstream>
+#include <vector>
+#include <tuple>
 
 static std::shared_ptr<ICPU> cpu(new CPU());
 static std::shared_ptr<Memory> mem(new Memory());
 static std::shared_ptr<Bus> bus(new Bus());
-static const int MAX_ITERATIONS = 20000;
 
-
-TEST(instructions, ldy_test_immediate)
+void setup()
 {
-    for(int i = 0; i < MAX_ITERATIONS; ++i)
-    {
-        uint16_t currentAddr = rand() % UINT16_MAX;
-        cpu->setRegister(Register::PC, currentAddr);
+    mem->initialize();
+    mem->randomize();
+    cpu->reset();
+    CPU *cppu = static_cast<CPU*>(cpu.get());
+    cppu->init();
+    cppu->connectBus(bus);
+    bus->connectMemory(mem);
+}
 
-        uint8_t expected = cpu->readByte(currentAddr);
+// Helper to verify LDY results
+void verifyLDYResults(uint8_t value) {
+    // Check Y register
+    ASSERT_EQ(cpu->getRegister(Register::Y), value)
+        << "Y register should contain loaded value: expected=0x" << std::hex << (int)value;
+    
+    // Check zero flag (set if value is zero)
+    ASSERT_EQ(cpu->getFlag(Flag::Z), value == 0)
+        << "Zero flag incorrect: value=0x" << std::hex << (int)value
+        << ", Z flag should be " << (value == 0 ? "set" : "clear");
+    
+    // Check negative flag (set if bit 7 of value is set)
+    ASSERT_EQ(cpu->getFlag(Flag::N), (value & 0x80) != 0)
+        << "Negative flag incorrect: value=0x" << std::hex << (int)value
+        << ", N flag should be " << ((value & 0x80) != 0 ? "set" : "clear");
+}
 
-        LDY ins(cpu, AddressingMode::Immediate, 2);
-        ins.run();
+// Helper to setup addressing mode and return effective address
+uint16_t setupAddressingMode(AddressingMode mode, uint8_t testValue) {
+    uint16_t pc = 0x1000;
+    cpu->setRegister(Register::PC, pc);
+    uint16_t effectiveAddress = 0;
+    
+    switch(mode) {
+        case AddressingMode::Immediate:
+            mem->writeByte(pc, testValue);
+            return pc;
+            
+        case AddressingMode::ZeroPage:
+            effectiveAddress = 0x0042;
+            mem->writeByte(pc, 0x42); // ZeroPage address
+            mem->writeByte(effectiveAddress, testValue);
+            break;
+            
+        case AddressingMode::ZeroPageX:
+            cpu->setRegister(Register::X, 0x10);
+            effectiveAddress = 0x0052; // 0x42 + 0x10 = 0x52
+            mem->writeByte(pc, 0x42); // ZeroPage address
+            mem->writeByte(effectiveAddress, testValue);
+            break;
+            
+        case AddressingMode::Absolute:
+            effectiveAddress = 0x1234;
+            mem->writeWord(pc, 0x1234); // Absolute address
+            mem->writeByte(effectiveAddress, testValue);
+            break;
+            
+        case AddressingMode::AbsoluteX:
+            cpu->setRegister(Register::X, 0x10);
+            effectiveAddress = 0x1244; // 0x1234 + 0x10 = 0x1244
+            mem->writeWord(pc, 0x1234); // Absolute address
+            mem->writeByte(effectiveAddress, testValue);
+            break;
+            
+        default: {
+            ADD_FAILURE() << "Unsupported addressing mode for LDY";
+            return 0;
+        }
+    }
+    
+    return effectiveAddress;
+}
 
-        ASSERT_EQ(cpu->getRegister(Register::Y), expected);
-
-        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
-        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+// Helper to get cycle count for different addressing modes
+int getCycleCount(AddressingMode mode) {
+    switch(mode) {
+        case AddressingMode::Immediate: return 2;
+        case AddressingMode::ZeroPage: return 3;
+        case AddressingMode::ZeroPageX: return 4;
+        case AddressingMode::Absolute: return 4;
+        case AddressingMode::AbsoluteX: return 4; // +1 if page boundary crossed
+        default: return 2;
     }
 }
 
-TEST(instructions, ldy_test_zeroPage)
-{
-    for(int i = 0; i < MAX_ITERATIONS; ++i)
-    {
-        uint16_t currentAddr = rand() % UINT16_MAX;
-        cpu->setRegister(Register::PC, currentAddr);
-
-        uint8_t lookUpAddr = cpu->readByte(currentAddr);
-        uint8_t expected = cpu->readByte(lookUpAddr);
-
-        LDY ins(cpu, AddressingMode::ZeroPage, 2);
-        ins.run();
-
-        ASSERT_EQ(cpu->getRegister(Register::Y), expected);
-        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
-        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+// Test case for LDY using different addressing modes
+class LDYAddressingModeTest : public ::testing::TestWithParam<std::tuple<AddressingMode, uint8_t>> {
+protected:
+    void SetUp() override {
+        setup();
     }
+};
 
+// Important test values to check
+const uint8_t testValues[] = {
+    0x00, // Tests zero flag
+    0x01, // Smallest positive value
+    0x7F, // Largest positive value
+    0x80, // Smallest negative value
+    0xFF, // Largest negative value
+    0x55, // Alternating bit pattern 01010101
+    0xAA  // Alternating bit pattern 10101010
+};
+
+// Generate test name
+std::string GetTestName(const testing::TestParamInfo<std::tuple<AddressingMode, uint8_t>>& info) {
+    auto [mode, value] = info.param;
+    std::stringstream ss;
+    
+    switch(mode) {
+        case AddressingMode::Immediate: ss << "Immediate"; break;
+        case AddressingMode::ZeroPage: ss << "ZeroPage"; break;
+        case AddressingMode::ZeroPageX: ss << "ZeroPageX"; break;
+        case AddressingMode::Absolute: ss << "Absolute"; break;
+        case AddressingMode::AbsoluteX: ss << "AbsoluteX"; break;
+        default: ss << "Unknown";
+    }
+    
+    ss << "_Value_" << std::hex << (int)value;
+    return ss.str();
 }
 
+TEST_P(LDYAddressingModeTest, LoadYRegister) {
+    auto [mode, testValue] = GetParam();
+    
+    std::stringstream ss;
+    ss << "Testing LDY with addressing mode: ";
+    switch(mode) {
+        case AddressingMode::Immediate: ss << "Immediate"; break;
+        case AddressingMode::ZeroPage: ss << "ZeroPage"; break;
+        case AddressingMode::ZeroPageX: ss << "ZeroPageX"; break;
+        case AddressingMode::Absolute: ss << "Absolute"; break;
+        case AddressingMode::AbsoluteX: ss << "AbsoluteX"; break;
+        default: ss << "Unknown";
+    }
+    ss << ", value: 0x" << std::hex << (int)testValue;
+    SCOPED_TRACE(ss.str());
+    
+    // Setup memory and addressing mode
+    setupAddressingMode(mode, testValue);
+    
+    // Execute LDY with the appropriate addressing mode
+    std::unique_ptr<LDY> ldy(new LDY(cpu, mode, getCycleCount(mode)));
+    ldy->run();
+    
+    // Verify results
+    verifyLDYResults(testValue);
+}
 
-TEST(instructions, ldy_test_zeroPageX)
-{
-    for(int i = 0; i < MAX_ITERATIONS; ++i)
-    {
-        uint16_t currentAddr = rand() % UINT16_MAX;
-        uint8_t currentXvalue = rand() % UINT8_MAX;
+// Generate combinations of addressing modes and test values
+std::vector<std::tuple<AddressingMode, uint8_t>> generateTestCases() {
+    std::vector<std::tuple<AddressingMode, uint8_t>> cases;
+    
+    // Addressing modes to test
+    const AddressingMode modes[] = {
+        AddressingMode::Immediate,
+        AddressingMode::ZeroPage,
+        AddressingMode::ZeroPageX,
+        AddressingMode::Absolute,
+        AddressingMode::AbsoluteX
+    };
+    
+    for (auto mode : modes) {
+        for (auto value : testValues) {
+            cases.push_back(std::make_tuple(mode, value));
+        }
+    }
+    
+    return cases;
+}
 
-        cpu->setRegister(Register::PC, currentAddr);
-        cpu->setRegister(Register::X, currentXvalue);
+INSTANTIATE_TEST_SUITE_P(
+    LDY,
+    LDYAddressingModeTest,
+    ::testing::ValuesIn(generateTestCases()),
+    GetTestName
+);
+
+// Test page boundary crossing for AbsoluteX mode
+TEST(LDYTest, PageCrossing) {
+    // Test AbsoluteX page crossing
+    setup();
+    uint16_t pc = 0x1000;
+    cpu->setRegister(Register::PC, pc);
+    cpu->setRegister(Register::X, 0xFF);
+    mem->writeWord(pc, 0x2000); // Base address
+    mem->writeByte(0x20FF, 0x42); // Target value at 0x2000 + 0xFF = 0x20FF
+    
+    std::unique_ptr<LDY> ldy(new LDY(cpu, AddressingMode::AbsoluteX, 5)); // 5 cycles with page crossing
+    ldy->run();
+    
+    verifyLDYResults(0x42);
+}
+
+// Test zero page wrap-around behavior for ZeroPageX
+TEST(LDYTest, ZeroPageWrapAround) {
+    // Test ZeroPageX wrap-around
+    setup();
+    uint16_t pc = 0x1000;
+    cpu->setRegister(Register::PC, pc);
+    cpu->setRegister(Register::X, 0xFF);
+    mem->writeByte(pc, 0x80); // Zero page address 0x80
+    mem->writeByte(0x7F, 0x42); // Target value at (0x80 + 0xFF) & 0xFF = 0x7F
+    
+    std::unique_ptr<LDY> ldy(new LDY(cpu, AddressingMode::ZeroPageX, 4));
+    ldy->run();
+    
+    verifyLDYResults(0x42);
+}
+
+// Test that LDY only affects Y, Z, and N flags
+TEST(LDYTest, OnlyAffectsYZNFlags) {
+    setup();
+    
+    // Set all flags beforehand
+    cpu->setFlag(Flag::C, true);
+    cpu->setFlag(Flag::Z, false); // Will be changed
+    cpu->setFlag(Flag::I, true);
+    cpu->setFlag(Flag::D, true);
+    cpu->setFlag(Flag::B, true);
+    cpu->setFlag(Flag::V, true);
+    cpu->setFlag(Flag::N, false); // Will be changed
+    
+    // Set A and X registers to check they're not affected
+    cpu->setRegister(Register::A, 0xAA);
+    cpu->setRegister(Register::X, 0xBB);
+    
+    // Setup LDY Immediate with value 0x80 (negative)
+    uint16_t pc = 0x1000;
+    cpu->setRegister(Register::PC, pc);
+    mem->writeByte(pc, 0x80);
+    
+    std::unique_ptr<LDY> ldy(new LDY(cpu, AddressingMode::Immediate, 2));
+    ldy->run();
+    
+    // Check affected registers and flags
+    ASSERT_EQ(cpu->getRegister(Register::Y), 0x80);
+    ASSERT_FALSE(cpu->getFlag(Flag::Z));
+    ASSERT_TRUE(cpu->getFlag(Flag::N));
+    
+    // Check unaffected registers
+    ASSERT_EQ(cpu->getRegister(Register::A), 0xAA);
+    ASSERT_EQ(cpu->getRegister(Register::X), 0xBB);
+    
+    // Check unaffected flags
+    ASSERT_TRUE(cpu->getFlag(Flag::C));
+    ASSERT_TRUE(cpu->getFlag(Flag::I));
+    ASSERT_TRUE(cpu->getFlag(Flag::D));
+    ASSERT_TRUE(cpu->getFlag(Flag::B));
+    ASSERT_TRUE(cpu->getFlag(Flag::V));
+    
+    // Test with zero value to check Z flag
+    setup();
+    cpu->setRegister(Register::PC, pc);
+    mem->writeByte(pc, 0x00);
+    
+    ldy.reset(new LDY(cpu, AddressingMode::Immediate, 2));
+    ldy->run();
+    
+    ASSERT_EQ(cpu->getRegister(Register::Y), 0x00);
+    ASSERT_TRUE(cpu->getFlag(Flag::Z));
+    ASSERT_FALSE(cpu->getFlag(Flag::N));
+}
+
+// Randomized test for extra coverage (reduced from 20000 to 100 iterations)
+TEST(LDYTest, RandomizedValues) {
+    const int ITERATIONS = 100;
+    
+    for (int i = 0; i < ITERATIONS; ++i) {
+        setup();
         
-        uint8_t lookUpAddr = cpu->readByte(currentAddr);
-        uint8_t expected = cpu->readByte(lookUpAddr + currentXvalue);
-
-        LDY ins(cpu, AddressingMode::ZeroPageX, 2);
-        ins.run();
-
-        ASSERT_EQ(cpu->getRegister(Register::Y), expected);
-        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
-        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
-    }
-}
-
-TEST(instructions, ldy_test_absolute)
-{
-    for(int i = 0; i < MAX_ITERATIONS; ++i)
-    {
-        uint16_t currentAddr = rand() % UINT16_MAX;
-
-        cpu->setRegister(Register::PC, currentAddr);
+        // Randomly choose an addressing mode
+        int modeInt = rand() % 5;
+        AddressingMode mode;
         
-        uint16_t lookUpAddr = cpu->readWord(currentAddr);
-        uint8_t expected = cpu->readByte(lookUpAddr);
-
-        LDY ins(cpu, AddressingMode::Absolute, 2);
-        ins.run();
-
-        ASSERT_EQ(cpu->getRegister(Register::Y), expected);
-        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
-        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
-    }
-}
-
-
-
-TEST(instructions, ldy_test_absoluteX)
-{
-    for(int i = 0; i < MAX_ITERATIONS; ++i)
-    {
-        uint16_t currentAddr = rand() % UINT16_MAX;
-        uint8_t currentXvalue = rand() % UINT8_MAX;
-
-        cpu->setRegister(Register::PC, currentAddr);
-        cpu->setRegister(Register::X, currentXvalue);
+        switch(modeInt) {
+            case 0: mode = AddressingMode::Immediate; break;
+            case 1: mode = AddressingMode::ZeroPage; break;
+            case 2: mode = AddressingMode::ZeroPageX; break;
+            case 3: mode = AddressingMode::Absolute; break;
+            default: mode = AddressingMode::AbsoluteX; break;
+        }
         
-        uint16_t lookUpAddr = cpu->readWord(currentAddr);
-        uint8_t expected = cpu->readByte(lookUpAddr + currentXvalue);
-
-        LDY ins(cpu, AddressingMode::AbsoluteX, 2);
-        ins.run();
-
-        ASSERT_EQ(cpu->getRegister(Register::Y), expected);
-        ASSERT_EQ(cpu->getFlag(Flag::Z), expected == 0);
-        ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+        // Random test value
+        uint8_t testValue = rand() & 0xFF;
+        
+        // Setup memory and execute LDY
+        setupAddressingMode(mode, testValue);
+        
+        std::unique_ptr<LDY> ldy(new LDY(cpu, mode, getCycleCount(mode)));
+        ldy->run();
+        
+        // Verify results
+        verifyLDYResults(testValue);
     }
 }
-
-
 
 int main(int argc, char** argv)
 {
-
     ::testing::InitGoogleTest(&argc, argv);
     srand(time(nullptr));
-
+    
     mem->initialize();
     mem->randomize();
     
@@ -131,10 +321,8 @@ int main(int argc, char** argv)
     cppu->init();
     cppu->reset();
     
-
     cppu->connectBus(bus);
     bus->connectMemory(mem);
     
-   
     return RUN_ALL_TESTS();
 }

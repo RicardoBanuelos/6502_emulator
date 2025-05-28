@@ -99,11 +99,9 @@ void CPU::pushWord(uint16_t data)
 
 uint16_t CPU::popWord()
 {
-    uint16_t data = 0;
-    uint8_t lo = popByte();
-    uint8_t hi = popByte();
-
-    return lo | (hi << 8 & 0xFF00);
+    uint16_t low = popByte();
+    uint16_t high = popByte();
+    return (high << 8) | low;
 }
 
 uint8_t CPU::readByte(uint16_t address)

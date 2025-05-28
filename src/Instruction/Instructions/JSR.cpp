@@ -2,7 +2,7 @@
 
 
 
-JSR::JSR(std::shared_ptr<ICPU> icpu)
+JSR::JSR(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycleCount)
     :   Instruction("JSR", icpu, AddressingMode::Absolute, 6)
 {
 }
