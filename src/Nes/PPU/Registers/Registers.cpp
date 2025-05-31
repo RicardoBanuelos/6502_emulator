@@ -1,6 +1,7 @@
 #include "Registers.h"
 #include <iostream>
 
+
 PPURegisters::PPURegisters()
     : reg(REGISTERS_SIZE, 0)
 {
@@ -8,26 +9,12 @@ PPURegisters::PPURegisters()
 
 PPURegisters::~PPURegisters() = default;
 
-uint8_t PPURegisters::read(RegistersIndex regIndex) const
+uint8_t PPURegisters::read(uint16_t addr) const
 {
-    if(regIndex >= REGISTERS_SIZE)
-    {
-        std::cerr << "Error: Invalid register index " << static_cast<int>(regIndex) << std::endl;
-        throw std::out_of_range("Invalid register index");
-    }
-    return reg[regIndex];
+    return reg[addr & REGISTERS_MASK];
 }
 
-void PPURegisters::write(RegistersIndex regIndex, uint8_t value)
+void PPURegisters::write(uint16_t addr, uint8_t data)
 {
-    if(regIndex >= REGISTERS_SIZE)
-    {
-        std::cerr << "Error: Invalid register index " << static_cast<int>(regIndex) << std::endl;
-        throw std::out_of_range("Invalid register index");
-    }
-    
-    reg[regIndex] = value;
+    reg[addr & REGISTERS_MASK] = data;
 }
-
-
-

@@ -16,14 +16,16 @@ public:
         PPUSCROLL = 0x05,
         PPUADDR = 0x06,
         PPUDATA = 0x07,
-        REGISTERS_SIZE
+        REGISTERS_SIZE = 8,
+        REGISTERS_MASK = 0x07
     };
     PPURegisters();
     ~PPURegisters();
 
-    uint8_t read(RegistersIndex regIndex) const;
-    void write(RegistersIndex regIndex, uint8_t value);
+    uint8_t read(uint16_t addr) const;
+    void write(uint16_t addr, uint8_t data);
 
 private:
+
     std::vector<uint8_t> reg;
 };
