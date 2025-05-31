@@ -1,1 +1,2 @@
-add_subdirectory(Bus)
+add_subdirectory(PPU)
+add_subdirectory(RAM)

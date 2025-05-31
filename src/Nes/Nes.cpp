@@ -33,4 +33,12 @@ Nes::~Nes()
     {
         return mBus->readByte(address);
     }
+    void Nes::writeWord(uint32_t address, uint8_t data)
+    {
+        mBus->writeWord(address, data);
+    }
+    uint16_t Nes::readWord(uint32_t address) const
+    {
+        return mBus->readWord(address);
+    }
 #endif

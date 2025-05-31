@@ -11,6 +11,7 @@ option(ENABLE_TESTING "Enable testing" ON)
 option(CREATE_EXECUTABLE "Create the executable" OFF)
 
 include(CPM)
+include(AddTest)
 
 
 if(CREATE_EXECUTABLE)

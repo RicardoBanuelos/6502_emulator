@@ -75,6 +75,17 @@ void NesBus::writeByte(uint32_t address, uint8_t data)
 
 uint16_t NesBus::readWord(uint32_t address)
 {
+    // Handle edge cases when reading across memory region boundaries
+    // For example, reading a word at 0x07FF would cross from RAM into PPU registers
+    if (address == RAM_LAST_MIRRORED_ADDRESS) {
+        uint8_t low = readByte(address);
+        address = mapAddress(address + 1); // Move to next address for high byte
+        uint8_t high = readByte(address); // This will be in PPU register space
+        return (static_cast<uint16_t>(high) << 8) | low;
+        // uint8_t high = readByte(address + 1); // This will be in PPU register space
+        // return (static_cast<uint16_t>(high) << 8) | low;
+    }
+
     address = mapAddress(address);
 
     if (address <= RAM_LAST_MIRRORED_ADDRESS)
@@ -102,6 +113,16 @@ uint16_t NesBus::readWord(uint32_t address)
 
 void NesBus::writeWord(uint32_t address, uint16_t data)
 {
+
+    // Handle edge cases when writing across memory region boundaries
+    // For example, writing a word at 0x07FF would cross from RAM into PPU registers
+    if (address == RAM_LAST_MIRRORED_ADDRESS) {
+        writeByte(address, static_cast<uint8_t>(data & 0xFF)); // Low byte
+        address = mapAddress(address + 1); // Move to next address for high byte
+        writeByte(address, static_cast<uint8_t>((data >> 8) & 0xFF)); // High byte
+        return;
+    }
+
     address = mapAddress(address);
 
     if (address <= RAM_LAST_MIRRORED_ADDRESS)

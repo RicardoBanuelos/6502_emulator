@@ -19,8 +19,9 @@ target_link_libraries(GTest::GTest INTERFACE gtest_main)
 include(GoogleTest)
 
 # No conditionals for simplicity - just include all test directories
-# add_subdirectory(CPU)
+add_subdirectory(CPU)
 add_subdirectory(Instructions)
-# add_subdirectory(Memory)
-# add_subdirectory(Nes)
-# add_subdirectory(Programs)
+add_subdirectory(Memory)
+add_subdirectory(Nes)
+add_subdirectory(Programs)
+add_subdirectory(InstructionsCombined)

@@ -2,7 +2,6 @@
 #include <iostream>
 PPU::PPU()
 {
-
 }
 
 PPU::~PPU()
@@ -11,7 +10,7 @@ PPU::~PPU()
 
 void PPU::writeRegister(uint32_t addr, uint8_t data)
 {
-    if(!isValidAddr(addr))
+    if (!isValidAddr(addr))
     {
         throw std::out_of_range("Address out of PPU register range");
     }
@@ -22,7 +21,7 @@ void PPU::writeRegister(uint32_t addr, uint8_t data)
 
 uint8_t PPU::readRegister(uint32_t addr) const
 {
-    if(!isValidAddr(addr))
+    if (!isValidAddr(addr))
     {
         throw std::out_of_range("Address out of PPU register range");
     }

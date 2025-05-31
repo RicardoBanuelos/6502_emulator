@@ -27,23 +27,28 @@ public:
 
     AddressingData addressing(AddressingMode mode) const override;
     const Instruction* getInstruction(OpCode opcode) const;
+    Instruction *fetchInstruction();
+    
     uint8_t fetchByte() override;
     uint16_t fetchWord() override;
-    Instruction *fetchInstruction();
+    
+    void pushByte(uint8_t data);
+    uint8_t popByte();
+    
+    void pushWord(uint16_t data);
+    uint16_t popWord();
+    
+    void writeByte(uint16_t address, uint8_t byte) override;
+    void writeWord(uint16_t address, uint16_t word) override;
+    
+    uint8_t readByte(uint16_t address) override;
+    uint16_t readWord(uint16_t address) override;
+
+
 private:
     void initInstructions();
 
     
-    void writeByte(uint16_t address, uint8_t byte) override;
-    void writeWord(uint16_t address, uint16_t word) override;
-
-    void pushByte(uint8_t data);
-    uint8_t popByte();
-    void pushWord(uint16_t data);
-    uint16_t popWord();
-
-    uint8_t readByte(uint16_t address) override;
-    uint16_t readWord(uint16_t address) override;
 
 
     Registers mRegisters;
