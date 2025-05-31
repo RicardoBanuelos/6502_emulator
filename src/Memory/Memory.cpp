@@ -28,20 +28,19 @@ void Memory::randomize()
 
 uint8_t Memory::readByte(uint32_t address) const
 {
-    if(!validateAddress(address)) 
-        return 0;
-
+    address = wrapAddress(address);
     return mData[address];
 }
 
 uint16_t Memory::readWord(uint32_t address) const
 {
-    if(!validateAddress(address + 1)) 
-        return 0;
+    uint16_t lowAddr = wrapAddress(address);
+    uint16_t highAddr = wrapAddress(address + 1);
+
 
     uint16_t tmp;
-    uint8_t low = mData[address];
-    uint8_t high = mData[address + 1];
+    uint8_t low = mData[lowAddr];
+    uint8_t high = mData[highAddr];
 
     tmp = high;
     tmp <<= 8;
@@ -52,25 +51,23 @@ uint16_t Memory::readWord(uint32_t address) const
 
 void Memory::writeByte(uint32_t address, uint8_t byte)
 {
-    if(!validateAddress(address)) 
-        return;
-
+    address = wrapAddress(address);
     mData[address] = byte;
 }
 
 void Memory::writeWord(uint32_t address, uint16_t word)
 {
-    if(!validateAddress(address + 1)) 
-        return;
+    uint16_t lowByteAddr = wrapAddress(address);
+    uint16_t highByteAddr = wrapAddress(address + 1);
 
-    mData[address] = word & 0x00FF;
-    mData[address + 1] = (word >> 8);
+    mData[lowByteAddr] = word & 0x00FF;
+    mData[highByteAddr] = (word >> 8);
 }
 
 void Memory::dumpMemory(uint32_t startAddress, uint32_t endAddress) const
 {
-    if(!validateAddress(startAddress) || !validateAddress(endAddress)) 
-        return;
+    startAddress = wrapAddress(startAddress);
+    endAddress = wrapAddress(endAddress);
 
     const int BYTES_PER_ROW = 16;
     const int NUM_ROWS = (endAddress - startAddress + BYTES_PER_ROW) / BYTES_PER_ROW;
@@ -100,7 +97,8 @@ void Memory::dumpMemory(uint32_t startAddress, uint32_t endAddress) const
         std::string asciiRow;
         for (int i = 0; i < BYTES_PER_ROW; i++) {
             uint32_t addr = rowAddr + i;
-            if (addr <= endAddress && validateAddress(addr)) {
+            addr = wrapAddress(addr);
+            if (addr <= endAddress) {
                 uint8_t value = mData[addr];
                 std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(value) << " ";
                 
@@ -131,22 +129,27 @@ bool Memory::loadBinary(const std::string &path, uint16_t startAddress)
 {
     std::ifstream binaryFile(path, std::ios::in | std::ios::binary);
     if(!binaryFile.is_open())
-    {
-        
         return false;
-    }
 
-
+    startAddress = wrapAddress(startAddress); // Ensure start address is valid
+    
     char buffer;
+    uint16_t currentAddr = startAddress;
     while(binaryFile.read(&buffer, sizeof(char)))
     {
-        mData[startAddress++] = static_cast<uint8_t>(buffer);
+        mData[currentAddr] = static_cast<uint8_t>(buffer);
+        currentAddr = wrapAddress(currentAddr + 1); // Wrap around if needed
+        
+        // Optional: detect if we've wrapped back to the start address
+        if(currentAddr == startAddress) {
+            break; // We've filled the entire memory
+        }
     }
 
     return true;
 }
 
-bool Memory::validateAddress(uint32_t address) const
+uint16_t Memory::wrapAddress(uint32_t address) const
 {
-    return address >= 0 && address < MAX_MEMORY;
+    return address % MAX_MEMORY;
 }

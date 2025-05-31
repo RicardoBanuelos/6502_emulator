@@ -338,61 +338,242 @@ TEST_F(RAMAccessTest, OutOfBoundsAccess) {
         << "Reading from outside RAM returned RAM contents";
 }
 
-TEST_F(RAMAccessTest, WordAccessAcrossMirrors) {
-    // Test word (16-bit) access across mirrors
-    for (uint16_t offset = 0; offset < RAM_SIZE - 1; offset += 64) {
-        SCOPED_TRACE("Testing word access at offset $" + std::to_string(offset));
-        
-        uint16_t testWord = (dist(rng) << 8) | dist(rng);
-        
-        
-        // Write a word to base RAM
-        nes->writeWord(RAM_BASE + offset, testWord);
-        
-        // Read the word from each mirror
-        EXPECT_EQ(nes->readWord(MIRROR1_BASE + offset), testWord)
-            << "Word read from first mirror failed";
-            
-        EXPECT_EQ(nes->readWord(MIRROR2_BASE + offset), testWord)
-            << "Word read from second mirror failed";
-            
-        EXPECT_EQ(nes->readWord(MIRROR3_BASE + offset), testWord)
-            << "Word read from third mirror failed";
-            
-        // Write a word to a mirror and read from base
-        uint16_t testWord2 = (dist(rng) << 8) | dist(rng);
-        nes->writeWord(MIRROR2_BASE + offset, testWord2);
-        
-        EXPECT_EQ(nes->readWord(RAM_BASE + offset), testWord2)
-            << "Word write to mirror not reflected in base RAM";
+// Add these tests after your existing test cases
+
+TEST_F(RAMAccessTest, WordOperationsAcrossMirrors) {
+    // Test word operations across mirrored regions
+    uint16_t testWord = 0xABCD;
+    
+    // Write to base RAM
+    nes->writeWord(RAM_BASE, testWord);
+    
+    // Verify in mirrors
+    EXPECT_EQ(nes->readWord(MIRROR1_BASE), testWord);
+    EXPECT_EQ(nes->readWord(MIRROR2_BASE), testWord);
+    EXPECT_EQ(nes->readWord(MIRROR3_BASE), testWord);
+    
+    // Write to a mirror
+    testWord = 0xDEAD;
+    nes->writeWord(MIRROR2_BASE + 0x100, testWord);
+    
+    // Verify in other regions
+    EXPECT_EQ(nes->readWord(RAM_BASE + 0x100), testWord);
+    EXPECT_EQ(nes->readWord(MIRROR1_BASE + 0x100), testWord);
+    EXPECT_EQ(nes->readWord(MIRROR3_BASE + 0x100), testWord);
+}
+
+TEST_F(RAMAccessTest, CrossMirrorBoundary) {
+    // Test reading/writing words across mirror boundaries
+    uint16_t boundaryAddress = MIRROR1_BASE - 1;  // 0x0FFF
+    uint16_t testWord = 0xCAFE;
+    
+    // Write word at boundary between mirrors
+    nes->writeWord(boundaryAddress, testWord);
+    
+    // Low byte should be at end of base RAM
+    EXPECT_EQ(nes->readByte(boundaryAddress), testWord & 0xFF);
+    
+    // High byte should be at start of next mirror
+    EXPECT_EQ(nes->readByte(MIRROR1_BASE), testWord >> 8);
+    
+    // Reading as word should work correctly
+    EXPECT_EQ(nes->readWord(boundaryAddress), testWord);
+    
+    // Do the same test at other mirror boundaries
+    testWord = 0xBEEF;
+    boundaryAddress = MIRROR2_BASE - 1;  // 0x17FF
+    nes->writeWord(boundaryAddress, testWord);
+    EXPECT_EQ(nes->readWord(boundaryAddress), testWord);
+    
+    testWord = 0xFACE;
+    boundaryAddress = MIRROR3_BASE - 1;  // 0x1FFF
+    nes->writeWord(boundaryAddress, testWord);
+    EXPECT_EQ(nes->readWord(boundaryAddress), testWord);
+}
+
+TEST_F(RAMAccessTest, ZeroPageAccess) {
+    // Test zero page access (important for many 6502 operations)
+    uint8_t zeroPageValues[256];
+    
+    // Fill zero page with incrementing values
+    for (int i = 0; i < 256; ++i) {
+        zeroPageValues[i] = i;
+        nes->writeByte(i, i);
+    }
+    
+    // Verify zero page
+    for (int i = 0; i < 256; ++i) {
+        EXPECT_EQ(nes->readByte(i), zeroPageValues[i]);
+    }
+    
+    // Verify zero page is mirrored properly
+    for (int i = 0; i < 256; ++i) {
+        EXPECT_EQ(nes->readByte(i + MIRROR1_BASE), zeroPageValues[i]);
+        EXPECT_EQ(nes->readByte(i + MIRROR2_BASE), zeroPageValues[i]);
+        EXPECT_EQ(nes->readByte(i + MIRROR3_BASE), zeroPageValues[i]);
     }
 }
 
-TEST_F(RAMAccessTest, CrossBoundaryWordAccess) {
-    // Test word access that crosses RAM mirror boundaries
+TEST_F(RAMAccessTest, StackPageAccess) {
+    // Test stack page (0x0100-0x01FF) - important for 6502 stack operations
+    uint8_t stackPageValues[256];
+    uint16_t stackBase = 0x0100;
     
-    // Test at end of base RAM into first mirror
-    uint16_t addr = RAM_END; // 0x07FF
-    uint16_t testWord = 0xABCD;
+    // Fill stack page
+    for (int i = 0; i < 256; ++i) {
+        stackPageValues[i] = 0xFF - i;  // Descending values
+        nes->writeByte(stackBase + i, stackPageValues[i]);
+    }
     
-    nes->writeWord(addr, testWord);
+    // Verify stack page
+    for (int i = 0; i < 256; ++i) {
+        EXPECT_EQ(nes->readByte(stackBase + i), stackPageValues[i]);
+    }
     
-    // Low byte should be at 0x07FF, high byte at 0x0800 (first mirror)
-    EXPECT_EQ(nes->readByte(addr), 0xCD) << "Low byte write failed";
-    EXPECT_EQ(nes->readByte(addr + 1), 0xAB) << "High byte write failed (crossed to mirror)";
+    // Verify stack page mirrors
+    for (int i = 0; i < 256; ++i) {
+        EXPECT_EQ(nes->readByte(stackBase + i + MIRROR1_BASE), stackPageValues[i]);
+        EXPECT_EQ(nes->readByte(stackBase + i + MIRROR2_BASE), stackPageValues[i]);
+        EXPECT_EQ(nes->readByte(stackBase + i + MIRROR3_BASE), stackPageValues[i]);
+    }
+}
+
+TEST_F(RAMAccessTest, RapidAlternatingAccess) {
+    // Test rapidly alternating between different mirrors
+    std::vector<uint16_t> addresses = {
+        RAM_BASE + 0x123,
+        MIRROR1_BASE + 0x123,
+        MIRROR2_BASE + 0x123,
+        MIRROR3_BASE + 0x123
+    };
     
-    // Reading the word should get both bytes
-    EXPECT_EQ(nes->readWord(addr), testWord) << "Word read across boundary failed";
+    // Rapidly write different values to the same location in different mirrors
+    for (int i = 0; i < 100; ++i) {
+        uint8_t testValue = i & 0xFF;
+        uint16_t addr = addresses[i % addresses.size()];
+        
+        nes->writeByte(addr, testValue);
+        
+        // All mirrors should reflect the latest write
+        for (uint16_t mirrorAddr : addresses) {
+            EXPECT_EQ(nes->readByte(mirrorAddr), testValue)
+                << "Mirror at " << std::hex << mirrorAddr 
+                << " not updated on iteration " << i;
+        }
+    }
+}
+
+TEST_F(RAMAccessTest, MemoryInitialization) {
+    // Test RAM initial state - should be all zeros after Nes construction
+    // First create a new instance to ensure we test initial state
+    auto freshNes = std::make_unique<Nes>();
     
-    // Same test at end of first mirror into second mirror
-    addr = MIRROR1_BASE + RAM_SIZE - 1; // 0x0FFF
-    testWord = 0x1234;
+    // Check RAM is initialized to zero (or some default pattern)
+    int nonZeroCount = 0;
+    for (uint16_t addr = RAM_BASE; addr <= RAM_LAST_ADDRESS; addr += 64) {
+        if (freshNes->readByte(addr) != 0) {
+            nonZeroCount++;
+        }
+    }
     
-    nes->writeWord(addr, testWord);
+    // RAM should be zeroed or follow a consistent pattern
+    EXPECT_TRUE(nonZeroCount == 0 || nonZeroCount == (RAM_LAST_ADDRESS - RAM_BASE + 1) / 64)
+        << "RAM initialization is inconsistent";
+}
+
+TEST_F(RAMAccessTest, RandomAccessPattern) {
+    // Test random access patterns across all mirrors
+    std::vector<uint16_t> testAddresses;
+    std::map<uint16_t, uint8_t> expectedValues;
     
-    EXPECT_EQ(nes->readByte(addr), 0x34) << "Low byte write failed at mirror boundary";
-    EXPECT_EQ(nes->readByte(addr + 1), 0x12) << "High byte write failed (crossed mirrors)";
-    EXPECT_EQ(nes->readWord(addr), testWord) << "Word read across mirrors failed";
+    // Generate random addresses across all RAM mirrors
+    std::uniform_int_distribution<uint16_t> addrDist(RAM_BASE, RAM_LAST_ADDRESS);
+    for (int i = 0; i < 100; ++i) {
+        uint16_t addr = addrDist(rng);
+        uint8_t value = dist(rng);
+        testAddresses.push_back(addr);
+        
+        // Save expected value for the base address
+        uint16_t baseAddr = getBaseAddress(addr);
+        expectedValues[baseAddr] = value;
+        
+        // Write to the address
+        nes->writeByte(addr, value);
+    }
+    
+    // Verify all writes across all mirrors
+    for (uint16_t baseAddr = RAM_BASE; baseAddr <= RAM_END; ++baseAddr) {
+        if (expectedValues.find(baseAddr) != expectedValues.end()) {
+            uint8_t expected = expectedValues[baseAddr];
+            
+            // Check base address and all mirrors
+            EXPECT_EQ(nes->readByte(baseAddr), expected);
+            EXPECT_EQ(nes->readByte(baseAddr + 0x0800), expected);
+            EXPECT_EQ(nes->readByte(baseAddr + 0x1000), expected);
+            EXPECT_EQ(nes->readByte(baseAddr + 0x1800), expected);
+        }
+    }
+}
+
+TEST_F(RAMAccessTest, RAMBoundaryIsolation) {
+    // Ensure RAM is properly isolated from other memory regions
+    
+    // First fill RAM with a pattern
+    for (uint16_t addr = RAM_BASE; addr <= RAM_LAST_ADDRESS; ++addr) {
+        nes->writeByte(addr, 0xAA);
+    }
+    
+    // Now write different patterns to surrounding regions
+    for (uint16_t addr = RAM_LAST_ADDRESS + 1; addr < RAM_LAST_ADDRESS + 20; ++addr) {
+        nes->writeByte(addr, 0x55);  // PPU registers start here
+    }
+    
+    // Verify RAM boundary is respected
+    EXPECT_EQ(nes->readByte(RAM_LAST_ADDRESS), 0xAA);
+    EXPECT_NE(nes->readByte(RAM_LAST_ADDRESS + 1), 0xAA);
+    
+    // And verify writing beyond RAM doesn't affect RAM
+    nes->writeByte(RAM_LAST_ADDRESS + 1, 0x33);
+    EXPECT_EQ(nes->readByte(RAM_LAST_ADDRESS), 0xAA); // Last RAM address unchanged
+}
+
+TEST_F(RAMAccessTest, AddressingModesSimulation) {
+    // Test common 6502 addressing modes that interact with memory
+    
+    // Zero page
+    nes->writeByte(0x20, 0x40);      // Address to use is stored at 0x20
+    nes->writeByte(0x40, 0xCD);      // Value is stored at 0x40
+    
+    // Zero page, X
+    uint8_t x_reg = 0x05;
+    nes->writeByte(0x20 + x_reg, 0x50); // Address with X offset
+    nes->writeByte(0x50, 0xEF);      // Value
+    
+    
+    // Verify that "code" using these addressing modes would read correct values
+    uint8_t zp_value = nes->readByte(nes->readByte(0x20));
+    EXPECT_EQ(zp_value, 0xCD);
+    
+    uint8_t zpx_value = nes->readByte(nes->readByte(0x20 + x_reg));
+    EXPECT_EQ(zpx_value, 0xEF);
+    
+    // Absolute
+    nes->writeWord(0x100, 0x0400);    // Address to use is 0x0400
+    nes->writeByte(0x0400, 0xAB);    // Value
+    
+    // Indirect (JMP indirect simulation)
+    nes->writeWord(0x80, 0x0500);    // Address points to 0x0500
+    nes->writeWord(0x0500, 0xBEEF);  // Target address
+
+    uint8_t abs_value = nes->readByte(nes->readWord(0x100));
+    EXPECT_EQ(abs_value, 0xAB);
+    
+    uint16_t indirect_target = nes->readWord(nes->readWord(0x80));
+    EXPECT_EQ(indirect_target, 0xBEEF);
+    
+    // Verify these addresses are mirrored properly
+    EXPECT_EQ(nes->readByte(nes->readByte(0x20 + MIRROR1_BASE)), 0xCD);
+    EXPECT_EQ(nes->readByte(nes->readByte(0x20 + MIRROR2_BASE)), 0xCD);
 }
 
 int main(int argc, char** argv) {

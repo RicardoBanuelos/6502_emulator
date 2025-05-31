@@ -18,7 +18,7 @@ public:
     bool loadBinary(const std::string &path, uint16_t startAddress = 0);
     static const uint32_t MAX_MEMORY = 1024 * 64;
 private:
-    bool validateAddress(uint32_t address) const;
+    uint16_t wrapAddress(uint32_t address) const;
 
     uint8_t mData[MAX_MEMORY]={0};
 };
