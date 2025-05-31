@@ -33,5 +33,5 @@
 
 # temporaly folders
 build/
-/.vscode
+/.vscode/
 /tmp
