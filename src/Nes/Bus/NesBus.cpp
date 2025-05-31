@@ -20,7 +20,7 @@ NesBus::~NesBus()
 {
 }
 
-uint8_t NesBus::readByte(uint32_t address)
+uint8_t NesBus::readByte(uint16_t address)
 {
     address = mapAddress(address);
 
@@ -44,7 +44,7 @@ uint8_t NesBus::readByte(uint32_t address)
     return 0; // Placeholder for actual PRG-ROM read
 }
 
-void NesBus::writeByte(uint32_t address, uint8_t data)
+void NesBus::writeByte(uint16_t address, uint8_t data)
 {
     address = mapAddress(address);
 
@@ -73,7 +73,7 @@ void NesBus::writeByte(uint32_t address, uint8_t data)
 }
 
 
-uint16_t NesBus::readWord(uint32_t address) {
+uint16_t NesBus::readWord(uint16_t address) {
     // Standard 6502 behavior - if reading a word at 0xFFFF, it wraps around to 0x0000
     uint8_t low = readByte(address);
     uint8_t high = readByte((address + 1) & 0xFFFF); // Apply 16-bit wrap
@@ -81,7 +81,7 @@ uint16_t NesBus::readWord(uint32_t address) {
     return (static_cast<uint16_t>(high) << 8) | static_cast<uint16_t>(low);
 }
 
-void NesBus::writeWord(uint32_t address, uint16_t data)
+void NesBus::writeWord(uint16_t address, uint16_t data)
 {
     uint16_t low = data & 0x00FF;
     uint16_t high = (data >> 8) & 0x00FF;
@@ -90,7 +90,7 @@ void NesBus::writeWord(uint32_t address, uint16_t data)
 }
 
 
-uint32_t NesBus::mapAddress(uint32_t address) const
+uint16_t NesBus::mapAddress(uint16_t address) const
 {
     if (address <= RAM_LAST_ADDRESS)
     {

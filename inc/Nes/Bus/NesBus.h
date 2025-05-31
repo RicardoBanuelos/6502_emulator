@@ -24,15 +24,15 @@ public:
     ~NesBus();
 
 
-    uint8_t readByte(uint32_t address) override;
-    uint16_t readWord(uint32_t address) override;
-    void writeByte(uint32_t address, uint8_t data) override;
-    void writeWord(uint32_t address, uint16_t data) override;
+    uint8_t readByte(uint16_t address) override;
+    uint16_t readWord(uint16_t address) override;
+    void writeByte(uint16_t address, uint8_t data) override;
+    void writeWord(uint16_t address, uint16_t data) override;
     void connectPPU(std::shared_ptr<IPPU> ppu);
 private:
 
     std::shared_ptr<IPPU> mPPU;
-    uint32_t mapAddress(uint32_t address) const;
+    uint16_t mapAddress(uint16_t address) const;
 
     static const uint16_t RAM_LAST_ADDRESS = 0x1FFF;
     static const uint16_t PPU_LAST_ADDRESS = 0x3FFF;

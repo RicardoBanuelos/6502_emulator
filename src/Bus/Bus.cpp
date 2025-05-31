@@ -8,22 +8,22 @@ Bus::~Bus()
 {
 }
 
-uint8_t Bus::readByte(uint32_t address)
+uint8_t Bus::readByte(uint16_t address)
 {
     return mMemory->readByte(address);
 }
 
-uint16_t Bus::readWord(uint32_t address)
+uint16_t Bus::readWord(uint16_t address)
 {
     return mMemory->readWord(address);
 }
 
-void Bus::writeByte(uint32_t address, uint8_t data)
+void Bus::writeByte(uint16_t address, uint8_t data)
 {
     mMemory->writeByte(address, data);
 }
 
-void Bus::writeWord(uint32_t address, uint16_t data)
+void Bus::writeWord(uint16_t address, uint16_t data)
 {
     mMemory->writeWord(address, data);
 }
