@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/LDA.h"
+#include "LDA.h"
 
 LDA::LDA(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("LDA", icpu, addressingMode, cycles)

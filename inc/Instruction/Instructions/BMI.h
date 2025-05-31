@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Instruction.h"
+#include "Instructions.h"
 
 class BMI : public Instruction {
 public:

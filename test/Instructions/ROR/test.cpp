@@ -1,133 +1,352 @@
 #include <gtest/gtest.h>
-#include "Instruction/Instructions/ROR.h"
-#include "CPU/CPU.h"
-#include "Memory/Memory.h"
-#include "Bus/Bus.h"
+#include "ROR.h"
+#include "CPU.h"
+#include "Memory.h"
+#include "Bus.h"
+#include <vector>
+#include <tuple>
 
 static std::shared_ptr<ICPU> cpu(new CPU());
 static std::shared_ptr<Memory> mem(new Memory());
 static std::shared_ptr<Bus> bus(new Bus());
-static const int MAX_ITERATIONS = 1000;
 
-void ASSERT_ALL(uint16_t result, uint8_t expected)
+void setup()
 {
+    mem->initialize();
+    mem->randomize();
+    cpu->reset();
+    CPU *cppu = static_cast<CPU*>(cpu.get());
+    cppu->init();
+    cppu->connectBus(bus);
+    bus->connectMemory(mem);
+}
+
+void setA(uint8_t value) { cpu->setRegister(Register::A, value); }
+void setX(uint8_t value) { cpu->setRegister(Register::X, value); }
+void setY(uint8_t value) { cpu->setRegister(Register::Y, value); }
+void setC(bool value) { cpu->setFlag(Flag::C, value); }
+void setPC(uint16_t value) { cpu->setRegister(Register::PC, value); }
+
+// Test case parameters: input value, carry_in, expected_result, expected_C, expected_Z, expected_N
+using RORTestCase = std::tuple<uint8_t, bool, uint8_t, bool, bool, bool>;
+
+class RORTest : public ::testing::TestWithParam<std::tuple<AddressingMode, int>> {
+protected:
+    void SetUp() override {
+        setup();
+    }
+};
+
+void checkResults(uint8_t expected_result, bool expected_carry, bool expected_zero, bool expected_negative, uint8_t actual_result)
+{
+    // Check the result
+    ASSERT_EQ(actual_result, expected_result) << "Result value incorrect";
     
-    ASSERT_EQ(result & 0x00FF, expected);
-    ASSERT_EQ((result & 0x01) > 0, cpu->getFlag(Flag::C));
-    ASSERT_EQ((result & Flag::N) > 0, cpu->getFlag(Flag::N));
-    ASSERT_EQ((result & 0x00FF) == 0, cpu->getFlag(Flag::Z));
+    // Check flags
+    ASSERT_EQ(cpu->getFlag(Flag::C), expected_carry) << "Carry flag incorrect";
+    ASSERT_EQ(cpu->getFlag(Flag::Z), expected_zero) << "Zero flag incorrect";
+    ASSERT_EQ(cpu->getFlag(Flag::N), expected_negative) << "Negative flag incorrect";
 }
 
+// Comprehensive test data covering all flag combinations
+std::vector<RORTestCase> generateTestCases() {
+    std::vector<RORTestCase> cases;
+    
+    // Normal rotation without flags
+    cases.push_back(std::make_tuple(0x02, false, 0x01, false, false, false)); // 00000010 -> 00000001, C=0
+    
+    // Test with carry in
+    cases.push_back(std::make_tuple(0x02, true, 0x81, false, false, true));   // 00000010 + C -> 10000001, C=0, N=1
+    
+    // Carry out
+    cases.push_back(std::make_tuple(0x01, false, 0x00, true, true, false));   // 00000001 -> 00000000, C=1, Z=1
+    cases.push_back(std::make_tuple(0x01, true, 0x80, true, false, true));    // 00000001 + C -> 10000000, C=1, N=1
+    
+    // Zero result
+    cases.push_back(std::make_tuple(0x00, false, 0x00, false, true, false));  // 00000000 -> 00000000, Z=1
+    
+    // Negative result (with carry in)
+    cases.push_back(std::make_tuple(0x00, true, 0x80, false, false, true));   // 00000000 + C -> 10000000, N=1
+    
+    // All bits set
+    cases.push_back(std::make_tuple(0xFF, false, 0x7F, true, false, false));  // 11111111 -> 01111111, C=1
+    cases.push_back(std::make_tuple(0xFF, true, 0xFF, true, false, true));    // 11111111 + C -> 11111111, C=1, N=1
+    
+    // Alternating bits
+    cases.push_back(std::make_tuple(0x55, false, 0x2A, true, false, false));  // 01010101 -> 00101010, C=1
+    cases.push_back(std::make_tuple(0xAA, false, 0x55, false, false, false)); // 10101010 -> 01010101, C=0
+    
+    return cases;
+}
 
-TEST(instructions, ror_test_accumulator)
-{
-    for(int i = 0; i < MAX_ITERATIONS; ++i)
-    {
-        cpu->randomizeRegisters();
-        cpu->randomizeFlags();
-
-        
-        cpu->setFlag(Flag::C, rand() % 2);
-        uint16_t fetched = cpu->getRegister(Register::A);
-        uint16_t result = static_cast<uint16_t>(cpu->getFlag(Flag::C) << 7) | (fetched >> 1);
-
-        ROR ins(cpu, AddressingMode::Accumulator, 2);
-        ins.run();
-
-        ASSERT_ALL(result, cpu->getRegister(Register::A));
-        
-        
+// Helper to set up memory for different addressing modes
+void setupAddressing(AddressingMode mode, uint8_t operand) {
+    setPC(0x200);
+    
+    switch (mode) {
+        case AddressingMode::Accumulator:
+            setA(operand);
+            break;
+            
+        case AddressingMode::ZeroPage:
+            mem->writeByte(0x200, 0x42);
+            mem->writeByte(0x42, operand);
+            break;
+            
+        case AddressingMode::ZeroPageX:
+            setX(0x05);
+            mem->writeByte(0x200, 0x40);
+            mem->writeByte(0x45, operand);
+            break;
+            
+        case AddressingMode::Absolute:
+            mem->writeWord(0x200, 0x1234);
+            mem->writeByte(0x1234, operand);
+            break;
+            
+        case AddressingMode::AbsoluteX:
+            setX(0x01);
+            mem->writeWord(0x200, 0x1234);
+            mem->writeByte(0x1235, operand);
+            break;
     }
 }
 
-TEST(instructions, ror_test_zeroPage)
-{
-    for(int i = 0; i < MAX_ITERATIONS; ++i)
-    {
-        cpu->randomizeRegisters();
-        cpu->randomizeFlags();
-        uint16_t currentAddr = rand() % UINT16_MAX;
-        cpu->setRegister(Register::PC, currentAddr);
-
-        cpu->setFlag(Flag::C, rand() % 2);
-
-        uint8_t lookUpAddr = cpu->readByte(currentAddr);
-        uint16_t fetched = cpu->readByte(lookUpAddr);
-        uint16_t result = static_cast<uint16_t>(cpu->getFlag(Flag::C) << 7) | (fetched >> 1);
-
-        ROR ins(cpu, AddressingMode::ZeroPage, 2);
-        ins.run();
-
-
-        ASSERT_ALL(result, cpu->readByte(lookUpAddr));
+// Get cycle count for each addressing mode
+int getCycleCount(AddressingMode mode) {
+    switch (mode) {
+        case AddressingMode::Accumulator: return 2;
+        case AddressingMode::ZeroPage: return 5;
+        case AddressingMode::ZeroPageX: return 6;
+        case AddressingMode::Absolute: return 6;
+        case AddressingMode::AbsoluteX: return 7;
+        default: return 2;
     }
 }
 
-TEST(instructions, ror_test_zeroPageX)
-{
-    for(int i = 0; i < MAX_ITERATIONS; ++i)
-    {
-        cpu->randomizeRegisters();
-        cpu->randomizeFlags();
-        uint16_t currentAddr = rand() % UINT16_MAX;
-        cpu->setRegister(Register::PC, currentAddr);
-
-        uint8_t lookUpAddr = cpu->readByte(currentAddr);
-        uint16_t fetched = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X));
-        uint16_t result = static_cast<uint16_t>(cpu->getFlag(Flag::C) << 7) | (fetched >> 1);
-
-        ROR ins(cpu, AddressingMode::ZeroPageX, 2);
-        ins.run();
-
-        ASSERT_ALL(result, cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)));
+// Get result after ROR for different addressing modes
+uint8_t getResult(AddressingMode mode) {
+    switch (mode) {
+        case AddressingMode::Accumulator:
+            return cpu->getRegister(Register::A);
+            
+        case AddressingMode::ZeroPage:
+            return mem->readByte(0x42);
+            
+        case AddressingMode::ZeroPageX:
+            return mem->readByte(0x45);
+            
+        case AddressingMode::Absolute:
+            return mem->readByte(0x1234);
+            
+        case AddressingMode::AbsoluteX:
+            return mem->readByte(0x1235);
+            
+        default:
+            return 0;
     }
 }
 
-TEST(instructions, ror_test_absolute)
-{
-    for(int i = 0; i < MAX_ITERATIONS; ++i)
-    {
-        cpu->randomizeRegisters();
-        cpu->randomizeFlags();
-        uint16_t currentAddr = rand() % UINT16_MAX;
-        cpu->setRegister(Register::PC, currentAddr);
-
-        uint16_t lookUpAddr = cpu->readWord(currentAddr);
-        uint16_t fetched = cpu->readByte(lookUpAddr);
-
-        uint16_t result = static_cast<uint16_t>(cpu->getFlag(Flag::C) << 7) | (fetched >> 1);
-
-        ROR ins(cpu, AddressingMode::Absolute, 2);
-        ins.run();
-
-        ASSERT_ALL(result, cpu->readByte(lookUpAddr));  
+TEST_P(RORTest, ExhaustiveTest) {
+    auto [mode, testCaseIndex] = GetParam();
+    auto testCase = generateTestCases()[testCaseIndex];
+    
+    auto [value, carry_in, expected_result, expected_carry, expected_zero, expected_negative] = testCase;
+    
+    setup();
+    setC(carry_in);
+    setupAddressing(mode, value);
+    
+    std::unique_ptr<ROR> ror(new ROR(cpu, mode, getCycleCount(mode)));
+    ror->run();
+    
+    std::string modeName;
+    switch (mode) {
+        case AddressingMode::Accumulator: modeName = "Accumulator"; break;
+        case AddressingMode::ZeroPage: modeName = "ZeroPage"; break;
+        case AddressingMode::ZeroPageX: modeName = "ZeroPageX"; break;
+        case AddressingMode::Absolute: modeName = "Absolute"; break;
+        case AddressingMode::AbsoluteX: modeName = "AbsoluteX"; break;
+        default: modeName = "Unknown";
     }
+    
+    SCOPED_TRACE("Mode: " + modeName + 
+                 ", Value: 0x" + std::to_string(value) + 
+                 ", C in: " + std::to_string(carry_in));
+    
+    uint8_t result = getResult(mode);
+    checkResults(expected_result, expected_carry, expected_zero, expected_negative, result);
 }
 
-TEST(instructions, ror_test_absoluteX)
-{
-    for(int i = 0; i < MAX_ITERATIONS; ++i)
-    {
-        cpu->randomizeRegisters();
-        cpu->randomizeFlags();
-        uint16_t currentAddr = rand() % UINT16_MAX;
-        cpu->setRegister(Register::PC, currentAddr);
+// Generate combinations of addressing modes and test cases
+std::vector<AddressingMode> addressingModes = {
+    AddressingMode::Accumulator,
+    AddressingMode::ZeroPage,
+    AddressingMode::ZeroPageX,
+    AddressingMode::Absolute,
+    AddressingMode::AbsoluteX
+};
 
-        uint16_t lookUpAddr = cpu->readWord(currentAddr);
-        uint16_t fetched = cpu->readByte(lookUpAddr + cpu->getRegister(Register::X));
-
-        uint16_t result = static_cast<uint16_t>(cpu->getFlag(Flag::C) << 7) | (fetched >> 1);
-
-        ROR ins(cpu, AddressingMode::AbsoluteX, 2);
-        ins.run();
-
-        ASSERT_ALL(result, cpu->readByte(lookUpAddr + cpu->getRegister(Register::X)));  
+std::vector<std::tuple<AddressingMode, int>> GenerateTestParams() {
+    std::vector<std::tuple<AddressingMode, int>> params;
+    auto testCases = generateTestCases();
+    
+    for (auto mode : addressingModes) {
+        for (int i = 0; i < testCases.size(); ++i) {
+            params.push_back(std::make_tuple(mode, i));
+        }
     }
+    
+    return params;
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    ROR,
+    RORTest,
+    ::testing::ValuesIn(GenerateTestParams())
+);
+
+// Test zero page wrap-around behavior
+TEST(ROR, ZeroPageWrapAround) {
+    setup();
+    setX(0xFF);
+    setC(true);
+    setPC(0x200);
+    mem->writeByte(0x200, 0x80);  // 0x80 + 0xFF = 0x17F, but should wrap to 0x7F
+    mem->writeByte(0x7F, 0x01);   // Will rotate to 0x80 with carry in
+    
+    std::unique_ptr<ROR> ror(new ROR(cpu, AddressingMode::ZeroPageX, 6));
+    ror->run();
+    
+    ASSERT_EQ(mem->readByte(0x7F), 0x80);
+    ASSERT_EQ(cpu->getFlag(Flag::C), true);
+    ASSERT_EQ(cpu->getFlag(Flag::Z), false);
+    ASSERT_EQ(cpu->getFlag(Flag::N), true);
+}
+
+// Test carry flag behavior across multiple rotations
+TEST(ROR, MultiRotation) {
+    setup();
+    
+    // Start with 0x83 in accumulator (10000011)
+    setA(0x83);
+    setC(false);
+    
+    // First rotation: 10000011 -> 01000001, C=1
+    std::unique_ptr<ROR> ror1(new ROR(cpu, AddressingMode::Accumulator, 2));
+    ror1->run();
+    
+    ASSERT_EQ(cpu->getRegister(Register::A), 0x41);
+    ASSERT_EQ(cpu->getFlag(Flag::C), true);
+    
+    // Second rotation: 01000001 -> 10100000, C=1 (carry in from previous operation)
+    std::unique_ptr<ROR> ror2(new ROR(cpu, AddressingMode::Accumulator, 2));
+    ror2->run();
+    
+    ASSERT_EQ(cpu->getRegister(Register::A), 0xA0);
+    ASSERT_EQ(cpu->getFlag(Flag::C), true);
+    ASSERT_EQ(cpu->getFlag(Flag::N), true);
+}
+
+// Edge case: All zeros with carry in
+TEST(ROR, AllZerosWithCarry) {
+    setup();
+    setA(0x00);
+    setC(true);
+    
+    std::unique_ptr<ROR> ror(new ROR(cpu, AddressingMode::Accumulator, 2));
+    ror->run();
+    
+    ASSERT_EQ(cpu->getRegister(Register::A), 0x80);
+    ASSERT_EQ(cpu->getFlag(Flag::C), false);
+    ASSERT_EQ(cpu->getFlag(Flag::Z), false);
+    ASSERT_EQ(cpu->getFlag(Flag::N), true);
+}
+
+// Test ROR memory operations properly read-modify-write
+TEST(ROR, ReadModifyWrite) {
+    setup();
+    
+    // Setup memory with 0x10
+    setPC(0x200);
+    mem->writeWord(0x200, 0x1234);
+    mem->writeByte(0x1234, 0x10);
+    setC(true);
+    
+    // Execute ROR
+    std::unique_ptr<ROR> ror(new ROR(cpu, AddressingMode::Absolute, 6));
+    ror->run();
+    
+    // Check memory was updated correctly (0x10 -> 0x88 with carry in)
+    ASSERT_EQ(mem->readByte(0x1234), 0x88);
+    ASSERT_EQ(cpu->getFlag(Flag::C), false);
+    ASSERT_EQ(cpu->getFlag(Flag::N), true);
+}
+
+// Test the consistency of ROR operations with specific bit patterns
+TEST(ROR, BitPatternConsistency) {
+    setup();
+    
+    // Test with alternating bit pattern 10101010
+    setA(0xAA);
+    setC(false);
+    
+    std::unique_ptr<ROR> ror1(new ROR(cpu, AddressingMode::Accumulator, 2));
+    ror1->run();
+    
+    // Should result in 01010101
+    ASSERT_EQ(cpu->getRegister(Register::A), 0x55);
+    ASSERT_EQ(cpu->getFlag(Flag::C), false);
+    ASSERT_EQ(cpu->getFlag(Flag::N), false);
+    
+    // Reset and test the opposite pattern 01010101
+    setup();
+    setA(0x55);
+    setC(false);
+    
+    std::unique_ptr<ROR> ror2(new ROR(cpu, AddressingMode::Accumulator, 2));
+    ror2->run();
+    
+    // Should result in 00101010
+    ASSERT_EQ(cpu->getRegister(Register::A), 0x2A);
+    ASSERT_EQ(cpu->getFlag(Flag::C), true);
+    ASSERT_EQ(cpu->getFlag(Flag::N), false);
+}
+
+// Test ROR on the lowest bit scenarios
+TEST(ROR, LowestBitScenarios) {
+    setup();
+    
+    // Test with value where only the lowest bit is set: 00000001
+    setA(0x01);
+    setC(false);
+    
+    std::unique_ptr<ROR> ror1(new ROR(cpu, AddressingMode::Accumulator, 2));
+    ror1->run();
+    
+    // Should result in 00000000 and carry set
+    ASSERT_EQ(cpu->getRegister(Register::A), 0x00);
+    ASSERT_EQ(cpu->getFlag(Flag::C), true);
+    ASSERT_EQ(cpu->getFlag(Flag::Z), true);
+    ASSERT_EQ(cpu->getFlag(Flag::N), false);
+    
+    // Test with value where only the lowest bit is set but carry is set: 00000001
+    setup();
+    setA(0x01);
+    setC(true);
+    
+    std::unique_ptr<ROR> ror2(new ROR(cpu, AddressingMode::Accumulator, 2));
+    ror2->run();
+    
+    // Should result in 10000000 and carry set
+    ASSERT_EQ(cpu->getRegister(Register::A), 0x80);
+    ASSERT_EQ(cpu->getFlag(Flag::C), true);
+    ASSERT_EQ(cpu->getFlag(Flag::Z), false);
+    ASSERT_EQ(cpu->getFlag(Flag::N), true);
 }
 
 int main(int argc, char** argv)
 {
-
     ::testing::InitGoogleTest(&argc, argv);
     srand(time(nullptr));
 
@@ -138,7 +357,6 @@ int main(int argc, char** argv)
     cppu->init();
     cppu->reset();
     
-
     cppu->connectBus(bus);
     bus->connectMemory(mem);
 

@@ -1,4 +1,6 @@
-#include "Instruction/Instruction.h"
+#pragma once 
+
+#include "Instruction.h"
 
 class PHA : public Instruction
 {

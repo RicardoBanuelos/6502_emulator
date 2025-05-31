@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/BNE.h"
+#include "BNE.h"
 
 BNE::BNE(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("BNE", icpu, addressingMode, cycles)

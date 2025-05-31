@@ -1,9 +1,6 @@
-#include "CPU/CPU.h"
-#include "Instruction/Instructions/LDA.h"
-#include "Instruction/Instructions.h"
-
-#include <random>
 #include "CPU.h"
+#include "Instructions.h"
+#include <random>
 
 CPU::CPU()
 {
@@ -25,10 +22,11 @@ void CPU::reset()
     mRegisters.PC = 0xFFCC;
     mRegisters.SP = 0xFF;
     mRegisters.statusRegister.statusFlags.D = 0;
+    mRegisters.statusRegister.byte = 0;
+    mRegisters.statusRegister.statusFlags.I = 1; // Interrupts disabled on reset
     mRegisters.A = 0;
     mRegisters.X = 0;
     mRegisters.Y = 0;
-    mRegisters.statusRegister.byte = 0;
 }
 
 void CPU::randomizeRegisters()
@@ -101,11 +99,9 @@ void CPU::pushWord(uint16_t data)
 
 uint16_t CPU::popWord()
 {
-    uint16_t data = 0;
-    uint8_t lo = popByte();
-    uint8_t hi = popByte();
-
-    return lo | (hi << 8 & 0xFF00);
+    uint16_t low = popByte();
+    uint16_t high = popByte();
+    return (high << 8) | low;
 }
 
 uint8_t CPU::readByte(uint16_t address)

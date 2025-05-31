@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/BCC.h"
+#include "BCC.h"
 
 BCC::BCC(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("BCC", icpu, addressingMode, cycles)

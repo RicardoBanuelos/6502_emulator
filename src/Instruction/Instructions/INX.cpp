@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/INX.h"
+#include "INX.h"
 
 INX::INX(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("INX", icpu, addressingMode, cycles)

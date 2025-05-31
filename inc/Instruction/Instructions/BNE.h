@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Instruction.h"
+#include "Instruction.h"
 
 class BNE : public Instruction {
 public:

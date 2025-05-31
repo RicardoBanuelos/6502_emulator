@@ -1,19 +1,30 @@
-cmake_minimum_required(VERSION 3.5.0)
-project(6502Emulator VERSION 0.1.0 LANGUAGES C CXX)
+cmake_minimum_required(VERSION 3.28)
 
-#Enable Testing
-set(ENABLE_TESTING TRUE)
-set(TEST_CPU TRUE)
-set(TEST_MEMORY TRUE)
-set(TEST_INSTRUCTIONS TRUE)
-set(TEST_PROGRAMS TRUE)
+project(6502_emulator LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 
-include_directories(inc)
+option(ENABLE_TESTING "Enable testing" ON)
+option(CREATE_EXECUTABLE "Create the executable" OFF)
+
+include(CPM)
+include(AddTest)
+
+
+if(CREATE_EXECUTABLE)
+    add_subdirectory(app)
+endif()
+
+
 add_subdirectory(src)
 
+#Enable Testing
 if(ENABLE_TESTING)
+    message("Configuring tests...")
+    include(CTest)
     enable_testing()
     add_subdirectory(test)
 endif()
-

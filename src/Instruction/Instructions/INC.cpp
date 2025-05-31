@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/INC.h"
+#include "INC.h"
 
 INC::INC(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("INC", icpu, addressingMode, cycles)

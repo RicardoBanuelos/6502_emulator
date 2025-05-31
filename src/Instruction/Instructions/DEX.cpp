@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/DEX.h"
+#include "DEX.h"
 
 DEX::DEX(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("DEX", icpu, addressingMode, cycles)

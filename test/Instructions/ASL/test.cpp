@@ -1,122 +1,222 @@
 #include <gtest/gtest.h>
-#include "Instruction/Instructions/ASL.h"
-#include "CPU/CPU.h"
-#include "Memory/Memory.h"
-#include "Bus/Bus.h"
+#include "ASL.h"
+#include "CPU.h"
+#include "Memory.h"
+#include "Bus.h"
+#include <vector>
+#include <tuple>
 
 static std::shared_ptr<ICPU> cpu(new CPU());
 static std::shared_ptr<Memory> mem(new Memory());
 static std::shared_ptr<Bus> bus(new Bus());
 
-void ASSERT_ALL(uint16_t expected, uint8_t result)
+void setup()
 {
-    ASSERT_EQ(expected & 0x00FF, result);
-    ASSERT_EQ(cpu->getFlag(Flag::C), (expected & 0xFF00) > 0);
-    ASSERT_EQ(cpu->getFlag(Flag::Z), (expected & 0x00FF) == 0);
-    ASSERT_EQ(cpu->getFlag(Flag::N), (expected & Flag::N) > 0);
+    mem->initialize();
+    mem->randomize();
+    cpu->reset();
+    CPU *cppu = static_cast<CPU*>(cpu.get());
+    cppu->init();
+    cppu->connectBus(bus);
+    bus->connectMemory(mem);
 }
 
-TEST(instructions, asl_accumulator)
+void setA(uint8_t value) { cpu->setRegister(Register::A, value); }
+void setX(uint8_t value) { cpu->setRegister(Register::X, value); }
+void setY(uint8_t value) { cpu->setRegister(Register::Y, value); }
+void setPC(uint16_t value) { cpu->setRegister(Register::PC, value); }
+
+// Test case parameters: value, expected_result, expected_C, expected_Z, expected_N
+using ASLTestCase = std::tuple<uint8_t, uint8_t, bool, bool, bool>;
+
+class ASLTest : public ::testing::TestWithParam<std::tuple<AddressingMode, int>> {
+protected:
+    void SetUp() override {
+        setup();
+    }
+};
+
+void checkFlags(uint8_t result, uint8_t expected, bool carry, bool zero, bool negative)
 {
-    for(int i = 0; i < 1000; ++i)
-    {
-        cpu->reset();
-        cpu->randomizeRegisters();
-        uint16_t expected = cpu->getRegister(Register::A) << 1;    
+    ASSERT_EQ(result, expected);
+    ASSERT_EQ(cpu->getFlag(Flag::C), carry);
+    ASSERT_EQ(cpu->getFlag(Flag::Z), zero);
+    ASSERT_EQ(cpu->getFlag(Flag::N), negative);
+}
 
-        std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::Implied, 2));
-        instruction->run();
+// Generate comprehensive test cases
+std::vector<ASLTestCase> generateTestCases() {
+    std::vector<ASLTestCase> cases;
+    
+    // Basic shifts
+    cases.push_back(std::make_tuple(0x01, 0x02, false, false, false)); // Simple shift
+    cases.push_back(std::make_tuple(0x40, 0x80, false, false, true));  // Shift resulting in negative
+    cases.push_back(std::make_tuple(0x80, 0x00, true, true, false));   // Shift with carry out and zero result
+    cases.push_back(std::make_tuple(0x00, 0x00, false, true, false));  // Shift zero stays zero
+    
+    // Carry flag tests
+    cases.push_back(std::make_tuple(0x81, 0x02, true, false, false));  // Carry out with bit 7 set
+    cases.push_back(std::make_tuple(0xAA, 0x54, true, false, false));  // Carry from patterns
+    cases.push_back(std::make_tuple(0x7F, 0xFE, false, false, true));  // Shift with negative result
+    
+    // Flag combinations
+    cases.push_back(std::make_tuple(0xFF, 0xFE, true, false, true));   // Carry and negative
+    cases.push_back(std::make_tuple(0xC0, 0x80, true, false, true));   // Carry and negative
+    cases.push_back(std::make_tuple(0x40, 0x80, false, false, true));  // Just negative
+    
+    return cases;
+}
 
-        ASSERT_ALL(expected, cpu->getRegister(Register::A));
+// Helper to set up memory for different addressing modes
+void setupAddressing(AddressingMode mode, uint8_t value) {
+    setPC(0x200);
+    
+    switch (mode) {
+        case AddressingMode::Accumulator:
+        case AddressingMode::Implied:
+            setA(value);
+            break;
+            
+        case AddressingMode::ZeroPage:
+            mem->writeByte(0x200, 0x42);
+            mem->writeByte(0x42, value);
+            break;
+            
+        case AddressingMode::ZeroPageX:
+            setX(0x05);
+            mem->writeByte(0x200, 0x40);
+            mem->writeByte(0x45, value);
+            break;
+            
+        case AddressingMode::Absolute:
+            mem->writeWord(0x200, 0x1234);
+            mem->writeByte(0x1234, value);
+            break;
+            
+        case AddressingMode::AbsoluteX:
+            setX(0x01);
+            mem->writeWord(0x200, 0x1234);
+            mem->writeByte(0x1235, value);
+            break;
     }
 }
 
-TEST(instructions, asl_zero_page)
-{
-    for(int i = 0; i < 1000; ++i)
-    {
-        cpu->reset();
-        cpu->randomizeRegisters();
-        uint16_t address = cpu->getRegister(Register::PC);
-        uint16_t zeroPageAddress = cpu->readByte(address);
-
-        uint16_t expected = cpu->readByte(zeroPageAddress) << 1;
-
-        std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::ZeroPage, 5));
-        instruction->run();
-
-        ASSERT_ALL(expected,  cpu->readByte(zeroPageAddress));
+// Get result based on addressing mode
+uint8_t getResult(AddressingMode mode) {
+    switch (mode) {
+        case AddressingMode::Accumulator:
+        case AddressingMode::Implied:
+            return cpu->getRegister(Register::A);
+            
+        case AddressingMode::ZeroPage:
+            return mem->readByte(0x42);
+            
+        case AddressingMode::ZeroPageX:
+            return mem->readByte(0x45);
+            
+        case AddressingMode::Absolute:
+            return mem->readByte(0x1234);
+            
+        case AddressingMode::AbsoluteX:
+            return mem->readByte(0x1235);
+            
+        default:
+            return 0;
     }
 }
 
-TEST(instructions, asl_zero_page_x)
-{
-    for(int i = 0; i < 1000; ++i)
-    {
-        cpu->reset();
-        cpu->randomizeRegisters();
-        uint16_t address = cpu->getRegister(Register::PC);
-        uint16_t zeroPageAddress = cpu->readByte(address) 
-                                + cpu->getRegister(Register::X);
-
-        uint16_t expected = cpu->readByte(zeroPageAddress) << 1;
-
-        std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::ZeroPageX, 6));
-        instruction->run();
-
-        ASSERT_ALL(expected, cpu->readByte(zeroPageAddress));
+// Get cycle count for each addressing mode
+int getCycleCount(AddressingMode mode) {
+    switch (mode) {
+        case AddressingMode::Accumulator:
+        case AddressingMode::Implied: return 2;
+        case AddressingMode::ZeroPage: return 5;
+        case AddressingMode::ZeroPageX: return 6;
+        case AddressingMode::Absolute: return 6;
+        case AddressingMode::AbsoluteX: return 7;
+        default: return 2;
     }
 }
 
-TEST(instructions, asl_absolute)
-{
-    for(int i = 0; i < 1000; ++i)
-    {
-        cpu->reset();
-        cpu->randomizeRegisters();
-        uint16_t address = cpu->getRegister(Register::PC);
-        uint16_t absoluteAddress = cpu->readWord(address);
-
-        uint16_t expected = cpu->readByte(absoluteAddress) << 1;
-
-        std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::Absolute, 6));
-        instruction->run();
-
-        ASSERT_ALL(expected, cpu->readByte(absoluteAddress));   
+TEST_P(ASLTest, ExhaustiveTest) {
+    auto [mode, testCaseIndex] = GetParam();
+    auto testCase = generateTestCases()[testCaseIndex];
+    
+    auto [value, expected_result, expected_carry, expected_zero, expected_negative] = testCase;
+    
+    setup();
+    setupAddressing(mode, value);
+    
+    std::unique_ptr<ASL> asl(new ASL(cpu, mode, getCycleCount(mode)));
+    asl->run();
+    
+    std::string modeName;
+    switch (mode) {
+        case AddressingMode::Accumulator:
+        case AddressingMode::Implied: modeName = "Accumulator"; break;
+        case AddressingMode::ZeroPage: modeName = "ZeroPage"; break;
+        case AddressingMode::ZeroPageX: modeName = "ZeroPageX"; break;
+        case AddressingMode::Absolute: modeName = "Absolute"; break;
+        case AddressingMode::AbsoluteX: modeName = "AbsoluteX"; break;
+        default: modeName = "Unknown";
     }
+    
+    SCOPED_TRACE("Mode: " + modeName + 
+                 ", Value: " + std::to_string(value) + 
+                 ", Expected: " + std::to_string(expected_result));
+    
+    uint8_t result = getResult(mode);
+    checkFlags(result, expected_result, expected_carry, expected_zero, expected_negative);
 }
 
-TEST(instructions, asl_absolute_x)
-{
-    for(int i = 0; i < 1000; ++i)
-    {
-        cpu->reset();
-        cpu->randomizeRegisters();
-        uint16_t address = cpu->getRegister(Register::PC);
-        uint16_t absoluteAddress = cpu->readWord(address)
-                                + cpu->getRegister(Register::X);;
+// Generate combinations of addressing modes and test cases
+std::vector<AddressingMode> addressingModes = {
+    AddressingMode::Accumulator, // ASL uses Accumulator mode, not Implied
+    AddressingMode::ZeroPage,
+    AddressingMode::ZeroPageX,
+    AddressingMode::Absolute,
+    AddressingMode::AbsoluteX
+};
 
-        uint16_t expected = cpu->readByte(absoluteAddress) << 1;
-
-        std::unique_ptr<ASL> instruction(new ASL(cpu, AddressingMode::AbsoluteX, 7));
-        instruction->run();
-
-        ASSERT_ALL(expected, cpu->readByte(absoluteAddress));;   
+std::vector<std::tuple<AddressingMode, int>> GenerateTestParams() {
+    std::vector<std::tuple<AddressingMode, int>> params;
+    auto testCases = generateTestCases();
+    
+    for (auto mode : addressingModes) {
+        for (int i = 0; i < testCases.size(); ++i) {
+            params.push_back(std::make_tuple(mode, i));
+        }
     }
+    
+    return params;
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    ASL,
+    ASLTest,
+    ::testing::ValuesIn(GenerateTestParams())
+);
+
+// Test zero page wrap-around behavior
+TEST(ASL, ZeroPageWrapAround) {
+    setup();
+    setX(0xFF);
+    setPC(0x200);
+    mem->writeByte(0x200, 0x80);  // 0x80 + 0xFF = 0x17F, but should wrap to 0x7F
+    mem->writeByte(0x7F, 0x40);
+    
+    std::unique_ptr<ASL> asl(new ASL(cpu, AddressingMode::ZeroPageX, 6));
+    asl->run();
+    
+    ASSERT_EQ(mem->readByte(0x7F), 0x80);
+    ASSERT_EQ(cpu->getFlag(Flag::N), true);
+    ASSERT_EQ(cpu->getFlag(Flag::Z), false);
+    ASSERT_EQ(cpu->getFlag(Flag::C), false);
 }
 
 int main(int argc, char** argv)
 {
-
     ::testing::InitGoogleTest(&argc, argv);
-    mem->initialize();
-    mem->randomize();
-
-    CPU *cppu = static_cast<CPU*>(cpu.get());
-    cppu->init();
-
-    cppu->connectBus(bus);
-    bus->connectMemory(mem);
-   
+    srand(time(nullptr));
     return RUN_ALL_TESTS();
 }

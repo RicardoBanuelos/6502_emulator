@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/ORA.h"
+#include "ORA.h"
 
 
 

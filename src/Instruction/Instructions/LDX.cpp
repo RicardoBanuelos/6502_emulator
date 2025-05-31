@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/LDX.h"
+#include "LDX.h"
 
 
 LDX::LDX(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)

@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/LDY.h"
+#include "LDY.h"
 
 LDY::LDY(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("LDY", icpu, addressingMode, cycles)

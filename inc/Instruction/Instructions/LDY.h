@@ -1,6 +1,6 @@
 #pragma once 
 
-#include "Instruction/Instruction.h"
+#include "Instruction.h"
 
 class LDY : public Instruction
 {

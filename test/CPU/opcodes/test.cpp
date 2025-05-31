@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "CPU/CPU.h"
-#include "Instruction/Instructions.h"
+#include "CPU.h"
+#include "Instructions.h"
 
 static std::shared_ptr<CPU> cpu(new CPU());
 

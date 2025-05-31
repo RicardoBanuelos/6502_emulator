@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/RTI.h"
+#include "RTI.h"
 
 
 RTI::RTI(std::shared_ptr<ICPU> icpu)

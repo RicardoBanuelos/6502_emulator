@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/ASL.h"
+#include "ASL.h"
 
 ASL::ASL(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("ASL", icpu, addressingMode, cycles)
@@ -17,9 +17,9 @@ void ASL::run()
 
     mIcpu->setFlag(Flag::C, (result & 0xFF00) > 0);
     mIcpu->setFlag(Flag::Z, (result & 0x00FF) == 0);
-    mIcpu->setFlag(Flag::N, (result & Flag::N));
+    mIcpu->setFlag(Flag::N, (result & 0x0080));
 
-    if(mAddressingMode == AddressingMode::Implied)
+    if(mAddressingMode == AddressingMode::Accumulator)
     {
         mIcpu->setRegister(Register::A, result & 0x00FF);
     }

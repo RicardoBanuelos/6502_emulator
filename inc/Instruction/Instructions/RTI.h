@@ -1,6 +1,6 @@
-#pragma 
+#pragma once
 
-#include "Instruction/Instruction.h"
+#include "Instruction.h"
 
 class RTI : public Instruction
 {

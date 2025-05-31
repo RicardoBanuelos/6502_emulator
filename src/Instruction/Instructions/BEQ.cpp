@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/BEQ.h"
+#include "BEQ.h"
 
 BEQ::BEQ(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("BEQ", icpu, addressingMode, cycles)

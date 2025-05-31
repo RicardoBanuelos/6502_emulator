@@ -1,4 +1,4 @@
-#include "Instruction/Instructions/BPL.h"
+#include "BPL.h"
 
 BPL::BPL(std::shared_ptr<ICPU> icpu, AddressingMode addressingMode, uint8_t cycles)
     :   Instruction("BPL", icpu, addressingMode, cycles)

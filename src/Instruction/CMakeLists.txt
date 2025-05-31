@@ -1,6 +1,9 @@
-set(INTRUCTIONS_LIBRARY libInstructions CACHE INTERNAL "")
-include_directories(${PROJECT_SOURCE_DIR}/inc/Instruction/Instructions)
-add_library(${INTRUCTIONS_LIBRARY} 
+set(HEADERS_FOLDER  
+    ${CMAKE_SOURCE_DIR}/inc/Instruction
+    ${CMAKE_SOURCE_DIR}/inc/Instruction/Instructions
+)
+
+add_library(${INSTRUCTIONS_LIBRARY_NAME} 
     Instruction.cpp
     Instructions/ADC.cpp
     Instructions/AND.cpp
@@ -32,7 +35,6 @@ add_library(${INTRUCTIONS_LIBRARY}
     Instructions/JMP.cpp
     Instructions/JSR.cpp
     Instructions/LDA.cpp
-    Instructions/JSR.cpp
     Instructions/LDX.cpp
     Instructions/LDY.cpp
     Instructions/LSR.cpp
@@ -61,4 +63,12 @@ add_library(${INTRUCTIONS_LIBRARY}
     Instructions/TYA.cpp
 )
 
+target_include_directories(${INSTRUCTIONS_LIBRARY_NAME} 
+    PUBLIC
+    ${HEADERS_FOLDER}
+)
 
+target_link_libraries(${INSTRUCTIONS_LIBRARY_NAME} 
+    PUBLIC
+    ${ICPU_LIBRARY_NAME}
+)

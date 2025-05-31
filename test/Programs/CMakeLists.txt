@@ -1,1 +1,2 @@
 add_subdirectory(BasicPrograms)
+add_subdirectory(MathPrograms)

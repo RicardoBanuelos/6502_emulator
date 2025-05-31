@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../Instruction.h"
+#include "Instruction.h"
+
 
 class BCS : public Instruction {
 public:
