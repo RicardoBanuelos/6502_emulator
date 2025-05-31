@@ -219,43 +219,121 @@ TEST_F(JMPTest, JumpDoesNotAffectFlags) {
     ASSERT_FALSE(cpu->getFlag(Flag::N));
 }
 
-// Comprehensive randomized test
-TEST_F(JMPTest, RandomizedJumps) {
-    // Perform fewer random tests (100 instead of 1000)
-    for (int i = 0; i < 100; ++i) {
+// Test JMP Indirect with memory wrapping
+TEST_F(JMPTest, JumpIndirectWithMemoryWrapping) {
+    // Set initial PC
+    cpu->setRegister(Register::PC, 0x1000);
+    
+    // Test cases for memory wrapping
+    struct WrappingTestCase {
+        uint32_t pointerLocation;
+        uint16_t targetLowByte;
+        uint16_t targetHighByte;
+        uint16_t expectedPC;
+        std::string description;
+    };
+    
+    std::vector<WrappingTestCase> testCases = {
+        // Standard case - no wrapping
+        { 0x2000, 0x34, 0x12, 0x1234, "Standard pointer" },
+        
+        // Classic 6502 JMP indirect bug at page boundary
+        { 0x20FF, 0x34, 0x12, 0x1234, "Page boundary bug - high byte reads from same page" },
+        
+        // Test pointer at highest memory address
+        { 0xFFFF, 0x34, 0x12, 0x1234, "Pointer at 0xFFFF wraps to 0x0000 for high byte" },
+        
+        // Memory address wrapping (beyond 64K)
+        { 0x10000, 0x78, 0x56, 0x5678, "Pointer beyond 64K wraps to 0x0000" }
+    };
+    
+    for (const auto& tc : testCases) {
+        setup();
+        SCOPED_TRACE(tc.description);
+        
+        cpu->setRegister(Register::PC, 0x1000);
+        
+        // Write the pointer to where PC is pointing
+        mem->writeWord(0x1000, tc.pointerLocation);
+        
+        // Write the target bytes - taking into account the page boundary bug
+        mem->writeByte(tc.pointerLocation, tc.targetLowByte);
+        
+        if (tc.pointerLocation & 0xFF == 0xFF) {
+            // Handle page boundary bug - high byte reads from start of same page
+            mem->writeByte((tc.pointerLocation & 0xFF00), tc.targetHighByte);
+        } else {
+            // Normal case - high byte at next address
+            mem->writeByte(tc.pointerLocation + 1, tc.targetHighByte);
+        }
+        
+        // Execute JMP Indirect
+        std::unique_ptr<JMP> jmp(new JMP(cpu, AddressingMode::Indirect, 5));
+        jmp->run();
+        
+        // Verify PC
+        ASSERT_EQ(cpu->getRegister(Register::PC), tc.expectedPC)
+            << "PC incorrect after JMP Indirect with wrapping: expected=0x" 
+            << std::hex << tc.expectedPC;
+    }
+}
+
+// Test memory wrapping with randomized values
+TEST_F(JMPTest, RandomizedMemoryWrappingJumps) {
+    for (int i = 0; i < 50; ++i) {
         setup();
         
-        // Random PC value
-        uint16_t initialPC = rand() & 0xFFFC; // Ensure word-aligned for simplicity
-        cpu->setRegister(Register::PC, initialPC);
+        // Create a random address that will wrap
+        uint32_t overflowingAddress = rand() & 0x1FFFF; // 17-bit address (can go beyond 64K)
+        uint16_t wrappedAddress = overflowingAddress & 0xFFFF; // Apply wrap
         
-        // Random target address
-        uint16_t targetAddress = rand() & 0xFFFF;
-        mem->writeWord(initialPC, targetAddress);
+        uint16_t targetValue = rand() & 0xFFFF;
         
-        bool useIndirect = (rand() % 2) == 1;
+        // Set PC and write the overflowing address
+        cpu->setRegister(Register::PC, 0x1000);
+        mem->writeWord(0x1000, wrappedAddress);
         
-        if (useIndirect) {
-            // For indirect jumps, write the final target to the pointer location
-            uint16_t indirectPointer = targetAddress;
-            uint16_t finalTarget = rand() & 0xFFFF;
-            mem->writeWord(indirectPointer, finalTarget);
+        // For indirect mode, write target at the wrapped address
+        if (i % 2 == 0) { // Test indirect jumps
+            mem->writeWord(wrappedAddress, targetValue);
+            
+            // Account for page boundary bug
+            if ((wrappedAddress & 0xFF) == 0xFF) {
+                // Write low byte normally
+                mem->writeByte(wrappedAddress, targetValue & 0xFF);
+                
+                // Write high byte with page boundary bug
+                mem->writeByte((wrappedAddress & 0xFF00), targetValue >> 8);
+            }
             
             // Execute JMP Indirect
             std::unique_ptr<JMP> jmp(new JMP(cpu, AddressingMode::Indirect, 5));
             jmp->run();
             
-            // Verify PC
-            ASSERT_EQ(cpu->getRegister(Register::PC), finalTarget) 
-                << "PC incorrect after JMP Indirect: expected=0x" << std::hex << finalTarget;
-        } else {
+            // Verify PC reflects wrapping
+            if ((wrappedAddress & 0xFF) == 0xFF) {
+                // With page boundary bug
+                uint16_t lowByte = mem->readByte(wrappedAddress);
+                uint16_t highByte = mem->readByte(wrappedAddress & 0xFF00);
+                uint16_t expectedPC = (highByte << 8) | lowByte;
+                
+                ASSERT_EQ(cpu->getRegister(Register::PC), expectedPC)
+                    << "PC incorrect after JMP Indirect with page boundary: expected=0x"
+                    << std::hex << expectedPC;
+            } else {
+                ASSERT_EQ(cpu->getRegister(Register::PC), targetValue)
+                    << "PC incorrect after JMP Indirect with wrapping: expected=0x"
+                    << std::hex << targetValue;
+            }
+        } else { // Test absolute jumps with wrapped addresses
             // Execute JMP Absolute
             std::unique_ptr<JMP> jmp(new JMP(cpu, AddressingMode::Absolute, 3));
             jmp->run();
             
             // Verify PC
-            ASSERT_EQ(cpu->getRegister(Register::PC), targetAddress) 
-                << "PC incorrect after JMP Absolute: expected=0x" << std::hex << targetAddress;
+            ASSERT_EQ(cpu->getRegister(Register::PC), wrappedAddress)
+                << "PC incorrect after JMP Absolute with wrapping: expected=0x"
+                << std::hex << wrappedAddress;
         }
     }
 }

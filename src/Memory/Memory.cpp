@@ -34,13 +34,9 @@ uint8_t Memory::readByte(uint32_t address) const
 
 uint16_t Memory::readWord(uint32_t address) const
 {
-    uint16_t lowAddr = wrapAddress(address);
-    uint16_t highAddr = wrapAddress(address + 1);
-
-
     uint16_t tmp;
-    uint8_t low = mData[lowAddr];
-    uint8_t high = mData[highAddr];
+    uint8_t low = readByte(address);
+    uint8_t high = readByte(address + 1);
 
     tmp = high;
     tmp <<= 8;
@@ -60,8 +56,8 @@ void Memory::writeWord(uint32_t address, uint16_t word)
     uint16_t lowByteAddr = wrapAddress(address);
     uint16_t highByteAddr = wrapAddress(address + 1);
 
-    mData[lowByteAddr] = word & 0x00FF;
-    mData[highByteAddr] = (word >> 8);
+    writeByte(lowByteAddr, static_cast<uint8_t>(word & 0xFF)); // Low byte
+    writeByte(highByteAddr, static_cast<uint8_t>((word >> 8) & 0xFF)); // High byte
 }
 
 void Memory::dumpMemory(uint32_t startAddress, uint32_t endAddress) const
