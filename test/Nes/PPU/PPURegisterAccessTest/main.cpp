@@ -362,6 +362,74 @@ TEST_F(PPURegisterAccessTest, LatchingRegisterBehavior) {
     // and the data was written there
 }
 
+TEST_F(PPURegisterAccessTest, RandomizedMirroring) {
+    std::mt19937 rng(12345); // Fixed seed for reproducibility
+    std::uniform_int_distribution<uint16_t> addrDist(0x2000, 0x3FFF);
+    std::uniform_int_distribution<uint8_t> valDist(0, 0xFF);
+
+    // Write random values to random mirrored addresses
+    std::array<uint8_t, 8> shadow = {0};
+    for (int i = 0; i < 1000; ++i) {
+        uint16_t addr = addrDist(rng);
+        uint8_t value = valDist(rng);
+        nes->writeByte(addr, value);
+        shadow[addr & 0x7] = value;
+
+        // Check all mirrors for this register
+        for (uint16_t mirror = 0x2000 + (addr & 0x7); mirror <= 0x3FFF; mirror += 8) {
+            EXPECT_EQ(nes->readByte(mirror), value)
+                << "Random mirror failed at $" << std::hex << mirror;
+        }
+    }
+
+    // Final check: all base registers should match shadow
+    for (uint16_t i = 0; i < 8; ++i) {
+        EXPECT_EQ(nes->readByte(PPUCTRL + i), shadow[i])
+            << "Base register mismatch after random writes";
+    }
+}
+
+TEST_F(PPURegisterAccessTest, FullBlockWriteRead) {
+    // Write a unique value to each address in the first 8-byte block
+    for (uint16_t i = 0; i < 8; ++i) {
+        nes->writeByte(0x2000 + i, 0xA0 + i);
+    }
+
+    // Check all mirrors in the next block
+    for (uint16_t i = 0; i < 8; ++i) {
+        EXPECT_EQ(nes->readByte(0x2008 + i), 0xA0 + i)
+            << "Mirror in next block failed at $" << std::hex << (0x2008 + i);
+    }
+
+    // Check all mirrors in the last block
+    for (uint16_t i = 0; i < 8; ++i) {
+        EXPECT_EQ(nes->readByte(0x3FF8 + i), 0xA0 + i)
+            << "Mirror in last block failed at $" << std::hex << (0x3FF8 + i);
+    }
+}
+
+TEST_F(PPURegisterAccessTest, WriteAllMirrorsCheckBase) {
+    // For each register, write to every mirror and check base register
+    for (uint16_t reg = 0; reg < 8; ++reg) {
+        uint16_t baseAddr = PPUCTRL + reg;
+        for (uint16_t mirror = baseAddr; mirror <= 0x3FFF; mirror += 8) {
+            uint8_t value = (mirror & 0xFF);
+            nes->writeByte(mirror, value);
+            EXPECT_EQ(nes->readByte(baseAddr), value)
+                << "Base register not updated after write to mirror $" << std::hex << mirror;
+        }
+    }
+}
+
+TEST_F(PPURegisterAccessTest, AlternatingPatternStress) {
+    // Alternate writes between two patterns across all mirrors
+    for (uint16_t addr = 0x2000; addr <= 0x3FFF; ++addr) {
+        uint8_t pattern = (addr & 1) ? 0x55 : 0xAA;
+        nes->writeByte(addr, pattern);
+        EXPECT_EQ(nes->readByte(PPUCTRL + (addr & 0x7)), pattern)
+            << "Alternating pattern failed at $" << std::hex << addr;
+    }
+}
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

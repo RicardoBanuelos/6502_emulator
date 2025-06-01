@@ -1,4 +1,4 @@
-set(NES_BUS_TEST nes_bus_test)
+set(NES_BUS_TEST nes_ppu_registers_test)
 set(SOURCES main.cpp)
 set(LIBS ${NES_LIBRARY_NAME})
 

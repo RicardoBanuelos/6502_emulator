@@ -1,11 +1,13 @@
 #pragma once
 
-#include<stdint.h>
+#include <stdint.h>
 #include <string>
+#include <vector>
 
-class Memory {
+class Memory
+{
 public:
-    Memory();
+    Memory(const uint32_t maxMemory = 64 * 1024);
     ~Memory();
 
     void initialize();
@@ -16,9 +18,8 @@ public:
     void writeWord(uint32_t address, uint16_t word);
     void dumpMemory(uint32_t startAddress, uint32_t endAddress) const;
     bool loadBinary(const std::string &path, uint16_t startAddress = 0);
-    static const uint32_t MAX_MEMORY = 1024 * 64;
+    uint32_t getMaxMemory() const;
 private:
     uint16_t wrapAddress(uint32_t address) const;
-
-    uint8_t mData[MAX_MEMORY]={0};
+    std::vector<uint8_t> mData;
 };

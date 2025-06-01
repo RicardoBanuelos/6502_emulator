@@ -1,6 +1,5 @@
 add_subdirectory(Registers)
 
-
 message("Configuring Nes PPU library...")
 
 set(NES_PPU_LIB libnesppu CACHE INTERNAL "Library for nes PPU")

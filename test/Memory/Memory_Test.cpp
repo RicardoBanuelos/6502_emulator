@@ -17,14 +17,14 @@ protected:
 
 TEST_F(MemoryTest, WriteAndReadByte_FirstAndLast) {
     mem.writeByte(0, 0x11);
-    mem.writeByte(Memory::MAX_MEMORY - 1, 0x22);
+    mem.writeByte(mem.getMaxMemory() - 1, 0x22);
     EXPECT_EQ(mem.readByte(0), 0x11);
-    EXPECT_EQ(mem.readByte(Memory::MAX_MEMORY - 1), 0x22);
+    EXPECT_EQ(mem.readByte(mem.getMaxMemory() - 1), 0x22);
 }
 
 TEST_F(MemoryTest, WriteAndReadByte_OutOfBounds) {
-    mem.writeByte(Memory::MAX_MEMORY, 0x33); // Should wrap
-    EXPECT_EQ(mem.readByte(Memory::MAX_MEMORY), 0x33); // Should return 0x33
+    mem.writeByte(mem.getMaxMemory(), 0x33); // Should wrap
+    EXPECT_EQ(mem.readByte(mem.getMaxMemory()), 0x33); // Should return 0x33
 }
 
 TEST_F(MemoryTest, WriteAndReadWord_AtStart) {
@@ -33,18 +33,18 @@ TEST_F(MemoryTest, WriteAndReadWord_AtStart) {
 }
 
 TEST_F(MemoryTest, WriteAndReadWord_AtEndMinusOne) {
-    mem.writeWord(Memory::MAX_MEMORY - 2, 0x1234);
-    EXPECT_EQ(mem.readWord(Memory::MAX_MEMORY - 2), 0x1234);
+    mem.writeWord(mem.getMaxMemory() - 2, 0x1234);
+    EXPECT_EQ(mem.readWord(mem.getMaxMemory() - 2), 0x1234);
 }
 
 TEST_F(MemoryTest, WriteAndReadWord_AtLastByte) {
-    mem.writeWord(Memory::MAX_MEMORY - 1, 0x5678);
-    EXPECT_EQ(mem.readWord(Memory::MAX_MEMORY - 1), 0x5678);
+    mem.writeWord(mem.getMaxMemory() - 1, 0x5678);
+    EXPECT_EQ(mem.readWord(mem.getMaxMemory() - 1), 0x5678);
 }
 
 TEST_F(MemoryTest, WriteAndReadWord_OutOfBounds) {
-    mem.writeWord(Memory::MAX_MEMORY, 0x9999); // Should wrap
-    EXPECT_EQ(mem.readWord(Memory::MAX_MEMORY), 0x9999);
+    mem.writeWord(mem.getMaxMemory(), 0x9999); // Should wrap
+    EXPECT_EQ(mem.readWord(mem.getMaxMemory()), 0x9999);
 }
 
 TEST_F(MemoryTest, RandomizeChangesMemory) {
@@ -105,14 +105,14 @@ TEST_F(MemoryTest, LoadBinaryFile_CustomStartAddress) {
 
 TEST_F(MemoryTest, LoadBinaryFile_TooLarge) {
     const char* filename = "memtest_big.bin";
-    std::vector<uint8_t> data(Memory::MAX_MEMORY + 10, 0xAA);
+    std::vector<uint8_t> data(mem.getMaxMemory() + 10, 0xAA);
     std::ofstream ofs(filename, std::ios::binary);
     ofs.write(reinterpret_cast<const char*>(data.data()), data.size());
     ofs.close();
 
     // Should only load up to memory limit
     ASSERT_TRUE(mem.loadBinary(filename));
-    for (uint32_t i = 0; i < Memory::MAX_MEMORY; ++i) {
+    for (uint32_t i = 0; i < mem.getMaxMemory(); ++i) {
         EXPECT_EQ(mem.readByte(i), 0xAA);
     }
     std::remove(filename);
@@ -131,9 +131,9 @@ TEST_F(MemoryTest, DumpMemory_Basic) {
 
 TEST_F(MemoryTest, ValidateAddress_PrivateMethod) {
     // This test can't access private methods directly, but we can infer behavior
-    EXPECT_EQ(mem.readByte(Memory::MAX_MEMORY), 0);
-    mem.writeByte(Memory::MAX_MEMORY, 0xFF); // Should wrap write
-    EXPECT_EQ(mem.readByte(Memory::MAX_MEMORY), 0xFF);
+    EXPECT_EQ(mem.readByte(mem.getMaxMemory()), 0);
+    mem.writeByte(mem.getMaxMemory(), 0xFF); // Should wrap write
+    EXPECT_EQ(mem.readByte(mem.getMaxMemory()), 0xFF);
 }
 
 TEST_F(MemoryTest, OverwriteMemory) {
@@ -154,8 +154,8 @@ TEST_F(MemoryTest, LoadCustomBinaryFile) {
 
 TEST_F(MemoryTest, WordWriteReadAcrossBoundary) {
     // Should not write/read across memory boundary
-    mem.writeWord(Memory::MAX_MEMORY - 1, 0x1234); //should wrap
-    EXPECT_EQ(mem.readWord(Memory::MAX_MEMORY - 1), 0x1234);
+    mem.writeWord(mem.getMaxMemory() - 1, 0x1234); //should wrap
+    EXPECT_EQ(mem.readWord(mem.getMaxMemory() - 1), 0x1234);
 }
 
 // Add these tests to your existing file
@@ -199,7 +199,7 @@ TEST_F(MemoryTest, SequentialAccess) {
 
 // Test memory regions near the end boundary
 TEST_F(MemoryTest, NearEndBoundary) {
-    uint32_t nearEnd = Memory::MAX_MEMORY - 10;
+    uint32_t nearEnd = mem.getMaxMemory() - 10;
     
     for (uint32_t i = 0; i < 10; i++) {
         mem.writeByte(nearEnd + i, 0xA0 + i);
@@ -240,7 +240,7 @@ TEST_F(MemoryTest, LoadBinaryFile_OverflowAtCustomAddress) {
     ofs.write(reinterpret_cast<const char*>(data.data()), data.size());
     ofs.close();
 
-    uint16_t startAddr = Memory::MAX_MEMORY - 500; // This will cause overflow
+    uint16_t startAddr = mem.getMaxMemory() - 500; // This will cause overflow
     ASSERT_TRUE(mem.loadBinary(filename, startAddr));
     
     // Check bytes were loaded up to the limit
@@ -270,7 +270,7 @@ TEST_F(MemoryTest, RandomAccessPattern) {
     // Generate random addresses and values
     srand(42); // Fixed seed for reproducibility
     for (int i = 0; i < 100; i++) {
-        addresses.push_back(rand() % (Memory::MAX_MEMORY - 1));
+        addresses.push_back(rand() % (mem.getMaxMemory() - 1));
         values.push_back(rand() % 256);
     }
     
@@ -296,11 +296,11 @@ TEST_F(MemoryTest, DumpMemory_Ranges) {
     mem.dumpMemory(0, 15);
     mem.dumpMemory(16, 31);
     mem.dumpMemory(0, 255);
-    mem.dumpMemory(Memory::MAX_MEMORY - 16, Memory::MAX_MEMORY - 1);
+    mem.dumpMemory(mem.getMaxMemory() - 16, mem.getMaxMemory() - 1);
     
     // Test invalid ranges
     mem.dumpMemory(100, 50); // Start > end
-    mem.dumpMemory(Memory::MAX_MEMORY - 10, Memory::MAX_MEMORY + 10); // End out of bounds
+    mem.dumpMemory(mem.getMaxMemory() - 10, mem.getMaxMemory() + 10); // End out of bounds
 }
 
 // Test wrap-around behavior if your Memory class implements it
@@ -310,10 +310,10 @@ TEST_F(MemoryTest, WordReadWrite_Wrapping) {
     // If it does, adjust the expectations accordingly
     
     uint16_t value = 0xBEEF;
-    mem.writeWord(Memory::MAX_MEMORY - 1, value);
+    mem.writeWord(mem.getMaxMemory() - 1, value);
     
     // If no wrapping, only the low byte should be written
-    EXPECT_EQ(mem.readByte(Memory::MAX_MEMORY - 1), 0xEF);
+    EXPECT_EQ(mem.readByte(mem.getMaxMemory() - 1), 0xEF);
     
     // High byte might be at address 0 if wrapping is implemented
     // Uncomment if your Memory class implements wrapping

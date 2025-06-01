@@ -12,6 +12,7 @@ option(CREATE_EXECUTABLE "Create the executable" OFF)
 
 include(CPM)
 include(AddTest)
+include(addProgramLibrary)
 
 
 if(CREATE_EXECUTABLE)

@@ -4,12 +4,14 @@
 #include <iostream>
 #include <iomanip>
 
-Memory::Memory(){}
+Memory::Memory(const uint32_t maxMemory)
+    : mData(maxMemory)
+{}
 Memory::~Memory(){}
 
 void Memory::initialize()
 {
-    for(uint32_t i = 0; i < MAX_MEMORY; ++i)
+    for(uint32_t i = 0; i < getMaxMemory(); ++i)
     {
         mData[i] = 0;
     }
@@ -20,7 +22,7 @@ void Memory::randomize()
     std::mt19937 gen(std::random_device{}());
     std::uniform_int_distribution<> dis(0, UINT8_MAX);
 
-    for(int i = 0; i < MAX_MEMORY; ++i)
+    for(int i = 0; i < getMaxMemory(); ++i)
     {
         mData[i] = dis(gen);
     }
@@ -147,5 +149,10 @@ bool Memory::loadBinary(const std::string &path, uint16_t startAddress)
 
 uint16_t Memory::wrapAddress(uint32_t address) const
 {
-    return address % MAX_MEMORY;
+    return address % getMaxMemory();
+}
+
+uint32_t Memory::getMaxMemory() const
+{
+    return mData.size();
 }

@@ -2,7 +2,7 @@ set(NES_LIBRARY_NAME neslib CACHE INTERNAL "Nes library name")
 message("Configuring Nes library...")
 add_subdirectory(Bus)
 add_subdirectory(PPU)
-
+add_subdirectory(Catridge)
 
 
 set(LIBRARY_SOURCE 

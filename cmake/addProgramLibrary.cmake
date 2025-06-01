@@ -1,0 +1,6 @@
+function(add_program_library LIBRARY_NAME HEADERS_FOLDERS CPP_SOURCES DEPENDENCY_LIBS)
+    message("Configuring ${LIBRARY_NAME} library...")
+    add_library(${LIBRARY_NAME} STATIC ${CPP_SOURCES})
+    target_include_directories(${LIBRARY_NAME} PUBLIC ${HEADERS_FOLDERS})
+    target_link_libraries(${LIBRARY_NAME} PUBLIC ${DEPENDENCY_LIBS})
+endfunction(add_program_library)

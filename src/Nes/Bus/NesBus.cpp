@@ -29,7 +29,7 @@ uint8_t NesBus::readByte(uint16_t address)
         // Internal RAM
         return mMemory->readByte(address);
     }
-    else if (address <= PPU_LAST_MIRRORED_ADDRESS)
+    else if (address <= PPU_LAST_ADDRESS)
     {
         // PPU Registers
         return mPPU->readRegister(address); // Placeholder for actual PPU register read
@@ -53,7 +53,7 @@ void NesBus::writeByte(uint16_t address, uint8_t data)
         // Internal RAM
         mMemory->writeByte(address, data); // Placeholder for actual RAM write
     }
-    else if (address <= PPU_LAST_MIRRORED_ADDRESS)
+    else if (address <= PPU_LAST_ADDRESS)
     {
         // PPU Registers
         mPPU->writeRegister(address, data);
@@ -95,13 +95,9 @@ uint16_t NesBus::mapAddress(uint16_t address) const
     if (address <= RAM_LAST_ADDRESS)
     {
         // Internal RAM (2KB), mirrored every 2KB up to $1FFF
-        address = address & 0x07FF;
+        address = address & RAM_LAST_MIRRORED_ADDRESS;
     }
-    else if (address <= PPU_LAST_ADDRESS)
-    {
-        // PPU Registers ($2000-$2007), mirrored every 8 bytes up to $3FFF
-        address = 0x2000 + (address & 0x0007);
-    }
+    // $2000-$3FFF: PPU registers (mirrored every 8 bytes)
     // $4000-$401F: APU and I/O registers (no mirroring here)
     // $4020-$FFFF: Cartridge space (no mirroring here)
     // These ranges are passed through as-is
