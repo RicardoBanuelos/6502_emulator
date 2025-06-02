@@ -41,7 +41,7 @@ uint8_t NesBus::readByte(uint16_t address)
     }
 
     // Cartridge PRG-ROM
-    return 0; // Placeholder for actual PRG-ROM read
+    return mCartridge->readByte(address); // Placeholder for actual PRG-ROM read
 }
 
 void NesBus::writeByte(uint16_t address, uint8_t data)
@@ -69,6 +69,7 @@ void NesBus::writeByte(uint16_t address, uint8_t data)
     {
         // Cartridge PRG-ROM
         // Placeholder for actual PRG-ROM write
+        mCartridge->writeByte(address, data);
     }
 }
 
@@ -108,4 +109,9 @@ uint16_t NesBus::mapAddress(uint16_t address) const
 void NesBus::connectPPU(std::shared_ptr<IPPU> ppu)
 {
     mPPU = ppu;
+}
+
+void NesBus::connectCatridge(std::shared_ptr<ICatridge> cartridge)
+{
+    mCartridge = cartridge;
 }

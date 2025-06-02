@@ -2,6 +2,7 @@
 
 #include "Bus.h"
 #include "IPPU.h"
+#include "ICatridge.h"
 
 /*
     $0000–$07FF	2 KB	    Internal RAM (mirrored every 2 KB)
@@ -29,8 +30,9 @@ public:
     void writeByte(uint16_t address, uint8_t data) override;
     void writeWord(uint16_t address, uint16_t data) override;
     void connectPPU(std::shared_ptr<IPPU> ppu);
+    void connectCatridge(std::shared_ptr<ICatridge> cartridge);
 private:
-
+    std::shared_ptr<ICatridge> mCartridge;  
     std::shared_ptr<IPPU> mPPU;
     uint16_t mapAddress(uint16_t address) const;
 

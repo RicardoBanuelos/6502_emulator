@@ -1,5 +1,3 @@
-message("Configuring NesBus library...")
-
 set(NES_BUS_LIB libNesBus CACHE INTERNAL "Library for NesBus")
 
 set(LIBRARY_SOURCE 
@@ -13,7 +11,10 @@ set(LIBRARY_HEADERS_FILES
 set(LIBRARY_HEADERS_DIRS
     ${CMAKE_SOURCE_DIR}/inc/Nes/Bus
     ${CMAKE_SOURCE_DIR}/inc/Nes/PPU
+    ${CMAKE_SOURCE_DIR}/inc/Nes/Catridge/Interfaces
+
 )
+
 
 add_library(${NES_BUS_LIB} STATIC ${LIBRARY_SOURCE} ${LIBRARY_HEADERS_FILES})
 target_include_directories(${NES_BUS_LIB} PUBLIC ${LIBRARY_HEADERS_DIRS})

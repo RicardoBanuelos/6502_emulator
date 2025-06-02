@@ -1,4 +1,5 @@
 add_subdirectory(Registers)
+add_subdirectory(Bus)
 
 message("Configuring Nes PPU library...")
 
