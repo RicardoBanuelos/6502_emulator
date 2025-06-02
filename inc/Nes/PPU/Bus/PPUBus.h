@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include "IBus.h"
+#include "IPPUBus.h"
 #include "ICatridge.h"
 
 /**
@@ -10,7 +10,7 @@
     $3F00–$3FFF	Palettes	PPU internal palette RAM
  */
 
-class PPUBus : public IBus
+class PPUBus : public IPPUBus
 {
 
 public:
@@ -21,8 +21,7 @@ public:
     virtual uint16_t readWord(uint16_t address) override;
     virtual void writeByte(uint16_t address, uint8_t data) override;
     virtual void writeWord(uint16_t address, uint16_t data) override;
-
-    void connectCatridge(std::shared_ptr<ICatridge> catridge);
+    void connectCatridge(std::shared_ptr<ICatridge> catridge) override;
 
 private:
     constexpr static uint16_t PATTERN_TABLE_START_ADDRESS = 0x0000;

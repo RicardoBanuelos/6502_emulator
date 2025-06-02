@@ -42,6 +42,7 @@
 #include "NesBus.h"
 #include "CPU.h"
 #include "PPU.h"
+#include "NesCatridge.h"
 
 class Nes
 {
@@ -65,5 +66,6 @@ private:
     std::shared_ptr<PPU> mPPU;
     std::shared_ptr<CPU> mCPU;
     std::shared_ptr<NesBus> mBus;
+    std::shared_ptr<NesCatridge> mCartridge;
 
 };

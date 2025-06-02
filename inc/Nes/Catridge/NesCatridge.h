@@ -27,10 +27,10 @@ private:
     constexpr static uint16_t CHR_ROM_START_ADDRESS = 0; 
     constexpr static uint16_t CHR_ROM_LAST_ADDRESS = 0x1FFF; 
     constexpr static uint16_t EXPANSION_ROM_START_ADDRESS = 0x4020;
-    constexpr static uint16_t SRAM_ROM_START_ADDRESS = 0x6000;
-    constexpr static uint16_t PRG_ROM_START_ADDRESS = 0x8000;
     constexpr static uint16_t EXPANSION_ROM_END_ADDRESS = 0x5FFF;
+    constexpr static uint16_t SRAM_ROM_START_ADDRESS = 0x6000;
     constexpr static uint16_t SRAM_ROM_END_ADDRESS = 0x7FFF;
+    constexpr static uint16_t PRG_ROM_START_ADDRESS = 0x8000;
     constexpr static uint16_t PRG_ROM_END_ADDRESS = 0xFFFF;
 
     std::unique_ptr<Memory> mExpansionRom;	
